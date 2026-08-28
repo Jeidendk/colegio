@@ -2,9 +2,9 @@
     $isAdmin = $role === 'admin';
     $isTeacher = $role === 'docente';
     $heroTitle = $isAdmin ? 'Bienvenida, Andrea' : ($isTeacher ? 'Hola, Roberto' : 'Hola, Ana Lucía');
-    $heroSubtitle = $isAdmin ? 'Este es el estado general de la carrera de Electricidad.' : ($isTeacher ? 'Revisa tus clases, cursos y pendientes del día.' : 'Así avanza Juan Carlos durante el periodo académico 2026-1.');
+    $heroSubtitle = $isAdmin ? 'Este es el estado general de la comunidad educativa Montessori.' : ($isTeacher ? 'Revisa tus clases, cursos y pendientes del día.' : 'Así avanza Juan Carlos durante el año lectivo 2026-2027.');
     $heroStats = $isAdmin
-        ? [['Activos', '184', '+12 este mes'], ['Aulas', '26', '23 disponibles'], ['Solicitudes', '18', '4 pendientes'], ['Usuarios', '412', '96% activos']]
+        ? [['Activos', '184', '+12 este mes'], ['Aulas', '26', '23 disponibles'], ['Solicitudes', '18', '4 pendientes'], ['Estudiantes', '308', 'matriculados']]
         : ($isTeacher
             ? [['Cursos', '3', 'asignados'], ['Estudiantes', '83', 'en total'], ['Clases hoy', '4', 'próxima 10:00'], ['Pendientes', '6', 'por calificar']]
             : [['Promedio', $student['average'], 'sobre 10'], ['Asistencia', $student['attendance'], '+2% este mes'], ['Materias', '7', 'todas aprobadas'], ['Solicitudes', '2', 'activas']]);
@@ -35,7 +35,7 @@
         <div class="panel-header"><div><small>ALERTAS</small><h2>Requieren atención</h2></div></div>
         <div class="alert-list">
             <button data-toast="Abriendo activo EQ004"><i data-lucide="triangle-alert"></i><span><b>Equipo dañado</b><small>PC Core i7 · Lab. Cómputo 1</small></span></button>
-            <button data-toast="Abriendo solicitud SOL-2026-038"><i data-lucide="clock-3"></i><span><b>Solicitud pendiente</b><small>Hace 5 días · Control Automático</small></span></button>
+            <button data-toast="Abriendo solicitud SOL-2026-038"><i data-lucide="clock-3"></i><span><b>Solicitud pendiente</b><small>Hace 5 días · Ciencias Naturales</small></span></button>
             <button data-toast="Stock de proyectores revisado"><i data-lucide="package-x"></i><span><b>Stock bajo</b><small>Proyector Epson · 1 disponible</small></span></button>
         </div>
     </section>
@@ -45,7 +45,7 @@
     <section class="panel span-2">
         <div class="panel-header"><div><small>MI JORNADA</small><h2>Clases de hoy</h2></div><span class="date-chip">Jueves, 27 de agosto</span></div>
         <div class="timeline">
-            @foreach([['07:00','Electrónica de Potencia','Lab. Electrónica','Finalizada'],['10:00','Análisis de Señales','FIE-105','Próxima'],['14:00','Control Automático','Lab. Control','Pendiente']] as $class)
+            @foreach([['07:00','Matemática','Aula 8A','Finalizada'],['10:00','Lengua y Literatura','Biblioteca','Próxima'],['14:00','Ciencias Naturales','Laboratorio de Ciencias','Pendiente']] as $class)
                 <div class="timeline-row"><time>{{ $class[0] }}</time><span class="timeline-dot"></span><div><b>{{ $class[1] }}</b><small>{{ $class[2] }}</small></div><x-badge :value="$class[3]" /></div>
             @endforeach
         </div>
@@ -59,7 +59,7 @@
         </div>
     </section>
     <section class="panel span-3">
-        <div class="panel-header"><div><small>PERIODO 2026-1</small><h2>Mis cursos</h2></div><a href="{{ route('portal', ['role' => 'docente', 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Abrir aula virtual</a></div>
+        <div class="panel-header"><div><small>AÑO LECTIVO 2026-2027</small><h2>Mis cursos</h2></div><a href="{{ route('portal', ['role' => 'docente', 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Abrir aula virtual</a></div>
         <div class="course-grid compact">
             @foreach($courses as $course)
                 <article class="course-card"><span class="course-code">{{ $course['code'] }}</span><h3>{{ $course['name'] }}</h3><p>Paralelo {{ $course['parallel'] }} · {{ $course['room'] }}</p><div><span><i data-lucide="users"></i>{{ $course['students'] }} estudiantes</span><b>{{ $course['average'] }} prom.</b></div></article>
@@ -84,7 +84,7 @@
         <section class="panel">
             <div class="panel-header"><div><small>PRÓXIMAS</small><h2>Actividades</h2></div></div>
             <div class="mini-calendar"><b>28</b><span>AGO<small>Entrega informe de laboratorio</small></span></div>
-            <div class="mini-calendar"><b>02</b><span>SEP<small>Evaluación de Sistemas de Potencia</small></span></div>
+            <div class="mini-calendar"><b>02</b><span>SEP<small>Evaluación de Matemática</small></span></div>
             <div class="mini-calendar"><b>05</b><span>SEP<small>Reunión de representantes</small></span></div>
         </section>
         <section class="panel span-3">
@@ -99,4 +99,4 @@
 </div>
 @endif
 
-<div class="modal" id="new-resource-modal" aria-hidden="true"><form class="modal-card demo-form" data-demo-form><button class="modal-close" type="button" data-modal-close>×</button><small>RECURSO ACADÉMICO</small><h2>Publicar nuevo material</h2><label>Título<input required placeholder="Ej. Guía de laboratorio 05"></label><label>Curso<select><option>Control Automático</option><option>Circuitos Eléctricos I</option></select></label><label>Descripción<textarea placeholder="Describe el contenido..."></textarea></label><button class="primary-button" type="submit">Publicar recurso</button></form></div>
+<div class="modal" id="new-resource-modal" aria-hidden="true"><form class="modal-card demo-form" data-demo-form><button class="modal-close" type="button" data-modal-close>×</button><small>RECURSO ACADÉMICO</small><h2>Publicar nuevo material</h2><label>Título<input required placeholder="Ej. Guía de lectura 05"></label><label>Curso<select><option>Matemática</option><option>Lengua y Literatura</option><option>Ciencias Naturales</option></select></label><label>Descripción<textarea placeholder="Describe el contenido..."></textarea></label><button class="primary-button" type="submit">Publicar recurso</button></form></div>

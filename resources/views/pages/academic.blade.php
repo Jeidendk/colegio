@@ -8,11 +8,11 @@
 <section class="infra-hero academic-hero">
     <div class="infra-hero-title">
         <span><i data-lucide="{{ $faculty['icon'] }}"></i></span>
-        <div><h1>{{ $faculty['name'] }}</h1><p>Facultad · {{ count($careers) }} carreras</p></div>
+        <div><h1>{{ $faculty['name'] }}</h1><p>Institución · {{ count($careers) }} niveles educativos</p></div>
     </div>
 
     <div class="infra-hero-stats">
-        <div><i data-lucide="graduation-cap"></i><span><strong>{{ count($careers) }}</strong><small>Carreras</small></span></div>
+        <div><i data-lucide="graduation-cap"></i><span><strong>{{ count($careers) }}</strong><small>Niveles</small></span></div>
         <div><i data-lucide="layers"></i><span><strong>{{ $totalSubjects }}</strong><small>Materias</small></span></div>
         <div><i data-lucide="file-text"></i><span><strong>0</strong><small>Sílabos</small></span></div>
     </div>
@@ -21,11 +21,11 @@
 <div class="infra-layout">
     <aside class="panel infra-tree academic-tree">
         <div class="infra-tree-head">
-            <h2>Facultades y carreras</h2>
-            <button class="round-button small" type="button" title="Nueva facultad" data-modal-open="faculty-modal"><i data-lucide="plus"></i></button>
+            <h2>Institución y niveles</h2>
+            <button class="round-button small" type="button" title="Editar institución" data-modal-open="faculty-modal"><i data-lucide="plus"></i></button>
         </div>
 
-        <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar facultad o carrera..." data-tree-search></label>
+        <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar institución o nivel..." data-tree-search></label>
 
         <div class="infra-tree-list">
             <div class="tree-building is-open" data-tree-building data-building-name="{{ mb_strtolower($faculty['acronym'].' '.$faculty['name']) }}">
@@ -34,7 +34,7 @@
                     <span class="faculty-dot" style="background: {{ $faculty['color'] }}"></span>
                     <b>{{ $faculty['acronym'] }}</b>
                     <span class="tree-count">{{ count($careers) }}</span>
-                    <span class="tree-add" role="button" tabindex="0" title="Nueva carrera" data-modal-open="career-modal"><i data-lucide="plus"></i></span>
+                    <span class="tree-add" role="button" tabindex="0" title="Nuevo nivel" data-modal-open="career-modal"><i data-lucide="plus"></i></span>
                 </button>
 
                 <ul class="career-tree">
@@ -52,7 +52,7 @@
 
         <div class="tree-summary">
             <span><i data-lucide="layers"></i></span>
-            <div><b>1 facultad · {{ count($careers) }} carreras</b><small>Estructura académica</small></div>
+            <div><b>1 institución · {{ count($careers) }} niveles</b><small>Estructura académica</small></div>
         </div>
     </aside>
 
@@ -61,25 +61,25 @@
             <span class="faculty-mark" style="background: {{ $faculty['color'] }}1a; color: {{ $faculty['color'] }}"><i data-lucide="{{ $faculty['icon'] }}"></i></span>
             <div class="faculty-identity">
                 <h2>{{ $faculty['name'] }} <x-badge :value="$faculty['status']" /></h2>
-                <p>{{ $faculty['acronym'] }} · Decano/a: {{ $faculty['dean'] }} · {{ count($careers) }} carreras</p>
+                <p>{{ $faculty['acronym'] }} · Rector: {{ $faculty['dean'] }} · {{ count($careers) }} niveles</p>
             </div>
             <div class="building-actions">
-                <button class="pill-button" type="button" data-modal-open="faculty-modal"><i data-lucide="pencil"></i> Editar facultad</button>
-                <button class="pill-button danger" type="button" data-toast="La facultad se eliminaría en la demostración"><i data-lucide="trash-2"></i> Eliminar</button>
+                <button class="pill-button" type="button" data-modal-open="faculty-modal"><i data-lucide="pencil"></i> Editar institución</button>
+                <button class="pill-button danger" type="button" data-toast="La institución se eliminaría en la demostración"><i data-lucide="trash-2"></i> Eliminar</button>
             </div>
         </article>
 
         <section class="panel careers-panel" data-careers-panel>
             <div class="toolbar careers-toolbar">
-                <h2 class="careers-title">Carreras ({{ count($careers) }})</h2>
-                <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar carrera..." data-career-search></label>
+                <h2 class="careers-title">Niveles educativos ({{ count($careers) }})</h2>
+                <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar nivel..." data-career-search></label>
 
                 <div class="segmented compact layout-switch">
                     <button class="is-active" type="button" data-career-layout="grid" title="Tarjetas"><i data-lucide="layout-grid"></i></button>
                     <button type="button" data-career-layout="list" title="Lista"><i data-lucide="list"></i></button>
                 </div>
 
-                <button class="pill-button solid" type="button" data-modal-open="career-modal"><i data-lucide="plus"></i> Nueva carrera</button>
+                <button class="pill-button solid" type="button" data-modal-open="career-modal"><i data-lucide="plus"></i> Nuevo nivel</button>
             </div>
 
             <div class="career-cards" data-career-cards>
@@ -92,7 +92,7 @@
                         <h3>{{ $career['name'] }}</h3>
                         <p>Director/a: {{ $career['director'] }}</p>
                         <div class="career-card-foot">
-                            <span><i data-lucide="layers"></i> {{ $career['paos'] }} PAO</span>
+                            <span><i data-lucide="layers"></i> {{ $career['paos'] }} grados</span>
                             <span><i data-lucide="book-open"></i> {{ $career['subjects'] }} materias</span>
                             <button class="row-action" type="button" title="Ver malla curricular" data-career-link="{{ $career['slug'] }}" data-career-title="{{ $career['name'] }}" data-career-subjects="{{ $career['subjects'] }}"><i data-lucide="chevron-right"></i></button>
                         </div>
@@ -100,18 +100,18 @@
                 @endforeach
             </div>
 
-            <p class="empty-state hidden" data-careers-empty><i data-lucide="search-x"></i> Ninguna carrera coincide con la búsqueda.</p>
+            <p class="empty-state hidden" data-careers-empty><i data-lucide="search-x"></i> Ningún nivel coincide con la búsqueda.</p>
         </section>
 
         <section class="panel curriculum-panel hidden" data-curriculum-panel>
             <div class="panel-header">
                 <div>
-                    <button class="text-button" type="button" data-curriculum-back><i data-lucide="arrow-left"></i> Volver a carreras</button>
+                    <button class="text-button" type="button" data-curriculum-back><i data-lucide="arrow-left"></i> Volver a niveles</button>
                     <h2 data-curriculum-title>Malla curricular</h2>
                 </div>
                 <div class="row-actions">
-                    <button class="secondary-button" type="button" data-modal-open="career-modal"><i data-lucide="pencil"></i> Editar carrera</button>
-                    <button class="primary-button" type="button" data-modal-open="subject-modal"><i data-lucide="plus"></i> Nueva materia</button>
+                    <button class="pill-button" type="button" data-modal-open="career-modal"><i data-lucide="pencil"></i> Editar nivel</button>
+                    <button class="pill-button solid" type="button" data-modal-open="subject-modal"><i data-lucide="plus"></i> Nueva materia</button>
                 </div>
             </div>
 
@@ -140,11 +140,11 @@
                 </div>
             @endforeach
 
-            <p class="empty-state hidden" data-curriculum-empty><i data-lucide="book-dashed"></i> <span data-curriculum-empty-text>Esta carrera todavía no tiene materias registradas en su malla.</span></p>
+            <p class="empty-state hidden" data-curriculum-empty><i data-lucide="book-dashed"></i> <span data-curriculum-empty-text>Este nivel todavía no tiene asignaturas registradas.</span></p>
 
             <div class="panel-footer">
                 <span><i data-lucide="info"></i> <span data-curriculum-summary></span></span>
-                <button class="secondary-button" type="button" data-toast="Malla exportada en la demostración"><i data-lucide="download"></i> Exportar malla</button>
+                <button class="pill-button" type="button" data-toast="Malla exportada en la demostración"><i data-lucide="download"></i> Exportar malla</button>
             </div>
         </section>
     </section>
@@ -154,16 +154,16 @@
     <form class="modal-card demo-form identity-modal" data-demo-form>
         <div class="identity-modal-head">
             <span class="identity-icon"><i data-lucide="building-2"></i></span>
-            <div><h2>Nueva facultad</h2><p>Completa los datos y personaliza el diseño</p></div>
+            <div><h2>Editar institución</h2><p>Actualiza los datos institucionales</p></div>
             <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
         </div>
 
         <div class="form-grid">
-            <label class="export-field">Siglas <em>*</em><input required placeholder="Ej: FIE"></label>
+            <label class="export-field">Siglas <em>*</em><input required placeholder="Ej: UEM" value="UEM"></label>
             <label class="export-field">Estado<select><option>Activa</option><option>Inactiva</option></select></label>
         </div>
 
-        <label class="export-field">Nombre completo <em>*</em><input required placeholder="Facultad de..."></label>
+        <label class="export-field">Nombre completo <em>*</em><input required placeholder="Unidad Educativa..." value="Unidad Educativa Montessori"></label>
         <label class="export-field">Decano/a actual<input placeholder="Nombre del Decano"></label>
 
         <div class="identity-section">
@@ -197,7 +197,7 @@
 
         <div class="modal-actions">
             <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-            <button class="primary-button dark" type="submit">Crear facultad</button>
+            <button class="primary-button dark" type="submit">Guardar institución</button>
         </div>
     </form>
 </div>
@@ -206,26 +206,26 @@
     <form class="modal-card demo-form identity-modal" data-demo-form>
         <div class="identity-modal-head">
             <span class="identity-icon"><i data-lucide="book-open"></i></span>
-            <div><h2>Nueva carrera</h2><p>Asignación e identidad visual</p></div>
+            <div><h2>Nuevo nivel educativo</h2><p>Asignación e identidad visual</p></div>
             <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
         </div>
 
-        <label class="export-field">Facultad a la que pertenece <em>*</em>
+        <label class="export-field">Institución a la que pertenece <em>*</em>
             <select><option>{{ $faculty['name'] }}</option></select>
         </label>
 
-        <label class="export-field">Nombre de la carrera <em>*</em><input required placeholder="Ej: Ingeniería de Software"></label>
+        <label class="export-field">Nombre del nivel <em>*</em><input required placeholder="Ej: EGB Superior"></label>
 
         <div class="form-grid">
-            <label class="export-field">N° PAO<input type="number" min="1" max="12" value="9"></label>
+            <label class="export-field">N.º de grados<input type="number" min="1" max="10" value="3"></label>
             <label class="export-field">Estado<select><option>Activa</option><option>Inactiva</option></select></label>
         </div>
 
-        <label class="export-field">Director/a de carrera<input placeholder="Ing. Nombre Apellido"></label>
+        <label class="export-field">Coordinador/a del nivel<input placeholder="Lcdo. Nombre Apellido"></label>
 
         <div class="identity-section">
-            <span class="section-label">Diseño corporativo de la carrera</span>
-            <p class="section-note">Nota: el color hexadecimal debe ser único dentro de la misma facultad.</p>
+            <span class="section-label">Diseño visual del nivel</span>
+            <p class="section-note">Nota: el color ayuda a identificar el nivel dentro de la institución.</p>
 
             <label class="export-field">Color hexadecimal
                 <span class="color-field">
@@ -255,7 +255,7 @@
 
         <div class="modal-actions">
             <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-            <button class="primary-button dark" type="submit">Crear carrera</button>
+            <button class="primary-button dark" type="submit">Crear nivel</button>
         </div>
     </form>
 </div>
@@ -268,13 +268,13 @@
         <label>Nombre de la materia<input required placeholder="Ej. Sistemas Distribuidos"></label>
         <div class="form-grid">
             <label>Código<input placeholder="Ej. SW-401"></label>
-            <label>PAO<select>@for($pao = 1; $pao <= 9; $pao++)<option>{{ $pao }}.º</option>@endfor</select></label>
+            <label>Grado<select>@for($pao = 1; $pao <= 10; $pao++)<option>{{ $pao }}.º</option>@endfor</select></label>
         </div>
         <div class="form-grid">
             <label>Créditos<input type="number" min="1" max="8" value="3"></label>
             <label>Horas<input type="number" min="8" step="8" value="48"></label>
         </div>
-        <label>Carrera<select>@foreach($careers as $career)<option>{{ $career['name'] }}</option>@endforeach</select></label>
+        <label>Nivel educativo<select>@foreach($careers as $career)<option>{{ $career['name'] }}</option>@endforeach</select></label>
         <div class="modal-actions">
             <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
             <button class="primary-button" type="submit">Guardar materia</button>

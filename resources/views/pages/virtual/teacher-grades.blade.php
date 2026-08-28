@@ -1,23 +1,17 @@
 @php
     $gradeRows = [
-        ['JP','Juan Carlos Pérez','202145678','Sistemas Eléctricos de Potencia','Actividad 2 · Flujo de potencia','Entregado','—'],
-        ['MR','María Fernanda Ruiz','202145691','Sistemas Eléctricos de Potencia','Actividad 2 · Flujo de potencia','Entregado','—'],
-        ['JS','Jorge Silva Andrade','202145704','Máquinas Eléctricas II','Informe · Motor trifásico','Borrador','—'],
-        ['AC','Andrea Cabrera','202145719','Máquinas Eléctricas II','Taller de transformadores','Calificado','8,7'],
-        ['LM','Luis Molina','202145731','Control Automático','Práctica · Control PID','Entregado','—'],
+        ['JP','Juan Carlos Pérez','M-08021','Matemática','Actividad 2 · Números racionales','Entregado','—'],
+        ['MR','María Fernanda Ruiz','M-08034','Matemática','Actividad 2 · Números racionales','Entregado','—'],
+        ['JS','Jorge Silva Andrade','M-08047','Lengua y Literatura','Relato de tradición oral','Borrador','—'],
+        ['AC','Andrea Cabrera','M-08052','Lengua y Literatura','Taller de escritura comunitaria','Calificado','8,7'],
+        ['LM','Luis Molina','M-08063','Ciencias Naturales','Bitácora · Ecosistemas','Entregado','—'],
     ];
 @endphp
 
 <section class="teacher-courses-heading">
-    <div><small>EVALUACIÓN · PERIODO 2026-1</small><h1>Libro de calificaciones</h1><p>Revisa entregas, registra notas y publica la retroalimentación desde una sola bandeja.</p></div>
+    <div><h1>Libro de calificaciones</h1><p>Revisa entregas, registra notas y publica la retroalimentación desde una sola bandeja.</p></div>
     <button class="pill-button solid" type="button" data-toast="Las calificaciones guardadas fueron publicadas"><i data-lucide="send"></i> Publicar calificaciones</button>
 </section>
-
-<div class="detail-metrics">
-    @foreach([['clipboard-clock','22','Por calificar'],['circle-check-big','41','Calificadas'],['clock-3','5','Entregas tardías'],['chart-no-axes-column-increasing','8,4','Promedio general']] as $stat)
-        <div><small>{{ $stat[2] }}</small><strong>{{ $stat[1] }}</strong><span><i data-lucide="{{ $stat[0] }}"></i> Periodo 2026-1</span></div>
-    @endforeach
-</div>
 
 <section class="panel users-panel" data-teacher-gradebook>
     <span class="panel-accent" aria-hidden="true"></span>

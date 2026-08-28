@@ -1,0 +1,87 @@
+<div class="course-detail-breadcrumb"><a href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Área personal</a><i data-lucide="chevron-right"></i><a href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Mis cursos</a><i data-lucide="chevron-right"></i><span>{{ $selectedCourse['code'] }}</span></div>
+
+<header class="course-detail-header">
+    <div><small>{{ $selectedCourse['code'] }} · 8.º EGB · PARALELO {{ $selectedCourse['parallel'] }}</small><h1>{{ $selectedCourse['name'] }}</h1><p>{{ $selectedCourse['teacher'] }} · {{ $selectedCourse['room'] }}</p></div>
+    <div class="course-detail-completion"><span>{{ $selectedCourse['progress'] }}%</span><div><i style="width:{{ $selectedCourse['progress'] }}%"></i></div><small>Progreso del curso</small></div>
+</header>
+
+@if($isTeacher)
+    <div class="teacher-course-adminbar panel">
+        <div><span><i data-lucide="settings-2"></i></span><div><small>MODO DOCENTE</small><b>Gestión del aula</b></div></div>
+        <nav><button data-virtual-tab-target="people"><i data-lucide="users"></i> Participantes</button><button data-virtual-tab-target="grades"><i data-lucide="notebook-tabs"></i> Calificaciones</button><button data-toast="Informe del curso preparado"><i data-lucide="chart-no-axes-column-increasing"></i> Informes</button><button data-modal-open="virtual-resource-modal"><i data-lucide="plus"></i> Añadir contenido</button></nav>
+    </div>
+@endif
+
+<div class="course-detail-nav" role="tablist">
+    <button class="is-active" type="button" data-virtual-tab="course"><i data-lucide="book-open"></i> Curso</button>
+    <button type="button" data-virtual-tab="people"><i data-lucide="users"></i> Participantes</button>
+    <button type="button" data-virtual-tab="grades"><i data-lucide="notebook-tabs"></i> Calificaciones</button>
+    <button type="button" data-virtual-tab="skills"><i data-lucide="badge-check"></i> Competencias</button>
+</div>
+
+<section data-virtual-panel="course" data-course-topics>
+    <div class="course-topic-tabs" role="tablist" aria-label="Unidades del curso">
+        <button class="is-active" type="button" data-course-topic="welcome">Bienvenida</button>
+        @foreach($selectedCourse['modules'] as $index => $module)<button type="button" data-course-topic="unit-{{ $index + 1 }}">Unidad {{ $index + 1 }}</button>@endforeach
+        <button type="button" data-course-topic="closing">Cierre</button>
+    </div>
+
+    <div class="course-detail-layout">
+        <main class="course-content-box">
+            <section data-course-topic-panel="welcome">
+                <div class="course-detail-cover"><img src="{{ $selectedCourse['image'] }}" alt="Imagen de {{ $selectedCourse['name'] }}"><div><span>MONTESSORI · AULA VIRTUAL</span><h2>{{ $selectedCourse['name'] }}</h2><p>Aprende, explora y comparte tus descubrimientos.</p></div></div>
+
+                <div class="course-section-heading"><i data-lucide="info"></i><span>Sección de información</span></div>
+                <div class="course-learning-results"><b>Resultados de aprendizaje</b><ul><li>Comprende los conceptos esenciales de la asignatura y los relaciona con situaciones de su entorno.</li><li>Desarrolla autonomía para investigar, organizar información y comunicar sus ideas.</li><li>Participa con respeto y responsabilidad en experiencias colaborativas.</li></ul></div>
+                <button class="course-activity-row" type="button" data-toast="Perfil del docente abierto"><span class="type-file"><i data-lucide="contact"></i></span><div><b>Conoce a tu docente</b><small>{{ $selectedCourse['teacher'] }} · Docente responsable</small></div><i data-lucide="chevron-right"></i></button>
+                <button class="course-activity-row" type="button" data-toast="Plan de aprendizaje abierto"><span class="type-file"><i data-lucide="file-text"></i></span><div><b>Plan de aprendizaje de la asignatura</b><small>Objetivos, unidades, metodología y evaluación · PDF</small></div><i data-lucide="chevron-right"></i></button>
+
+                <div class="course-schedule-strip"><div><i data-lucide="calendar-days"></i><span><b>Encuentros de clase</b><small>Lunes y miércoles · 07:00 a 09:00</small></span></div><div><i data-lucide="messages-square"></i><span><b>Acompañamiento</b><small>Viernes · 12:00 a 13:00</small></span></div></div>
+                <button class="course-activity-row" type="button" data-toast="Evaluación diagnóstica abierta"><span class="type-quiz"><i data-lucide="list-checks"></i></span><div><b>Evaluación diagnóstica</b><small>Disponible hasta el 31 de agosto · 10 puntos</small></div><x-badge value="Pendiente" /></button>
+
+                <div class="course-section-heading"><i data-lucide="megaphone"></i><span>Sección de comunicación</span></div>
+                <button class="course-activity-row" type="button" data-toast="Foro de avisos abierto"><span class="type-forum"><i data-lucide="messages-square"></i></span><div><b>Avisos y novedades</b><small>Información importante publicada por el docente</small></div><em>3 nuevos</em></button>
+                <button class="course-activity-row" type="button" data-toast="Guía de convivencia abierta"><span class="type-file"><i data-lucide="file-heart"></i></span><div><b>Acuerdos de convivencia y participación</b><small>Orientaciones para nuestra comunidad de aprendizaje</small></div><i data-lucide="chevron-right"></i></button>
+
+                <div class="course-section-heading"><i data-lucide="users"></i><span>Sección de interacción</span></div>
+                <button class="course-activity-row" type="button" data-toast="Foro de preguntas abierto"><span class="type-forum"><i data-lucide="message-circle-question"></i></span><div><b>Preguntas, ideas y descubrimientos</b><small>Espacio para conversar y construir respuestas juntos</small></div><i data-lucide="chevron-right"></i></button>
+                <button class="course-activity-row" type="button" data-toast="Registro de asistencia consultado"><span class="type-attendance"><i data-lucide="user-check"></i></span><div><b>Registro de asistencia</b><small>Consulta tu participación en las clases programadas</small></div><x-badge value="Al día" /></button>
+            </section>
+
+            @foreach($selectedCourse['modules'] as $index => $module)
+                <section class="hidden" data-course-topic-panel="unit-{{ $index + 1 }}">
+                    <div class="course-unit-heading"><span>UNIDAD {{ $index + 1 }}</span><h2>{{ $module['title'] }}</h2><p>{{ $module['meta'] }}</p></div>
+                    <div class="course-section-heading"><i data-lucide="book-open-check"></i><span>Explorar y comprender</span></div>
+                    <button class="course-activity-row" type="button" data-toast="Guía de aprendizaje abierta"><span class="type-file"><i data-lucide="file-text"></i></span><div><b>Guía de aprendizaje de la unidad</b><small>Conceptos, ejemplos y preguntas para explorar</small></div><x-badge :value="$module['done'] ? 'Completado' : 'Pendiente'" /></button>
+                    <button class="course-activity-row" type="button" data-toast="Recurso multimedia abierto"><span class="type-url"><i data-lucide="circle-play"></i></span><div><b>Recurso multimedia interactivo</b><small>Video y material visual · 18 minutos</small></div><i data-lucide="external-link"></i></button>
+                    <div class="course-section-heading"><i data-lucide="pencil-ruler"></i><span>Aplicar y crear</span></div>
+                    <button class="course-activity-row" type="button" data-toast="Actividad práctica abierta"><span class="type-quiz"><i data-lucide="clipboard-check"></i></span><div><b>{{ $module['type'] === 'task' ? $module['title'] : 'Actividad práctica de la unidad' }}</b><small>Entrega guiada con retroalimentación del docente</small></div><x-badge value="Pendiente" /></button>
+                    <button class="course-activity-row" type="button" data-toast="Foro colaborativo abierto"><span class="type-forum"><i data-lucide="users-round"></i></span><div><b>Construimos juntos</b><small>Comparte tu proceso, comenta y aprende de tus compañeros</small></div><i data-lucide="chevron-right"></i></button>
+                </section>
+            @endforeach
+
+            <section class="hidden" data-course-topic-panel="closing">
+                <div class="course-unit-heading"><span>CIERRE DEL CURSO</span><h2>Reflexiona sobre lo aprendido</h2><p>Organiza tus evidencias y reconoce tus avances.</p></div>
+                <div class="course-section-heading"><i data-lucide="sparkles"></i><span>Portafolio y despedida</span></div>
+                <button class="course-activity-row" type="button" data-toast="Portafolio abierto"><span class="type-file"><i data-lucide="folder-check"></i></span><div><b>Mi portafolio de aprendizaje</b><small>Selección de trabajos, reflexiones y logros</small></div><i data-lucide="chevron-right"></i></button>
+                <button class="course-activity-row" type="button" data-toast="Autoevaluación abierta"><span class="type-quiz"><i data-lucide="badge-check"></i></span><div><b>Autoevaluación final</b><small>Reconoce tus fortalezas y próximos retos</small></div><x-badge value="Pendiente" /></button>
+            </section>
+        </main>
+
+        <aside class="course-blocks">
+            <article><header>Buscar en los foros</header><div><label class="search-field"><i data-lucide="search"></i><input placeholder="Buscar conversaciones"></label><button class="text-button" data-toast="Búsqueda avanzada abierta">Búsqueda avanzada</button></div></article>
+            <article><header>Docente del curso</header><div class="course-teacher-block"><span>{{ $selectedCourse['initials'] }}</span><b>{{ $selectedCourse['teacher'] }}</b><small>{{ $selectedCourse['room'] }}</small><button data-toast="Mensaje preparado"><i data-lucide="mail"></i> Enviar mensaje</button></div></article>
+            <article><header>Próximos eventos</header><div class="course-event-block"><time>{{ $selectedCourse['date'] }}</time><b>{{ $selectedCourse['next'] }}</b><small>Actividad del curso</small><a href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'vista' => 'calendario']) }}">Ir al calendario</a></div></article>
+            <article><header>Progreso del curso</header><div class="course-block-progress"><strong>{{ $selectedCourse['progress'] }}%</strong><span><i style="width:{{ $selectedCourse['progress'] }}%"></i></span><small>{{ collect($selectedCourse['modules'])->where('done', true)->count() }} de {{ count($selectedCourse['modules']) }} módulos revisados</small></div></article>
+        </aside>
+    </div>
+</section>
+
+<section class="hidden" data-virtual-panel="grades">
+    <div class="virtual-section-title"><div><small>EVALUACIÓN</small><h2>Calificaciones del curso</h2></div><div class="grade-summary"><b>{{ $selectedCourse['grades'][2][1] }}</b><small>Promedio actual</small></div></div>
+    <div class="panel table-wrap"><table class="data-table virtual-grades"><thead><tr><th>Actividad</th><th>Calificación</th><th>Rango</th><th>Retroalimentación</th></tr></thead><tbody>@foreach($selectedCourse['grades'] as $grade)<tr><td><b>{{ $grade[0] }}</b></td><td><span class="virtual-grade">{{ $grade[1] }}</span></td><td>0 – 10</td><td><button class="text-button" data-toast="Retroalimentación abierta">Ver comentario</button></td></tr>@endforeach</tbody></table></div>
+</section>
+
+<section class="hidden" data-virtual-panel="skills"><div class="virtual-section-title"><div><small>APRENDIZAJES</small><h2>Competencias del curso</h2></div></div><div class="competency-grid">@foreach([['Pensamiento crítico','Analiza información y comunica conclusiones.',88],['Autonomía','Organiza su proceso y toma decisiones responsables.',82],['Trabajo colaborativo','Participa con respeto y aporta al grupo.',92]] as $skill)<article class="panel"><span><i data-lucide="badge-check"></i></span><h3>{{ $skill[0] }}</h3><p>{{ $skill[1] }}</p><div><i style="width:{{ $skill[2] }}%"></i></div><b>{{ $skill[2] }}% alcanzado</b></article>@endforeach</div></section>
+
+<section class="hidden" data-virtual-panel="people"><div class="virtual-section-title"><div><small>COMUNIDAD DEL CURSO</small><h2>{{ $isTeacher ? 'Participantes matriculados' : 'Docente y compañeros' }}</h2></div></div><div class="people-grid"><article class="panel virtual-person"><span>{{ $selectedCourse['initials'] }}</span><div><small>DOCENTE PRINCIPAL</small><h3>{{ $selectedCourse['teacher'] }}</h3><p>docente@montessori-riobamba.edu.ec</p></div><button data-toast="Mensaje preparado"><i data-lucide="mail"></i></button></article>@foreach([['JP','Juan Carlos Pérez','M-08021'],['MR','María Fernanda Ruiz','M-08034'],['JS','Jorge Silva Andrade','M-08047']] as $person)<article class="panel virtual-person"><span>{{ $person[0] }}</span><div><small>ESTUDIANTE</small><h3>{{ $person[1] }}</h3><p>{{ $person[2] }} · 8.º EGB A</p></div><button data-toast="Perfil académico abierto"><i data-lucide="eye"></i></button></article>@endforeach</div></section>

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    @php $usesCampusMap = $role === 'admin' && in_array($page, ['horarios', 'infraestructura'], true); @endphp
+    @php $usesCampusMap = in_array($page, ['horarios', 'infraestructura', 'mapa'], true); @endphp
     @if($usesCampusMap)
         <link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}">
     @endif
@@ -22,8 +22,8 @@
 <body data-role="{{ $role }}" data-page="{{ $page }}">
 @php
     $people = [
-        'admin' => ['Dra. Andrea López', 'Administrador', 'AL'],
-        'docente' => ['Ing. Roberto Sánchez', 'Docente', 'RS'],
+        'admin' => ['Mgs. Andrea López', 'Administrador', 'AL'],
+        'docente' => ['Lcdo. Roberto Sánchez', 'Docente', 'RS'],
         'estudiante' => [$student['name'], 'Estudiante', 'JP'],
         'representante' => ['Ana Lucía Pérez', 'Representante', 'AP'],
     ];
@@ -32,8 +32,9 @@
 <div class="app-shell">
     <div class="mobile-backdrop" data-close-sidebar></div>
     <aside class="sidebar" id="sidebar">
-        <a class="brand school-brand" href="{{ route('portal', ['role' => $role, 'page' => $homes[$role]]) }}">
-            <img src="{{ asset('img/montessori-logo.png') }}" alt="Unidad Educativa Montessori">
+        <a class="brand" href="{{ route('portal', ['role' => $role, 'page' => $homes[$role]]) }}" aria-label="Montessori Riobamba">
+            <span class="brand-mark"><i data-lucide="graduation-cap"></i></span>
+            <span><strong>MONTESSORI</strong><small>RIOBAMBA</small></span>
         </a>
 
         <nav class="side-nav" aria-label="Navegación principal">

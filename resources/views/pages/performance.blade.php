@@ -9,7 +9,7 @@
     :subtitle="$isTeacherGradebook ? 'Consulta y edita las notas del curso seleccionado.' : 'Avance de '.$student['firstName'].' en el periodo 2026-1.'"
     :stats="$isTeacherGradebook
         ? [['Estudiantes', count($roster), 'en el curso'], ['Promedio', '7,9', 'del curso'], ['Aprobados', count($roster) - $atRisk, 'de '.count($roster)], ['En riesgo', $atRisk, 'requieren apoyo']]
-        : [['Promedio', $student['average'], 'sobre 10'], ['Asistencia', $student['attendance'], 'general'], ['Aprobadas', '7/7', 'materias'], ['Mejor nota', '9,1', 'Potencia']]">
+        : [['Promedio', $student['average'], 'sobre 10'], ['Asistencia', $student['attendance'], 'general'], ['Aprobadas', '7/7', 'materias'], ['Mejor nota', '9,1', 'Matemática']]">
     @if($isTeacherGradebook)
         <button class="hero-button" type="button" data-modal-open="grade-activity-modal"><i data-lucide="plus"></i> Registrar actividad</button>
     @endif

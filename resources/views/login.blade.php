@@ -36,11 +36,11 @@
         </form>
 
         <div class="school-login-note"><i data-lucide="shield-check"></i><span><b>Acceso demostrativo</b><small>No se validan ni almacenan credenciales.</small></span></div>
-        <p class="school-login-footer">Unidad Educativa Particular Montessori · Guayaquil</p>
+        <p class="school-login-footer">Unidad Educativa Montessori · Riobamba</p>
     </section>
 
     <section class="school-login-visual" aria-label="Comunidad educativa Montessori">
-        <div class="school-login-visual-copy"><span>EDUCACIÓN PARA LA VIDA</span><h2>Desarrollando<br>potencialidades</h2><p>Formación integral, pensamiento crítico y aprendizaje con responsabilidad social.</p><div><i data-lucide="sparkles"></i> Aprender · Crear · Convivir</div></div>
+        <div class="school-login-visual-copy"><span>EDUCACIÓN INTEGRAL</span><h2>Aprender haciendo,<br>crecer descubriendo</h2><p>Una comunidad educativa donde el aprendizaje es significativo, comunicativo y vivencial.</p><div><i data-lucide="sparkles"></i> Autonomía · Curiosidad · Convivencia</div></div>
     </section>
 </main>
 <div class="school-login-toast" role="status" aria-live="polite">Comuníquese con Secretaría para recuperar su acceso.</div>

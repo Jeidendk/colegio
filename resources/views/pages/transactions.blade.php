@@ -7,7 +7,7 @@
     ];
     $transactionLoans = [
         ['code' => 'PRE-2026-018', 'subject' => 'Multímetro digital Fluke 87V · 2 unidades', 'type' => 'Equipo', 'requester' => 'Juan Carlos Pérez', 'date' => '26 ago 2026', 'status' => 'Activo'],
-        ['code' => 'PRE-2026-015', 'subject' => 'Módulo PLC Siemens S7-1200', 'type' => 'Equipo', 'requester' => 'María Fernanda Ruiz', 'date' => '20 ago 2026', 'status' => 'Por devolver'],
+        ['code' => 'PRE-2026-015', 'subject' => 'Kit educativo de robótica', 'type' => 'Equipo', 'requester' => 'María Fernanda Ruiz', 'date' => '20 ago 2026', 'status' => 'Por devolver'],
         ['code' => 'PRE-2026-009', 'subject' => 'Pinza amperimétrica · Laboratorio de potencia', 'type' => 'Herramienta', 'requester' => 'Jorge Andrés Silva', 'date' => '08 ago 2026', 'status' => 'Devuelto'],
     ];
     $statusCounts = array_count_values(array_column($transactionRequests, 'status'));

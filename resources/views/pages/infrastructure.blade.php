@@ -200,7 +200,7 @@
             </div>
 
             <div class="split-modal-fields">
-                <label class="export-field">Nombre del edificio<input required placeholder="Edificio FIE-C"></label>
+                <label class="export-field">Nombre del edificio<input required placeholder="Bloque de Bachillerato"></label>
 
                 <span class="field-label">Ícono representativo</span>
                 <div class="icon-picker" data-icon-picker>

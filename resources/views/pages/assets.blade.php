@@ -82,9 +82,9 @@
         <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
         <h2>Registrar ítem</h2><p>Agregue equipos, herramientas, tecnología o mobiliario.</p>
         <label class="asset-photo-label">Foto del ítem<span class="asset-photo-drop"><i data-lucide="image-plus"></i><b>Subir foto</b><small>JPG, PNG</small><em><i data-lucide="camera"></i></em><input type="file" accept="image/jpeg,image/png"></span></label>
-        <div class="form-grid"><label>Nombre del ítem<input required placeholder="Ej: Módulo PLC..."></label><label>Nº de serie / código<input placeholder="SN-12345"></label></div>
+        <div class="form-grid"><label>Nombre del ítem<input required placeholder="Ej: Microscopio escolar..."></label><label>Nº de serie / código<input placeholder="SN-12345"></label></div>
         <label class="asset-quantity">Cantidad<span><input type="number" min="1" value="1"><small>Un solo registro. Sube la cantidad para carga en lote.</small></span></label>
-        <div class="asset-form-grid"><label>Categoría<select><option>Equipos</option><option>Herramientas</option><option>Tecnológico</option><option>Mobiliario</option></select></label><label>Aula / ubicación<select><option>Lab. Circuitos</option><option>Lab. Control</option><option>Lab. Potencia</option><option>Aula 201</option></select></label><label>Edificio<select><option>FIE-A</option><option>Bloque Labs</option><option>Cómputo</option></select></label></div>
+        <div class="asset-form-grid"><label>Categoría<select><option>Ciencias</option><option>Didáctico</option><option>Tecnológico</option><option>Mobiliario</option></select></label><label>Aula / ubicación<select><option>Laboratorio de Ciencias</option><option>Sala de Computación</option><option>Biblioteca</option><option>Aula 8A</option></select></label><label>Edificio<select><option>Bloque EGB</option><option>Bloque de Ciencias</option><option>Bloque Tecnológico</option></select></label></div>
         <label>Estado físico<select><option>Bueno</option><option>Malo</option><option>Dañado</option></select></label>
         <div class="modal-actions"><button class="asset-cancel" type="button" data-modal-close>Cancelar</button><button class="asset-primary-button" type="submit">Guardar ítem</button></div>
     </form>

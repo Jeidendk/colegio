@@ -33,6 +33,8 @@
     @include('pages.virtual.teacher-students')
 @elseif(!$selectedCourse && $virtualView === 'cursos' && $isTeacher)
     @include('pages.virtual.teacher-courses')
+@elseif(!$selectedCourse && $virtualView === 'cursos')
+    @include('pages.virtual.student-courses')
 @else
 @if(!$selectedCourse)
     <x-hero icon="monitor-play" :title="$isTeacher ? 'Aulas virtuales' : 'Mi aula virtual'" :subtitle="$isTeacher ? 'Publica contenidos y acompaña el avance de tus estudiantes.' : 'Continúa tus cursos, revisa actividades y consulta tus calificaciones.'" :stats="[['Cursos', count($virtualCourses), 'activos'], ['Progreso', '75%', 'promedio'], ['Pendientes', '3', 'actividades'], ['Avisos', '4', 'nuevos']]">
@@ -40,7 +42,7 @@
     </x-hero>
 
     <section class="virtual-toolbar">
-        <div><small>PERIODO 2026-1</small><h2>{{ $isTeacher ? 'Cursos que imparto' : 'Mis cursos' }}</h2></div>
+        <div><small>AÑO LECTIVO 2026-2027</small><h2>{{ $isTeacher ? 'Cursos que imparto' : 'Mis cursos' }}</h2></div>
         <label class="search-field virtual-search"><i data-lucide="search"></i><input type="search" placeholder="Buscar curso..." data-table-search></label>
     </section>
 
@@ -53,7 +55,7 @@
                     <div class="cover-progress"><i style="width: {{ $course['progress'] }}%"></i></div>
                 </div>
                 <div class="virtual-course-body">
-                    <small>INGENIERÍA EN ELECTRICIDAD</small>
+                    <small>8.º EGB · PARALELO {{ $course['parallel'] }}</small>
                     <h2>{{ $course['name'] }}</h2>
                     <div class="virtual-teacher"><span>{{ $course['initials'] }}</span><b>{{ $course['teacher'] }}</b></div>
                     <div class="course-progress-copy"><span>Progreso del curso</span><strong>{{ $course['progress'] }}%</strong></div>
@@ -66,10 +68,12 @@
         @endforeach
     </div>
 @else
+    @include('pages.virtual.course-detail')
+    @if(false)
     <div class="virtual-breadcrumb"><a href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual']) }}"><i data-lucide="arrow-left"></i> Mis cursos</a><span>/</span><b>{{ $selectedCourse['code'] }}</b></div>
 
     <section class="course-room-hero tone-{{ $selectedCourse['tone'] }}">
-        <div class="course-room-copy"><span>ESPOCH · AULA VIRTUAL</span><h1>{{ $selectedCourse['name'] }}</h1><div><i>{{ $selectedCourse['initials'] }}</i><b>{{ $selectedCourse['teacher'] }}</b></div></div>
+        <div class="course-room-copy"><span>MONTESSORI · AULA VIRTUAL</span><h1>{{ $selectedCourse['name'] }}</h1><div><i>{{ $selectedCourse['initials'] }}</i><b>{{ $selectedCourse['teacher'] }}</b></div></div>
         <div class="course-room-status">
             @if($isTeacher)
                 <div class="teacher-room-summary"><b>{{ $selectedCourse['students'] }} estudiantes</b><span>·</span><b>{{ $selectedCourse['pending'] }} entregas pendientes</b></div>
@@ -102,7 +106,7 @@
     <section data-virtual-panel="course">
         <div class="virtual-section-title"><div><small>CONTENIDO DEL CURSO</small><h2>Módulos de aprendizaje</h2></div>@if($isTeacher)<button class="pill-button" type="button" data-modal-open="virtual-resource-modal"><i data-lucide="plus"></i> Agregar actividad</button>@endif</div>
         <button class="virtual-announcement" data-toast="Foro abierto en modo demostración"><span><i data-lucide="messages-square"></i></span><div><small>COMUNICACIÓN</small><b>Foro de novedades y avisos</b></div><em>3 nuevos</em><i data-lucide="chevron-right"></i></button>
-        <article class="course-welcome panel"><span><i data-lucide="sparkles"></i></span><div><h3>Bienvenido a {{ $selectedCourse['name'] }}</h3><p>En este espacio encontrarás los contenidos, recursos y actividades del periodo académico. Revisa regularmente los anuncios y completa cada módulo dentro de las fechas establecidas.</p><b>Facultad de Informática y Electrónica · Escuela de Electricidad</b></div></article>
+        <article class="course-welcome panel"><span><i data-lucide="sparkles"></i></span><div><h3>Bienvenido a {{ $selectedCourse['name'] }}</h3><p>En este espacio encontrarás contenidos, recursos y actividades del año lectivo. Revisa los anuncios y desarrolla cada módulo a tu ritmo, respetando las fechas establecidas.</p><b>Unidad Educativa Montessori · Educación General Básica</b></div></article>
         <div class="module-list">
             @foreach($selectedCourse['modules'] as $index => $module)
                 <article class="module-item">
@@ -124,20 +128,20 @@
 
     <section class="hidden" data-virtual-panel="skills">
         <div class="virtual-section-title"><div><small>RESULTADOS DE APRENDIZAJE</small><h2>Competencias del curso</h2></div></div>
-        <div class="competency-grid">@foreach([['Análisis técnico','Interpreta modelos y variables de sistemas eléctricos.',88],['Resolución de problemas','Aplica métodos de ingeniería en casos prácticos.',76],['Trabajo colaborativo','Participa activamente en prácticas y proyectos.',92]] as $skill)<article class="panel"><span><i data-lucide="badge-check"></i></span><h3>{{ $skill[0] }}</h3><p>{{ $skill[1] }}</p><div><i style="width:{{ $skill[2] }}%"></i></div><b>{{ $skill[2] }}% alcanzado</b></article>@endforeach</div>
+        <div class="competency-grid">@foreach([['Pensamiento crítico','Analiza información, formula preguntas y comunica sus conclusiones.',88],['Resolución de problemas','Aplica estrategias y conocimientos en situaciones cotidianas.',76],['Trabajo colaborativo','Participa con autonomía, respeto y responsabilidad en proyectos.',92]] as $skill)<article class="panel"><span><i data-lucide="badge-check"></i></span><h3>{{ $skill[0] }}</h3><p>{{ $skill[1] }}</p><div><i style="width:{{ $skill[2] }}%"></i></div><b>{{ $skill[2] }}% alcanzado</b></article>@endforeach</div>
     </section>
 
     <section class="hidden" data-virtual-panel="people">
         <div class="virtual-section-title"><div><small>COMUNIDAD DEL CURSO</small><h2>{{ $isTeacher ? 'Participantes matriculados' : 'Equipo docente' }}</h2></div></div>
-        <div class="people-grid"><article class="panel virtual-person"><span>{{ $selectedCourse['initials'] }}</span><div><small>DOCENTE PRINCIPAL</small><h3>{{ $selectedCourse['teacher'] }}</h3><p>{{ strtolower(str_replace(['Ing. ', ' '], ['', '.'], $selectedCourse['teacher'])) }}@espoch.edu.ec</p></div><button data-toast="Mensaje preparado"><i data-lucide="mail"></i></button></article>@if($isTeacher)@foreach([['JP','Juan Carlos Pérez','202145678'],['MR','María Fernanda Ruiz','202145691'],['JS','Jorge Silva Andrade','202145704']] as $person)<article class="panel virtual-person"><span>{{ $person[0] }}</span><div><small>ESTUDIANTE</small><h3>{{ $person[1] }}</h3><p>{{ $person[2] }} · Electricidad</p></div><button data-toast="Perfil académico abierto"><i data-lucide="eye"></i></button></article>@endforeach @endif</div>
+        <div class="people-grid"><article class="panel virtual-person"><span>{{ $selectedCourse['initials'] }}</span><div><small>DOCENTE PRINCIPAL</small><h3>{{ $selectedCourse['teacher'] }}</h3><p>docente@montessori-riobamba.edu.ec</p></div><button data-toast="Mensaje preparado"><i data-lucide="mail"></i></button></article>@if($isTeacher)@foreach([['JP','Juan Carlos Pérez','M-08021'],['MR','María Fernanda Ruiz','M-08034'],['JS','Jorge Silva Andrade','M-08047']] as $person)<article class="panel virtual-person"><span>{{ $person[0] }}</span><div><small>ESTUDIANTE</small><h3>{{ $person[1] }}</h3><p>{{ $person[2] }} · 8.º EGB A</p></div><button data-toast="Perfil académico abierto"><i data-lucide="eye"></i></button></article>@endforeach @endif</div>
     </section>
+    @endif
 @endif
 @endif
 
 <div class="modal" id="virtual-resource-modal" aria-hidden="true">
     <form class="modal-card demo-form wide-modal" data-demo-form>
         <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">&times;</button>
-        <small>AULA VIRTUAL</small>
         <h2>Publicar contenido</h2>
         <div class="form-grid">
             <label>Curso<select>@foreach($virtualCourses as $course)<option>{{ $course['name'] }}</option>@endforeach</select></label>

@@ -2,9 +2,9 @@
     $isSchedulePlanner = $role === 'admin';
     $weekDays = ['monday' => 'Lunes', 'tuesday' => 'Martes', 'wednesday' => 'Miércoles', 'thursday' => 'Jueves', 'friday' => 'Viernes'];
     $careerLegend = [
-        ['Diseño Gráfico', '#a855f7'], ['Electricidad', '#2563eb'], ['Electrónica y Automatización', '#0d9488'],
-        ['Electrónica y Telecomunicaciones', '#16a34a'], ['Software', '#f59e0b'], ['Tecnologías de la Información', '#ea580c'],
-        ['Telemática', '#c026d3'],
+        ['Inicial', '#a855f7'], ['EGB Elemental', '#2563eb'], ['EGB Media', '#0d9488'],
+        ['EGB Superior', '#16a34a'], ['Bachillerato', '#f59e0b'], ['English', '#ea580c'],
+        ['Proyectos interdisciplinarios', '#c026d3'],
     ];
     $printableHours = ['07H00 - 08H00', '08H00 - 09H00', '09H00 - 10H00', '10H00 - 11H00', '11H00 - 12H00', '12H00 - 13H00', '13H00 - 14H00', '14H00 - 15H00', '15H00 - 16H00', '16H00 - 17H00'];
     $plannerHours = ['07:00 - 08:00', '08:00 - 09:00', '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00'];
@@ -21,12 +21,12 @@
         }
     }
     $mapSpaces = [
-        ['name' => 'Edificio FIE-A', 'detail' => 'Aulas 101, 102, 105, 201 y 302', 'type' => 'Edificio', 'capacity' => 210, 'lat' => -1.65578, 'lng' => -78.67805, 'image' => 'https://images.unsplash.com/photo-1562774053-701939374585?w=320&h=240&fit=crop'],
-        ['name' => 'Bloque de Laboratorios', 'detail' => 'Control, Potencia, Circuitos y Electrónica', 'type' => 'Laboratorio', 'capacity' => 96, 'lat' => -1.65634, 'lng' => -78.67742, 'image' => 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=320&h=240&fit=crop'],
-        ['name' => 'Edificio de Cómputo', 'detail' => 'Laboratorios de informática 1 y 2', 'type' => 'Edificio', 'capacity' => 80, 'lat' => -1.65522, 'lng' => -78.67874, 'image' => 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=320&h=240&fit=crop'],
-        ['name' => 'Aula Magna', 'detail' => 'Auditorio y eventos académicos', 'type' => 'Auditorio', 'capacity' => 320, 'lat' => -1.65476, 'lng' => -78.67692, 'image' => 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=320&h=240&fit=crop'],
-        ['name' => 'Laboratorio de Potencia', 'detail' => 'Máquinas y sistemas eléctricos', 'type' => 'Laboratorio', 'capacity' => 28, 'lat' => -1.65692, 'lng' => -78.67782, 'image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=320&h=240&fit=crop'],
-        ['name' => 'Biblioteca FIE', 'detail' => 'Consulta y estudio colaborativo', 'type' => 'Servicio', 'capacity' => 72, 'lat' => -1.65505, 'lng' => -78.67948, 'image' => 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=320&h=240&fit=crop'],
+        ['name' => 'Bloque de Educación Básica', 'detail' => 'Aulas de EGB Elemental, Media y Superior', 'type' => 'Edificio', 'capacity' => 210, 'lat' => -1.65578, 'lng' => -78.67805, 'image' => 'https://images.unsplash.com/photo-1562774053-701939374585?w=320&h=240&fit=crop'],
+        ['name' => 'Laboratorio de Ciencias', 'detail' => 'Ciencias Naturales, Biología y Química', 'type' => 'Laboratorio', 'capacity' => 32, 'lat' => -1.65634, 'lng' => -78.67742, 'image' => 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=320&h=240&fit=crop'],
+        ['name' => 'Sala de Computación', 'detail' => 'Tecnología, programación y robótica educativa', 'type' => 'Laboratorio', 'capacity' => 30, 'lat' => -1.65522, 'lng' => -78.67874, 'image' => 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=320&h=240&fit=crop'],
+        ['name' => 'Auditorio Montessori', 'detail' => 'Actos, exposiciones y eventos académicos', 'type' => 'Auditorio', 'capacity' => 160, 'lat' => -1.65476, 'lng' => -78.67692, 'image' => 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=320&h=240&fit=crop'],
+        ['name' => 'Bloque de Educación Inicial', 'detail' => 'Ambientes preparados para Inicial 1 y 2', 'type' => 'Edificio', 'capacity' => 60, 'lat' => -1.65692, 'lng' => -78.67782, 'image' => 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=320&h=240&fit=crop'],
+        ['name' => 'Biblioteca Montessori', 'detail' => 'Lectura, consulta y estudio colaborativo', 'type' => 'Servicio', 'capacity' => 72, 'lat' => -1.65505, 'lng' => -78.67948, 'image' => 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=320&h=240&fit=crop'],
         ['name' => 'Cancha cubierta', 'detail' => 'Espacio de bienestar estudiantil', 'type' => 'Servicio', 'capacity' => 150, 'lat' => -1.65725, 'lng' => -78.67652, 'image' => 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=320&h=240&fit=crop'],
     ];
 @endphp
@@ -50,7 +50,7 @@
 @else
     <x-hero icon="calendar-days"
         :title="$role === 'estudiante' || $role === 'representante' ? 'Horario académico' : 'Mi horario docente'"
-        :subtitle="$role === 'representante' ? 'Consulta la jornada semanal de '.$student['firstName'].'.' : 'Periodo académico 2026-1 · Ingeniería en Electricidad'"
+        :subtitle="$role === 'representante' ? 'Consulta la jornada semanal de '.$student['firstName'].'.' : 'Año lectivo 2026-2027 · Unidad Educativa Montessori'"
         :stats="[['Clases', $classesInRoom, 'programadas'], ['Aulas', count(array_unique($usedRooms)), 'en uso'], ['Docentes', count(array_unique($assignedTeachers)), 'asignados']]" />
 @endif
 
@@ -205,7 +205,7 @@
         </aside>
 
         <div class="campus-spaces-map" data-campus-map>
-            <div class="leaflet-campus-map" id="spaces-leaflet-map" data-leaflet-map aria-label="Mapa interactivo de espacios ESPOCH"></div>
+            <div class="leaflet-campus-map" id="spaces-leaflet-map" data-leaflet-map aria-label="Mapa interactivo de espacios Montessori Riobamba"></div>
             <div class="map-style-switch"><button class="is-active" type="button" data-map-style="street">Mapa</button><button type="button" data-map-style="satellite">Satélite</button><button type="button" data-map-style="hybrid">Híbrido</button></div>
             <div class="map-zoom"><button type="button" data-map-zoom-in aria-label="Acercar">+</button><button type="button" data-map-zoom-out aria-label="Alejar">−</button><button type="button" data-map-center aria-label="Centrar mapa"><i data-lucide="locate-fixed"></i></button></div>
             <div class="spaces-map-legend"><b><i data-lucide="layers-3"></i> Leyenda</b><span><i class="dot available"></i> Disponible / Operativo</span><span><i class="dot occupied"></i> Ocupado</span></div>
@@ -232,15 +232,15 @@
         <label class="export-field">Aula o laboratorio
             <select data-export-room>
                 <option selected>Aula 102</option>
-                <option>FIE-201</option>
-                <option>FIE-302</option>
-                <option>Lab. Control</option>
-                <option>Lab. Potencia</option>
+                <option>Aula 8A</option>
+                <option>Aula 8B</option>
+                <option>Laboratorio de Ciencias</option>
+                <option>Sala de Computación</option>
             </select>
         </label>
 
-        <label class="export-field">Período académico
-            <input value="MARZO 2026 - SEPTIEMBRE 2026" data-export-period>
+        <label class="export-field">Año lectivo
+            <input value="2026 - 2027" data-export-period>
         </label>
 
         <div class="export-tabs segmented compact" data-tabs>
@@ -314,16 +314,16 @@
         <div class="export-sheet-wrap">
             <article class="export-sheet">
                 <header class="sheet-head">
-                    <img src="{{ asset('img/espoch-bandera.webp') }}" alt="ESPOCH">
+                    <img src="{{ asset('img/montessori-logo.png') }}" alt="Unidad Educativa Montessori">
                     <div>
-                        <h3>ESCUELA SUPERIOR POLITÉCNICA DE CHIMBORAZO</h3>
-                        <p>FACULTAD DE INFORMÁTICA Y ELECTRÓNICA</p>
+                        <h3>UNIDAD EDUCATIVA MONTESSORI</h3>
+                        <p>RIOBAMBA · CHIMBORAZO</p>
                     </div>
                 </header>
 
                 <h4 class="sheet-room" data-sheet-room>AULA 102</h4>
                 <p class="sheet-meta" data-sheet-building>EDIFICIO DE AULAS</p>
-                <p class="sheet-meta" data-sheet-period>MARZO 2026 - SEPTIEMBRE 2026</p>
+                <p class="sheet-meta" data-sheet-period>AÑO LECTIVO 2026 - 2027</p>
 
                 <table class="sheet-table">
                     <thead>
@@ -337,8 +337,8 @@
                 </table>
 
                 <footer class="sheet-foot">
-                    Panamericana Sur Km. 1 ½. | Teléfono: 593 (03) 2 998-200 | Telefax: (03) 2 317-001 | Código Postal: EC060155.<br>
-                    Riobamba - Ecuador
+                    Sector Las Acacias · Riobamba, Chimborazo<br>
+                    Documento demostrativo · Unidad Educativa Montessori
                 </footer>
             </article>
         </div>
@@ -352,11 +352,11 @@
             <small>HORARIOS</small>
             <h2>Nueva clase</h2>
             <div class="form-grid">
-                <label>Materia<select><option>Control Automático</option><option>Circuitos Eléctricos I</option><option>Máquinas Eléctricas II</option><option>Análisis de Señales</option></select></label>
-                <label>Docente<select><option>Ing. Roberto Sánchez</option><option>Ing. Patricia Morales</option><option>Ing. Fernando Ruiz</option><option>Ing. Ana Gómez</option></select></label>
+                <label>Materia<select><option>Matemática</option><option>Lengua y Literatura</option><option>Ciencias Naturales</option><option>Estudios Sociales</option></select></label>
+                <label>Docente<select><option>Lcdo. Roberto Sánchez</option><option>Lcda. Patricia Morales</option><option>Lcdo. Fernando Ruiz</option><option>Lcda. Ana Gómez</option></select></label>
             </div>
             <div class="form-grid">
-                <label>Carrera<select><option>Ingeniería en Electricidad</option><option>Electrónica y Automatización</option><option>Telecomunicaciones</option></select></label>
+                <label>Nivel<select><option>EGB Elemental</option><option>EGB Media</option><option>EGB Superior</option><option>Bachillerato</option></select></label>
                 <label>Paralelo<select><option>A</option><option>B</option></select></label>
             </div>
             <div class="form-grid">
@@ -368,10 +368,10 @@
                 <label>Hora fin<input type="time" value="09:00"></label>
             </div>
             <div class="form-grid">
-                <label>Edificio<select><option>FIE-A</option><option>Bloque Labs</option><option>Cómputo</option></select></label>
+                <label>Edificio<select><option>Bloque EGB</option><option>Bloque Inicial</option><option>Bloque Bachillerato</option></select></label>
                 <label>Piso<select><option>Planta baja</option><option>Piso 1</option><option>Piso 2</option></select></label>
             </div>
-            <label>Aula<select><option>FIE-201</option><option>FIE-302</option><option>Lab. Control</option><option>Lab. Potencia</option><option>Lab. Circuitos</option></select></label>
+            <label>Aula<select><option>Aula 8A</option><option>Aula 8B</option><option>Laboratorio de Ciencias</option><option>Sala de Computación</option><option>Biblioteca</option></select></label>
             <div class="modal-actions">
                 <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
                 <button class="primary-button" type="submit">Guardar clase</button>
@@ -390,8 +390,8 @@
                 <input type="file" accept=".xlsx,.csv">
             </label>
             <div class="form-grid">
-                <label>Periodo<select><option>2026-1</option><option>2025-2</option></select></label>
-                <label>Aula destino<select><option>Todas las del archivo</option><option>FIE-201</option><option>Lab. Control</option></select></label>
+                <label>Año lectivo<select><option>2026-2027</option><option>2025-2026</option></select></label>
+                <label>Aula destino<select><option>Todas las del archivo</option><option>Aula 8A</option><option>Laboratorio de Ciencias</option></select></label>
             </div>
             <label class="check-inline"><input type="checkbox" checked> Reemplazar las clases existentes del periodo</label>
             <div class="modal-actions">

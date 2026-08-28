@@ -164,7 +164,7 @@
                     @if($isFormats)
                         <option>General</option><option>Trámites</option><option>Académico</option><option>Inventario</option>
                     @else
-                        <option>Circuitos Eléctricos I</option><option>Control Automático</option><option>Sistemas Eléctricos de Potencia</option><option>General</option>
+                        <option>Matemática</option><option>Lengua y Literatura</option><option>Ciencias Naturales</option><option>General</option>
                     @endif
                 </select>
             </label>

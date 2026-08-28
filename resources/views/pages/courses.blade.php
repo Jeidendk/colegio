@@ -19,8 +19,8 @@
             <option>A</option>
             <option>B</option>
         </select>
-        <button class="secondary-button" type="button" data-modal-open="course-activity-modal"><i data-lucide="clipboard-pen"></i> Nueva actividad</button>
-        <button class="secondary-button" type="button" data-toast="Listado de cursos exportado"><i data-lucide="download"></i> Exportar</button>
+        <button class="pill-button" type="button" data-modal-open="course-activity-modal"><i data-lucide="clipboard-pen"></i> Nueva actividad</button>
+        <button class="pill-button" type="button" data-toast="Listado de cursos exportado"><i data-lucide="download"></i> Exportar</button>
     </div>
 
     <div class="course-grid">

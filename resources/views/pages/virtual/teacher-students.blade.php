@@ -1,24 +1,18 @@
 @php
     $participants = [
-        ['JP','Juan Carlos Pérez','202145678','Sistemas Eléctricos de Potencia','82%','Hoy, 08:32','Al día'],
-        ['MR','María Fernanda Ruiz','202145691','Sistemas Eléctricos de Potencia','74%','Ayer, 19:10','Al día'],
-        ['JS','Jorge Silva Andrade','202145704','Máquinas Eléctricas II','49%','Hace 5 días','En riesgo'],
-        ['AC','Andrea Cabrera','202145719','Máquinas Eléctricas II','88%','Hoy, 07:55','Al día'],
-        ['LM','Luis Molina','202145731','Control Automático','67%','Hace 2 días','Pendiente'],
-        ['SV','Sofía Villacís','202145744','Control Automático','91%','Hoy, 09:02','Al día'],
+        ['JP','Juan Carlos Pérez','M-08021','Matemática','82%','Hoy, 08:32','Al día'],
+        ['MR','María Fernanda Ruiz','M-08034','Matemática','74%','Ayer, 19:10','Al día'],
+        ['JS','Jorge Silva Andrade','M-08047','Lengua y Literatura','49%','Hace 5 días','En riesgo'],
+        ['AC','Andrea Cabrera','M-08052','Lengua y Literatura','88%','Hoy, 07:55','Al día'],
+        ['LM','Luis Molina','M-08063','Ciencias Naturales','67%','Hace 2 días','Pendiente'],
+        ['SV','Sofía Villacís','M-08071','Ciencias Naturales','91%','Hoy, 09:02','Al día'],
     ];
 @endphp
 
 <section class="teacher-courses-heading">
-    <div><small>SEGUIMIENTO · PERIODO 2026-1</small><h1>Participantes de mis cursos</h1><p>Consulta el avance y la última actividad de los estudiantes matriculados.</p></div>
+    <div><h1>Participantes de mis cursos</h1><p>Consulta el avance y la última actividad de los estudiantes matriculados.</p></div>
     <button class="pill-button solid" type="button" data-toast="Mensaje grupal preparado"><i data-lucide="send"></i> Mensaje grupal</button>
 </section>
-
-<div class="detail-metrics">
-    @foreach([['users','83','Matriculados'],['user-check','81','Activos'],['triangle-alert','4','Requieren atención'],['gauge','76%','Avance promedio']] as $stat)
-        <div><small>{{ $stat[2] }}</small><strong>{{ $stat[1] }}</strong><span><i data-lucide="{{ $stat[0] }}"></i> Periodo 2026-1</span></div>
-    @endforeach
-</div>
 
 <section class="panel users-panel" data-teacher-students>
     <span class="panel-accent" aria-hidden="true"></span>

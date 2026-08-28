@@ -1,7 +1,7 @@
 @php
     $canBroadcast = in_array($role, ['admin', 'docente'], true);
     $sentMessages = [
-        ['type' => 'Curso', 'title' => 'Recordatorio: entrega del informe 05', 'text' => 'Enviado a Sistemas Eléctricos de Potencia · Paralelo A.', 'date' => 'Hoy'],
+        ['type' => 'Curso', 'title' => 'Recordatorio: entrega de la actividad 05', 'text' => 'Enviado a Matemática · 8.º EGB · Paralelo A.', 'date' => 'Hoy'],
         ['type' => 'Representantes', 'title' => 'Convocatoria a reunión de padres', 'text' => 'Enviado a 28 representantes del paralelo A.', 'date' => 'Ayer'],
     ];
 @endphp
@@ -65,7 +65,7 @@
 
         <small data-message-type>ACADÉMICO</small>
         <h2 data-message-title>Reunión de seguimiento del periodo</h2>
-        <p data-message-text>Miércoles 2 de septiembre, 16:00 · Sala de reuniones FIE.</p>
+        <p data-message-text>Miércoles 2 de septiembre, 16:00 · Sala de reuniones Montessori.</p>
 
         <div class="message-note">
             <b>Estimada comunidad:</b>
@@ -79,8 +79,8 @@
                     <i data-lucide="paperclip"></i> Adjuntar
                     <input type="file">
                 </label>
-                <button class="secondary-button" type="button" data-toast="Borrador guardado">Guardar borrador</button>
-                <button class="primary-button" type="submit"><i data-lucide="send"></i> Enviar respuesta</button>
+                <button class="pill-button" type="button" data-toast="Borrador guardado">Guardar borrador</button>
+                <button class="pill-button solid" type="submit"><i data-lucide="send"></i> Enviar respuesta</button>
             </div>
         </form>
     </section>
@@ -107,7 +107,7 @@
             <label class="check-inline"><input type="checkbox" checked> Enviar copia al correo institucional</label>
             <div class="modal-actions">
                 <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-                <button class="primary-button" type="submit">Enviar aviso</button>
+                <button class="primary-button dark" type="submit">Enviar aviso</button>
             </div>
         </form>
     </div>

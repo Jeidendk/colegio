@@ -170,14 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
         cart.clear(); renderCart(); setCartOpen(false); showToast('Solicitud generada correctamente');
     });
 
-    document.querySelectorAll('[data-place]').forEach((button) => button.addEventListener('click', () => {
-        document.querySelectorAll('[data-place]').forEach((item) => item.classList.toggle('is-active', item === button));
-        const title = document.querySelector('[data-place-title]'); const detail = document.querySelector('[data-place-detail]');
-        if (title) title.textContent = button.dataset.place; if (detail) detail.textContent = button.dataset.detail;
-    }));
     document.querySelector('[data-place-search]')?.addEventListener('input', (event) => {
-        const query = event.target.value.toLocaleLowerCase('es');
-        document.querySelectorAll('[data-place]').forEach((place) => place.classList.toggle('hidden', !place.textContent.toLocaleLowerCase('es').includes(query)));
+        const query = event.target.value.trim().toLocaleLowerCase('es');
+        document.querySelectorAll('.place-item').forEach((place) => {
+            place.classList.toggle('hidden', Boolean(query) && !place.dataset.placeName.includes(query));
+        });
     });
     document.querySelectorAll('[data-building]').forEach((button) => button.addEventListener('click', () => {
         document.querySelectorAll('[data-building]').forEach((item) => item.classList.toggle('is-active', item === button));
@@ -606,7 +603,9 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const managementPanel = document.querySelector('[data-infra-panel="management"]');
     const mapPanel = document.querySelector('[data-infra-panel="map"]');
-    if (!managementPanel || !mapPanel) return;
+    const mapElement = document.querySelector('[data-infra-map]');
+    // La pantalla de mapa del estudiante reutiliza este mapa sin los paneles de gestión.
+    if (!mapElement) return;
 
     const campusCenter = [-1.65605, -78.67795];
     const buildTileLayers = () => ({
@@ -622,12 +621,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let campusMap = null;
     let campusLayers = {};
     let activeCampusLayer = null;
+    const campusMarkers = [];
 
     const initCampusMap = () => {
-        const element = document.querySelector('[data-infra-map]');
-        if (campusMap || !element || !window.L) return;
+        if (campusMap || !window.L) return;
 
-        campusMap = window.L.map(element, {zoomControl: false}).setView(campusCenter, 17);
+        campusMap = window.L.map(mapElement, {zoomControl: false}).setView(campusCenter, 17);
         campusLayers = buildTileLayers();
         activeCampusLayer = campusLayers.street.addTo(campusMap);
 
@@ -641,8 +640,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }).addTo(campusMap);
             point.bindPopup('<b>' + marker.dataset.markerTitle + '</b><br>' + marker.dataset.markerDetail);
             point.bindTooltip(marker.dataset.markerTitle, {direction: 'top', offset: [0, -9]});
+            campusMarkers[marker.dataset.markerIndex] = point;
         });
     };
+
+    // Lista de lugares: al elegir uno se centra el mapa y se actualiza la ficha.
+    const placeButtons = [...document.querySelectorAll('.place-item[data-infra-marker]')];
+    placeButtons.forEach((button) => button.addEventListener('click', () => {
+        placeButtons.forEach((item) => item.classList.toggle('is-active', item === button));
+        const title = document.querySelector('[data-place-title]');
+        const detail = document.querySelector('[data-place-detail]');
+        if (title) title.textContent = button.dataset.markerTitle;
+        if (detail) detail.textContent = button.dataset.markerDetail;
+
+        const marker = campusMarkers[button.dataset.markerIndex];
+        if (!marker || !campusMap) return;
+        campusMap.panTo(marker.getLatLng(), {animate: true});
+        marker.openPopup();
+    }));
+
+    if (!managementPanel || !mapPanel) {
+        initCampusMap();
+        window.setTimeout(() => campusMap?.invalidateSize(), 60);
+    }
 
     document.querySelectorAll('[data-infra-view]').forEach((tab) => tab.addEventListener('click', () => {
         const showMap = tab.dataset.infraView === 'map';
@@ -959,4 +979,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
 
     applyFilters();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const library = document.querySelector('[data-student-courses]');
+    if (library) {
+        const search = library.querySelector('[data-student-course-search]');
+        const filter = library.querySelector('[data-student-course-filter]');
+        const sort = library.querySelector('[data-student-course-sort]');
+        const view = library.querySelector('[data-student-course-view]');
+        const grid = library.querySelector('[data-student-course-grid]');
+        const cards = [...library.querySelectorAll('[data-student-course]')];
+        const empty = library.querySelector('[data-student-course-empty]');
+
+        const applyStudentCourseFilters = () => {
+            const query = (search?.value || '').trim().toLocaleLowerCase('es');
+            const selected = filter?.value || '';
+            let visible = 0;
+            cards.forEach((card) => {
+                const progress = Number(card.dataset.courseProgress || 0);
+                const pending = Number(card.dataset.coursePending || 0);
+                const matchesState = !selected
+                    || (selected === 'progress' && progress > 0 && progress < 100)
+                    || (selected === 'completed' && progress === 100)
+                    || (selected === 'pending' && pending > 0);
+                const matchesQuery = !query || card.dataset.courseSearch.includes(query);
+                card.classList.toggle('hidden', !(matchesState && matchesQuery));
+                if (matchesState && matchesQuery) visible += 1;
+            });
+            empty?.classList.toggle('hidden', visible !== 0);
+        };
+
+        const sortStudentCourses = () => {
+            const mode = sort?.value || 'name';
+            const ordered = [...cards].sort((first, second) => {
+                if (mode === 'progress') return Number(second.dataset.courseProgress) - Number(first.dataset.courseProgress);
+                if (mode === 'recent') return cards.indexOf(first) - cards.indexOf(second);
+                return first.dataset.courseName.localeCompare(second.dataset.courseName, 'es');
+            });
+            ordered.forEach((card) => grid?.appendChild(card));
+        };
+
+        search?.addEventListener('input', applyStudentCourseFilters);
+        filter?.addEventListener('change', applyStudentCourseFilters);
+        sort?.addEventListener('change', sortStudentCourses);
+        view?.addEventListener('change', () => grid?.classList.toggle('is-list', view.value === 'list'));
+        applyStudentCourseFilters();
+        sortStudentCourses();
+    }
+
+    const topicRoot = document.querySelector('[data-course-topics]');
+    if (topicRoot) {
+        const activateTopic = (topic) => {
+            topicRoot.querySelectorAll('[data-course-topic]').forEach((button) => {
+                const active = button.dataset.courseTopic === topic;
+                button.classList.toggle('is-active', active);
+                button.setAttribute('aria-selected', String(active));
+            });
+            topicRoot.querySelectorAll('[data-course-topic-panel]').forEach((panel) => panel.classList.toggle('hidden', panel.dataset.courseTopicPanel !== topic));
+        };
+        topicRoot.querySelectorAll('[data-course-topic]').forEach((button) => button.addEventListener('click', () => activateTopic(button.dataset.courseTopic)));
+    }
 });

@@ -1,5 +1,5 @@
 <section class="virtual-welcome">
-    <span>ESPOCH · ENTORNO VIRTUAL DE APRENDIZAJE</span>
+    <span>MONTESSORI · ENTORNO VIRTUAL DE APRENDIZAJE</span>
     <h1>{{ $isTeacher ? '¡Bienvenido al Aula Virtual!' : '¡Hola, '.$student['firstName'].'!' }}</h1>
     <p>{{ $isTeacher ? 'Administra tus cursos, contenidos y actividades desde un solo lugar.' : 'Aquí tienes un resumen de tu actividad académica en línea.' }}</p>
 </section>
@@ -20,7 +20,7 @@
     <aside class="panel">
         <div class="panel-header"><div><small>PRÓXIMOS 7 DÍAS</small><h2>Actividades</h2></div><a href="{{ route('portal', ['role'=>$role,'page'=>'aula-virtual','vista'=>'calendario']) }}">Calendario</a></div>
         <div class="virtual-timeline">
-            @foreach([['31','AGO','Cuestionario: Flujo de potencia','Sistemas Eléctricos'],['02','SEP','Informe: Motor trifásico','Máquinas Eléctricas II'],['04','SEP','Práctica: Control PID','Control Automático']] as $event)<article><time><b>{{ $event[0] }}</b><small>{{ $event[1] }}</small></time><div><b>{{ $event[2] }}</b><small>{{ $event[3] }}</small></div></article>@endforeach
+            @foreach([['31','AGO','Reto: números racionales','Matemática'],['02','SEP','Relato de tradición oral','Lengua y Literatura'],['04','SEP','Bitácora de ecosistemas','Ciencias Naturales']] as $event)<article><time><b>{{ $event[0] }}</b><small>{{ $event[1] }}</small></time><div><b>{{ $event[2] }}</b><small>{{ $event[3] }}</small></div></article>@endforeach
         </div>
     </aside>
 </div>

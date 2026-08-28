@@ -12,6 +12,17 @@ class ExampleTest extends TestCase
         $this->get('/')->assertRedirect('/login');
     }
 
+    public function test_login_is_a_visual_demo_that_opens_the_dashboard(): void
+    {
+        $this->get('/login')
+            ->assertOk()
+            ->assertSee('Unidad Educativa Montessori')
+            ->assertSee('Riobamba')
+            ->assertSee('Iniciar sesión')
+            ->assertSee('/admin/dashboard', false)
+            ->assertSee('No se validan ni almacenan credenciales.');
+    }
+
     public function test_every_role_has_a_public_hardcoded_home(): void
     {
         $pages = [
@@ -59,10 +70,10 @@ class ExampleTest extends TestCase
             '/estudiante/aula-virtual?vista=area' => 'Próximas actividades',
             '/estudiante/aula-virtual?vista=cursos' => 'Mis cursos',
             '/estudiante/aula-virtual?vista=calendario' => 'Calendario académico',
-            '/estudiante/aula-virtual?vista=calificaciones' => 'Resumen de resultados por curso',
-            '/estudiante/aula-virtual?curso=sistemas-potencia' => 'Módulos de aprendizaje',
+            '/estudiante/aula-virtual?vista=calificaciones' => 'Resumen de resultados por materia',
+            '/estudiante/aula-virtual?curso=matematica-octavo' => 'Sección de información',
             '/docente/aula-virtual' => 'Administra tus cursos',
-            '/docente/aula-virtual?vista=cursos' => 'Cursos que imparto',
+            '/docente/aula-virtual?vista=cursos' => 'Mis cursos',
             '/docente/aula-virtual?vista=calificaciones' => 'Libro de calificaciones',
             '/docente/aula-virtual?vista=estudiantes' => 'Participantes de mis cursos',
         ];
@@ -76,8 +87,8 @@ class ExampleTest extends TestCase
     {
         $this->get('/docente/aula-virtual?vista=cursos')
             ->assertOk()
-            ->assertSee('Cursos que imparto')
-            ->assertSee('Entregas por revisar')
+            ->assertSee('Mis cursos')
+            ->assertDontSee('class="detail-metrics"', false)
             ->assertSee('Administrar curso')
             ->assertSee('Solicitar nueva aula')
             ->assertSee('Buscar cursos...')
@@ -86,9 +97,30 @@ class ExampleTest extends TestCase
             ->assertSee('del aula preparada')
             ->assertDontSee('href="http://localhost/docente/cursos"', false);
 
+        foreach (['area', 'calificaciones', 'estudiantes'] as $cleanView) {
+            $this->get('/docente/aula-virtual?vista='.$cleanView)
+                ->assertOk()
+                ->assertDontSee('class="detail-metrics"', false)
+                ->assertDontSee('class="virtual-stat-grid personal-stats"', false);
+        }
+
         foreach (['cursos', 'calificaciones', 'estudiantes'] as $removedPage) {
             $this->get("/docente/{$removedPage}")->assertNotFound();
         }
+    }
+
+    public function test_student_course_library_has_eight_clickable_filtered_subjects(): void
+    {
+        $response = $this->get('/estudiante/aula-virtual?vista=cursos')
+            ->assertOk()
+            ->assertSee('Mis cursos')
+            ->assertSee('Ordenar por nombre del curso')
+            ->assertSee('Buscar cursos...')
+            ->assertSee('Computación y Robótica')
+            ->assertSee('Educación Física')
+            ->assertDontSee('Continuar curso');
+
+        $this->assertSame(8, substr_count($response->getContent(), 'class="student-course-card"'));
     }
 
     public function test_admin_transactions_screen_uses_the_adapted_workflow(): void
@@ -110,7 +142,7 @@ class ExampleTest extends TestCase
             ->assertSee('Horario semestral')
             ->assertSee('Mapa de espacios')
             ->assertSee('Explorador de espacios')
-            ->assertSee('Edificio FIE-A')
+            ->assertSee('Bloque de Educación Básica')
             ->assertSee('Aula 102')
             ->assertSee('spaces-leaflet-map')
             ->assertSee('images.unsplash.com')
@@ -125,7 +157,7 @@ class ExampleTest extends TestCase
             ->assertSee('Inventario')
             ->assertSee('Asignaciones')
             ->assertSee('Mantenimiento')
-            ->assertSee('Multímetro Digital Fluke')
+            ->assertSee('Microscopio binocular escolar')
             ->assertSee('Registrar ítem')
             ->assertSee('Subir foto');
     }

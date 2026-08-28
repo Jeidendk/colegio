@@ -21,8 +21,10 @@
         @endif
     </x-hero>
 
-    <section class="panel">
-        <div class="toolbar">
+    <section class="panel users-panel">
+        <span class="panel-accent" aria-hidden="true"></span>
+
+        <div class="toolbar users-toolbar">
             <div class="chip-filters" data-filter-chips>
                 @foreach($requestFilters as $value => $label)
                     <button type="button" class="filter-chip {{ $value === '' ? 'is-active' : '' }}" data-filter-chip="{{ $value }}">
@@ -30,8 +32,10 @@
                     </button>
                 @endforeach
             </div>
-            <label class="search-field grow"><i data-lucide="search"></i><input type="search" placeholder="Buscar solicitud, asignatura o equipo..." data-table-search></label>
-            <button class="secondary-button" type="button" data-toast="Listado exportado en la demostración"><i data-lucide="download"></i> Exportar</button>
+            <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar solicitud, asignatura o equipo..." data-table-search></label>
+            <div class="toolbar-right">
+                <button class="pill-button" type="button" data-toast="Listado exportado en la demostración"><i data-lucide="download"></i> Exportar</button>
+            </div>
         </div>
 
         <div class="table-wrap">
@@ -62,9 +66,7 @@
             </table>
         </div>
 
-        <div class="panel-footer">
-            <span><i data-lucide="info"></i> Mostrando {{ count($requests) }} de {{ count($requests) }} solicitudes.</span>
-        </div>
+        <x-table-footer :count="count($requests)" label="Bandeja de solicitudes y préstamos del periodo." />
     </section>
 
     @if($canManageRequests)
@@ -80,7 +82,7 @@
                 </div>
                 <label>Equipos solicitados<textarea placeholder="Ej. 2 × Multímetro digital, 1 × Osciloscopio"></textarea></label>
                 <div class="form-grid">
-                    <label>Laboratorio<select><option>Lab. Circuitos</option><option>Lab. Control</option><option>Lab. Potencia</option></select></label>
+                    <label>Laboratorio<select><option>Laboratorio de Ciencias</option><option>Sala de Computación</option><option>Taller de Arte</option></select></label>
                     <label>Estado inicial<select><option>Pendiente</option><option>Aprobada</option></select></label>
                 </div>
                 <div class="modal-actions">
@@ -119,7 +121,7 @@
                 <button type="button" data-tab="maintenance">Mantenimiento</button>
             </div>
             <label class="search-field grow"><i data-lucide="search"></i><input type="search" placeholder="Buscar activo, código o ubicación..." data-table-search></label>
-            <button class="secondary-button" type="button" data-toast="Inventario exportado"><i data-lucide="download"></i> Exportar</button>
+            <button class="pill-button" type="button" data-toast="Inventario exportado"><i data-lucide="download"></i> Exportar</button>
         </div>
 
         <div data-tab-panel="inventory">
@@ -174,7 +176,7 @@
             </div>
             <div class="panel-footer">
                 <span><i data-lucide="info"></i> {{ count($assignments) }} asignaciones registradas en el periodo.</span>
-                <button class="secondary-button" type="button" data-modal-open="assignment-modal"><i data-lucide="plus"></i> Nueva asignación</button>
+                <button class="pill-button" type="button" data-modal-open="assignment-modal"><i data-lucide="plus"></i> Nueva asignación</button>
             </div>
         </div>
 
@@ -204,7 +206,7 @@
             </div>
             <div class="panel-footer">
                 <span><i data-lucide="info"></i> {{ count($maintenance) }} órdenes registradas.</span>
-                <button class="secondary-button" type="button" data-modal-open="maintenance-modal"><i data-lucide="plus"></i> Nueva orden</button>
+                <button class="pill-button" type="button" data-modal-open="maintenance-modal"><i data-lucide="plus"></i> Nueva orden</button>
             </div>
         </div>
     </section>
@@ -224,8 +226,8 @@
                 <label>Estado<select><option>Bueno</option><option>Malo</option><option>Dañado</option></select></label>
             </div>
             <div class="form-grid">
-                <label>Edificio<select><option>FIE-A</option><option>Bloque Labs</option><option>Cómputo</option></select></label>
-                <label>Espacio<select><option>Lab. Circuitos</option><option>Lab. Control</option><option>Lab. Potencia</option><option>Aula 201</option></select></label>
+                <label>Edificio<select><option>Bloque EGB</option><option>Bloque de Ciencias</option><option>Bloque Tecnológico</option></select></label>
+                <label>Espacio<select><option>Laboratorio de Ciencias</option><option>Sala de Computación</option><option>Biblioteca</option><option>Aula 8A</option></select></label>
             </div>
             <label>Observaciones<textarea placeholder="Detalles de compra, garantía o accesorios..."></textarea></label>
             <div class="modal-actions">
@@ -240,7 +242,7 @@
             <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
             <small>ASIGNACIONES</small>
             <h2>Asignar activo</h2>
-            <label>Activo<select><option>Multímetro Digital Fluke</option><option>Módulo PLC S7-1200</option><option>Proyector Epson PowerLite</option></select></label>
+            <label>Activo<select><option>Microscopio binocular escolar</option><option>Kit educativo de robótica</option><option>Proyector Epson PowerLite</option></select></label>
             <div class="form-grid">
                 <label>Responsable<input required placeholder="Docente o área"></label>
                 <label>Desde<input type="date" value="2026-08-27"></label>
@@ -396,7 +398,7 @@
                 <label>Estado<select><option>Activo</option><option>Inactivo</option></select></label>
             </div>
             <div class="form-grid">
-                <label>Departamento o carrera<select><option>Ingeniería en Electricidad</option><option>Electrónica y Automatización</option><option>Telecomunicaciones</option><option>Dirección de Carrera</option></select></label>
+                <label>Nivel o departamento<select><option>EGB Elemental</option><option>EGB Media</option><option>EGB Superior</option><option>Coordinación Académica</option></select></label>
                 <label>PAO<select><option>No aplica</option>@for($pao = 1; $pao <= 9; $pao++)<option>{{ $pao }}.º</option>@endfor</select></label>
             </div>
             <div class="modal-actions">
