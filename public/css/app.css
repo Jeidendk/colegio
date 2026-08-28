@@ -414,3 +414,66 @@ html.dark .assets-page{background:#0d1218}html.dark .assets-panel,html.dark .ass
 .primary-button.dark{background:var(--ink);border-color:var(--ink)}
 .primary-button.dark:hover{background:#000}
 @media (max-width:1100px){.infra-layout{grid-template-columns:1fr}.infra-tree{position:static;max-height:none}.split-modal-body{grid-template-columns:1fr}}
+
+/* ===== ESTRUCTURA ACADEMICA: arbol de facultad, tarjetas de carrera y modales de identidad ===== */
+.academic-hero .infra-hero-title h1{font-size:27px}
+.faculty-dot{width:10px;height:10px;border-radius:50%;flex:0 0 10px}
+.career-tree button{padding:8px 10px}
+.career-mark-sm{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:0 0 26px}
+.career-mark-sm svg{width:14px;height:14px}
+
+.faculty-card{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.faculty-mark{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;flex:0 0 52px}
+.faculty-mark svg{width:24px;height:24px}
+.faculty-identity{margin-right:auto;min-width:0}
+.faculty-identity h2{display:flex;align-items:center;gap:10px;margin:0 0 5px;font-size:18px;color:#334155}
+.faculty-identity p{margin:0;font-size:12px;font-weight:600;color:#78828f}
+
+.careers-toolbar{flex-wrap:wrap;gap:12px}
+.careers-title{margin:0;font-size:15px;color:#334155;margin-right:auto}
+.careers-toolbar .search-field{max-width:250px}
+.career-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:4px}
+.career-cards.is-list{grid-template-columns:1fr}
+.career-card{position:relative;border:1px solid var(--line);border-left:4px solid var(--career-color,#2563eb);border-radius:14px;padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:7px;transition:.18s}
+.career-card:hover{box-shadow:0 12px 26px rgba(15,23,42,.09);transform:translateY(-2px)}
+.career-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.career-mark-lg{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 40px}
+.career-mark-lg svg{width:19px;height:19px}
+.career-card h3{margin:4px 0 0;font-size:15px;color:#334155}
+.career-card>p{margin:0;font-size:11px;font-weight:600;color:#9aa3b1}
+.career-card-foot{display:flex;align-items:center;gap:16px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line);font-size:11px;font-weight:700;color:#5b6878}
+.career-card-foot span{display:inline-flex;align-items:center;gap:6px}
+.career-card-foot svg{width:13px;height:13px;color:#9aa3b1}
+.career-card-foot .row-action{margin-left:auto}
+
+.curriculum-panel .panel-header h2{margin-top:6px;font-size:16px}
+.curriculum-panel .text-button{display:inline-flex;align-items:center;gap:6px}
+.curriculum-panel .text-button svg{width:13px;height:13px}
+
+.identity-modal{max-width:520px}
+.identity-modal-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+.identity-modal-head h2{margin:0 0 3px;font-size:17px}
+.identity-modal-head p{margin:0;font-size:11px;font-weight:600;color:#9aa3b1}
+.identity-modal-head .modal-close{position:static;margin-left:auto}
+.identity-icon{width:40px;height:40px;border-radius:12px;background:#eff6ff;color:#1d4ed8;display:grid;place-items:center;flex:0 0 40px}
+.identity-icon svg{width:19px;height:19px}
+.identity-section{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:11px}
+.section-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#9aa3b1}
+.section-note{margin:-6px 0 0;font-size:11px;font-weight:500;color:#9aa3b1}
+.export-field em{font-style:normal;color:var(--red)}
+.color-field{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:7px 11px;background:#fff}
+.color-field input[type=color]{width:28px;height:28px;padding:0;border:0;border-radius:7px;background:none;cursor:pointer}
+.color-field input[type=text]{flex:1;border:0;padding:0;font-size:13px;font-weight:600;color:#334155;text-transform:none;letter-spacing:0}
+.color-field input[type=text]:focus{outline:none}
+.color-swatches{display:flex;gap:10px;flex-wrap:wrap}
+.color-swatches button{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.color-swatches button.is-active{box-shadow:0 0 0 2px var(--ink)}
+.icon-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.icon-grid button{width:100%;height:40px;border-radius:10px}
+.icon-grid svg{width:17px;height:17px}
+.icon-grid button.is-active{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8;box-shadow:none}
+.upload-button{display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:11px;padding:11px;font-size:12px;font-weight:700;color:#5b6878;background:#f8fafc;cursor:pointer}
+.upload-button:hover{border-color:#cbd2dc;color:#334155}
+.upload-button svg{width:15px;height:15px}
+.upload-button input[type=file]{display:none}
+@media (max-width:640px){.icon-grid{grid-template-columns:repeat(5,1fr)}}

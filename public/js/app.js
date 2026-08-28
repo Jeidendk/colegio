@@ -693,3 +693,79 @@ document.addEventListener('DOMContentLoaded', () => {
         button.closest('[data-icon-picker]').querySelectorAll('button').forEach((item) => item.classList.toggle('is-active', item === button));
     }));
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const careersPanel = document.querySelector('[data-careers-panel]');
+    const curriculumPanel = document.querySelector('[data-curriculum-panel]');
+
+    // --- Selectores de color de los modales de facultad y carrera ---
+    document.querySelectorAll('[data-color-swatches]').forEach((group) => {
+        const section = group.closest('.identity-section');
+        const colorInput = section?.querySelector('[data-color-input]');
+        const colorText = section?.querySelector('[data-color-text]');
+
+        group.querySelectorAll('button').forEach((swatch) => swatch.addEventListener('click', () => {
+            group.querySelectorAll('button').forEach((item) => item.classList.toggle('is-active', item === swatch));
+            const color = swatch.dataset.color;
+            if (colorInput) colorInput.value = color;
+            if (colorText) colorText.value = color;
+        }));
+
+        colorInput?.addEventListener('input', () => {
+            if (colorText) colorText.value = colorInput.value;
+            group.querySelectorAll('button').forEach((item) => item.classList.remove('is-active'));
+        });
+    });
+
+    if (!careersPanel || !curriculumPanel) return;
+
+    // --- Buscador y disposición de las tarjetas de carrera ---
+    const careerSearch = document.querySelector('[data-career-search]');
+    const emptyMessage = document.querySelector('[data-careers-empty]');
+
+    careerSearch?.addEventListener('input', () => {
+        const query = careerSearch.value.trim().toLocaleLowerCase('es');
+        let visible = 0;
+        document.querySelectorAll('[data-career-item]').forEach((card) => {
+            const matches = !query || card.dataset.careerName.includes(query);
+            card.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+        emptyMessage?.classList.toggle('hidden', visible > 0);
+    });
+
+    document.querySelectorAll('[data-career-layout]').forEach((button) => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-career-layout]').forEach((item) => item.classList.toggle('is-active', item === button));
+        document.querySelector('[data-career-cards]')?.classList.toggle('is-list', button.dataset.careerLayout === 'list');
+    }));
+
+    // --- Detalle: malla curricular de una carrera ---
+    const curriculumTitle = document.querySelector('[data-curriculum-title]');
+
+    const subjectGrid = curriculumPanel.querySelector('.subject-grid');
+    const curriculumEmpty = curriculumPanel.querySelector('[data-curriculum-empty]');
+    const curriculumSummary = curriculumPanel.querySelector('[data-curriculum-summary]');
+    const registeredSummary = curriculumSummary?.textContent || '';
+
+    document.querySelectorAll('[data-career-link]').forEach((trigger) => trigger.addEventListener('click', () => {
+        // Solo Electricidad tiene malla cargada en la demostración; el resto muestra el estado vacío.
+        const hasSubjects = Number(trigger.dataset.careerSubjects) > 0;
+
+        if (curriculumTitle) curriculumTitle.textContent = 'Malla curricular · ' + trigger.dataset.careerTitle;
+        subjectGrid?.classList.toggle('hidden', !hasSubjects);
+        curriculumPanel.querySelector('.curriculum-toolbar')?.classList.toggle('hidden', !hasSubjects);
+        curriculumEmpty?.classList.toggle('hidden', hasSubjects);
+        if (curriculumSummary) {
+            curriculumSummary.textContent = hasSubjects ? registeredSummary : 'Sin materias registradas todavía.';
+        }
+
+        careersPanel.classList.add('hidden');
+        curriculumPanel.classList.remove('hidden');
+        document.querySelector('.workspace')?.scrollTo({top: 0, behavior: 'smooth'});
+    }));
+
+    document.querySelector('[data-curriculum-back]')?.addEventListener('click', () => {
+        curriculumPanel.classList.add('hidden');
+        careersPanel.classList.remove('hidden');
+    });
+});

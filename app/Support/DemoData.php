@@ -134,6 +134,28 @@ final class DemoData
                     ],
                 ],
             ],
+            'academic' => [
+                'faculty' => ['acronym' => 'FIE', 'name' => 'Facultad de Informática y Electrónica', 'dean' => 'No Asignado', 'status' => 'Activa', 'color' => '#b00000', 'icon' => 'cpu'],
+                'palette' => ['#a855f7', '#2563eb', '#10b981', '#ea580c', '#e11d48', '#0e7490', '#c026d3', '#f97316'],
+                'icons' => ['cpu', 'flask-conical', 'building-2', 'stethoscope', 'globe', 'palette', 'microscope', 'pen-tool', 'monitor', 'zap', 'database', 'activity', 'calculator', 'compass', 'leaf', 'network', 'wifi', 'book-open', 'school'],
+                'careers' => [
+                    ['slug' => 'diseno-grafico', 'name' => 'Diseño Gráfico', 'director' => 'Ing. Paulina Paula', 'color' => '#a855f7', 'icon' => 'palette', 'paos' => 9, 'subjects' => 0, 'status' => 'Activa'],
+                    ['slug' => 'electricidad', 'name' => 'Electricidad', 'director' => 'Ing. Andrés Morocho', 'color' => '#2563eb', 'icon' => 'zap', 'paos' => 9, 'subjects' => 6, 'status' => 'Activa'],
+                    ['slug' => 'electronica-y-automatizacion', 'name' => 'Electrónica y Automatización', 'director' => 'Ing. Sn', 'color' => '#0ea5e9', 'icon' => 'cpu', 'paos' => 9, 'subjects' => 0, 'status' => 'Activa'],
+                    ['slug' => 'electronica-y-telecomunicaciones', 'name' => 'Electrónica y Telecomunicaciones', 'director' => 'Ing. Mónica Zavala', 'color' => '#10b981', 'icon' => 'wifi', 'paos' => 9, 'subjects' => 0, 'status' => 'Activa'],
+                    ['slug' => 'software', 'name' => 'Software', 'director' => 'Ing. Omar Gomez', 'color' => '#f59e0b', 'icon' => 'monitor', 'paos' => 9, 'subjects' => 0, 'status' => 'Activa'],
+                    ['slug' => 'tecnologias-de-la-informacion', 'name' => 'Tecnologías de la Información', 'director' => 'Ing. Johnny Guaiña', 'color' => '#ea580c', 'icon' => 'database', 'paos' => 9, 'subjects' => 0, 'status' => 'Activa'],
+                    ['slug' => 'telemática', 'name' => 'Telemática', 'director' => 'Ing. Narcisa Salazar', 'color' => '#c026d3', 'icon' => 'network', 'paos' => 9, 'subjects' => 0, 'status' => 'Activa'],
+                ],
+                'curriculum' => [
+                    ['code' => 'ELEC-501', 'name' => 'Sistemas Eléctricos de Potencia', 'credits' => 4, 'hours' => 64, 'pao' => 5],
+                    ['code' => 'ELEC-502', 'name' => 'Máquinas Eléctricas II', 'credits' => 4, 'hours' => 64, 'pao' => 5],
+                    ['code' => 'ELEC-503', 'name' => 'Electrónica de Potencia', 'credits' => 3, 'hours' => 48, 'pao' => 5],
+                    ['code' => 'ELEC-504', 'name' => 'Análisis de Señales', 'credits' => 3, 'hours' => 48, 'pao' => 5],
+                    ['code' => 'ELEC-505', 'name' => 'Control Automático', 'credits' => 4, 'hours' => 64, 'pao' => 5],
+                    ['code' => 'ELEC-506', 'name' => 'Instalaciones Eléctricas', 'credits' => 3, 'hours' => 48, 'pao' => 5],
+                ],
+            ],
             'users' => [
                 ['name' => 'María Fernanda Ruiz', 'email' => 'maria.ruiz@espoch.edu.ec', 'role' => 'Estudiante', 'detail' => 'Electricidad · 5.º PAO', 'status' => 'Activo'],
                 ['name' => 'Ing. Roberto Sánchez', 'email' => 'roberto.sanchez@espoch.edu.ec', 'role' => 'Docente', 'detail' => 'Sistemas de Potencia', 'status' => 'Activo'],

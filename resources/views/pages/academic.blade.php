@@ -1,155 +1,261 @@
 @php
-    $careers = [
-        ['name' => 'Ingeniería en Electricidad', 'icon' => 'zap', 'paos' => 9, 'subjects' => 48, 'director' => 'Ing. Roberto Sánchez', 'color' => '#2563eb'],
-        ['name' => 'Electrónica y Automatización', 'icon' => 'cpu', 'paos' => 9, 'subjects' => 45, 'director' => 'Ing. Patricia Morales', 'color' => '#0d9488'],
-        ['name' => 'Telecomunicaciones', 'icon' => 'radio-tower', 'paos' => 8, 'subjects' => 42, 'director' => 'Ing. Fernando Ruiz', 'color' => '#c026d3'],
-    ];
-    $curriculum = [
-        ['ELEC-501', 'Sistemas Eléctricos de Potencia', 4, 64],
-        ['ELEC-502', 'Máquinas Eléctricas II', 4, 64],
-        ['ELEC-503', 'Electrónica de Potencia', 3, 48],
-        ['ELEC-504', 'Análisis de Señales', 3, 48],
-        ['ELEC-505', 'Control Automático', 4, 64],
-        ['ELEC-506', 'Instalaciones Eléctricas', 3, 48],
-    ];
-    $totalCredits = array_sum(array_column($curriculum, 2));
+    $faculty = $academic['faculty'];
+    $careers = $academic['careers'];
+    $curriculum = $academic['curriculum'];
+    $totalSubjects = array_sum(array_column($careers, 'subjects'));
+    $detailCareer = $careers[1];
+    $totalCredits = array_sum(array_column($curriculum, 'credits'));
 @endphp
 
-<x-hero icon="landmark" title="Estructura académica" subtitle="Gestión de facultades, carreras y malla curricular."
-    :stats="[['Facultades', '1', 'FIE'], ['Carreras', count($careers), 'activas'], ['Materias', '135', 'registradas'], ['PAOs', '9', 'Electricidad']]">
-    <button class="hero-button" type="button" data-modal-open="career-modal"><i data-lucide="plus"></i> Nueva carrera</button>
-</x-hero>
+<section class="infra-hero academic-hero">
+    <div class="infra-hero-title">
+        <span><i data-lucide="{{ $faculty['icon'] }}"></i></span>
+        <div><h1>{{ $faculty['name'] }}</h1><p>Facultad · {{ count($careers) }} carreras</p></div>
+    </div>
 
-<div class="academic-layout">
-    <section class="panel academic-tree">
-        <div class="panel-header">
-            <div><small>ORGANIZACIÓN</small><h2>Facultades y carreras</h2></div>
-            <button class="row-action" type="button" title="Nueva facultad" data-modal-open="faculty-modal"><i data-lucide="plus"></i></button>
+    <div class="infra-hero-stats">
+        <div><i data-lucide="graduation-cap"></i><span><strong>{{ count($careers) }}</strong><small>Carreras</small></span></div>
+        <div><i data-lucide="layers"></i><span><strong>{{ $totalSubjects }}</strong><small>Materias</small></span></div>
+        <div><i data-lucide="file-text"></i><span><strong>0</strong><small>Sílabos</small></span></div>
+    </div>
+</section>
+
+<div class="infra-layout">
+    <aside class="panel infra-tree">
+        <div class="infra-tree-head">
+            <h2>Facultades y carreras</h2>
+            <button class="round-button small" type="button" title="Nueva facultad" data-modal-open="faculty-modal"><i data-lucide="plus"></i></button>
         </div>
 
-        <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar facultad o carrera..." data-table-search></label>
+        <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar facultad o carrera..." data-tree-search></label>
 
-        <button class="tree-root is-active" type="button">
-            <i data-lucide="landmark"></i>
-            <span><b>FIE</b><small>Informática y Electrónica</small></span>
-        </button>
-
-        <div class="tree-children">
-            @foreach($careers as $index => $career)
-                <button class="{{ $index === 0 ? 'is-active' : '' }}" type="button" data-search-row>
-                    <i data-lucide="{{ $career['icon'] }}" style="color: {{ $career['color'] }}"></i>
-                    <span><b>{{ $career['name'] }}</b><small>{{ $career['paos'] }} PAOs · {{ $career['subjects'] }} materias</small></span>
+        <div class="infra-tree-list">
+            <div class="tree-building is-open" data-tree-building data-building-name="{{ mb_strtolower($faculty['acronym'].' '.$faculty['name']) }}">
+                <button class="tree-building-head is-active" type="button" data-tree-toggle>
+                    <i class="tree-chevron" data-lucide="chevron-down"></i>
+                    <span class="faculty-dot" style="background: {{ $faculty['color'] }}"></span>
+                    <b>{{ $faculty['acronym'] }}</b>
+                    <span class="tree-count">{{ count($careers) }}</span>
+                    <span class="tree-add" role="button" tabindex="0" title="Nueva carrera" data-modal-open="career-modal"><i data-lucide="plus"></i></span>
                 </button>
-            @endforeach
-        </div>
 
-        <div class="faculty-card">
-            <small>FACULTAD SELECCIONADA</small>
-            <div><i data-lucide="user-round"></i> Decano/a <b>Dra. Andrea López</b></div>
-            <div><i data-lucide="graduation-cap"></i> Carreras <b>{{ count($careers) }}</b></div>
-            <div class="row-actions">
-                <button class="secondary-button" type="button" data-modal-open="faculty-modal"><i data-lucide="pencil"></i> Editar facultad</button>
-            </div>
-        </div>
-    </section>
-
-    <section class="panel curriculum">
-        <div class="panel-header">
-            <div><small>INGENIERÍA EN ELECTRICIDAD</small><h2>Malla curricular · 9 PAOs</h2></div>
-            <div class="row-actions">
-                <button class="secondary-button" type="button" data-modal-open="career-modal"><i data-lucide="pencil"></i> Editar carrera</button>
-                <button class="primary-button" type="button" data-modal-open="subject-modal"><i data-lucide="plus"></i> Nueva materia</button>
+                <ul class="tree-spaces career-tree">
+                    @foreach($careers as $career)
+                        <li data-tree-space data-space-name="{{ mb_strtolower($career['name']) }}">
+                            <button type="button" data-career-link="{{ $career['slug'] }}" data-career-title="{{ $career['name'] }}" data-career-subjects="{{ $career['subjects'] }}">
+                                <span class="career-mark-sm" style="background: {{ $career['color'] }}1a; color: {{ $career['color'] }}"><i data-lucide="{{ $career['icon'] }}"></i></span>
+                                <span>{{ $career['name'] }}</span>
+                            </button>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
 
-        <div class="career-banner">
-            <span class="career-mark" style="background:#2563eb"><i data-lucide="zap"></i></span>
-            <div>
-                <b>Ingeniería en Electricidad</b>
-                <small>Facultad de Informática y Electrónica · Malla de 9 PAOs · Dir. Ing. Roberto Sánchez</small>
+        <button class="tree-add-space" type="button" data-modal-open="career-modal"><i data-lucide="plus"></i> Nueva carrera</button>
+        <p class="tree-footer">1 facultad · {{ count($careers) }} carreras</p>
+    </aside>
+
+    <section class="infra-detail">
+        <article class="panel faculty-card">
+            <span class="faculty-mark" style="background: {{ $faculty['color'] }}1a; color: {{ $faculty['color'] }}"><i data-lucide="{{ $faculty['icon'] }}"></i></span>
+            <div class="faculty-identity">
+                <h2>{{ $faculty['name'] }} <x-badge :value="$faculty['status']" /></h2>
+                <p>{{ $faculty['acronym'] }} · Decano/a: {{ $faculty['dean'] }} · {{ count($careers) }} carreras</p>
             </div>
-            <span class="career-credits">{{ $totalCredits }} créditos en este PAO</span>
-        </div>
-
-        <div class="curriculum-toolbar">
-            <div class="semester-tabs segmented">
-                @for($pao = 1; $pao <= 9; $pao++)
-                    <button class="{{ $pao === 5 ? 'is-active' : '' }}" type="button" data-semester="{{ $pao }}">{{ $pao }}.º</button>
-                @endfor
+            <div class="building-actions">
+                <button class="pill-button" type="button" data-modal-open="faculty-modal"><i data-lucide="pencil"></i> Editar facultad</button>
+                <button class="pill-button danger" type="button" data-toast="La facultad se eliminaría en la demostración"><i data-lucide="trash-2"></i> Eliminar</button>
             </div>
-            <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar materia..." data-table-search></label>
-        </div>
+        </article>
 
-        <div class="subject-grid">
-            @foreach($curriculum as $subject)
-                <article data-search-row>
-                    <span>{{ $subject[0] }}</span>
-                    <h3>{{ $subject[1] }}</h3>
-                    <p>{{ $subject[2] }} créditos · {{ $subject[3] }} horas</p>
-                    <div class="row-actions">
-                        <button class="row-action" type="button" title="Editar" data-modal-open="subject-modal"><i data-lucide="pencil"></i></button>
-                        <button class="row-action danger" type="button" title="Eliminar" data-toast="{{ $subject[1] }} eliminada en la demostración"><i data-lucide="trash-2"></i></button>
-                    </div>
-                </article>
-            @endforeach
-        </div>
+        <section class="panel careers-panel" data-careers-panel>
+            <div class="toolbar careers-toolbar">
+                <h2 class="careers-title">Carreras ({{ count($careers) }})</h2>
+                <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar carrera..." data-career-search></label>
 
-        <div class="panel-footer">
-            <span><i data-lucide="info"></i> {{ count($curriculum) }} materias en el 5.º PAO · {{ $totalCredits }} créditos.</span>
-            <button class="secondary-button" type="button" data-toast="Malla exportada en la demostración"><i data-lucide="download"></i> Exportar malla</button>
-        </div>
+                <div class="segmented compact layout-switch">
+                    <button class="is-active" type="button" data-career-layout="grid" title="Tarjetas"><i data-lucide="layout-grid"></i></button>
+                    <button type="button" data-career-layout="list" title="Lista"><i data-lucide="list"></i></button>
+                </div>
+
+                <button class="pill-button solid" type="button" data-modal-open="career-modal"><i data-lucide="plus"></i> Nueva carrera</button>
+            </div>
+
+            <div class="career-cards" data-career-cards>
+                @foreach($careers as $career)
+                    <article class="career-card" data-career-item data-career-name="{{ mb_strtolower($career['name']) }}" style="--career-color: {{ $career['color'] }}">
+                        <div class="career-card-head">
+                            <span class="career-mark-lg" style="background: {{ $career['color'] }}1a; color: {{ $career['color'] }}"><i data-lucide="{{ $career['icon'] }}"></i></span>
+                            <x-badge :value="$career['status']" />
+                        </div>
+                        <h3>{{ $career['name'] }}</h3>
+                        <p>Director/a: {{ $career['director'] }}</p>
+                        <div class="career-card-foot">
+                            <span><i data-lucide="layers"></i> {{ $career['paos'] }} PAO</span>
+                            <span><i data-lucide="book-open"></i> {{ $career['subjects'] }} materias</span>
+                            <button class="row-action" type="button" title="Ver malla curricular" data-career-link="{{ $career['slug'] }}" data-career-title="{{ $career['name'] }}" data-career-subjects="{{ $career['subjects'] }}"><i data-lucide="chevron-right"></i></button>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <p class="empty-state hidden" data-careers-empty><i data-lucide="search-x"></i> Ninguna carrera coincide con la búsqueda.</p>
+        </section>
+
+        <section class="panel curriculum-panel hidden" data-curriculum-panel>
+            <div class="panel-header">
+                <div>
+                    <button class="text-button" type="button" data-curriculum-back><i data-lucide="arrow-left"></i> Volver a carreras</button>
+                    <h2 data-curriculum-title>Malla curricular · {{ $detailCareer['name'] }}</h2>
+                </div>
+                <div class="row-actions">
+                    <button class="secondary-button" type="button" data-modal-open="career-modal"><i data-lucide="pencil"></i> Editar carrera</button>
+                    <button class="primary-button" type="button" data-modal-open="subject-modal"><i data-lucide="plus"></i> Nueva materia</button>
+                </div>
+            </div>
+
+            <div class="curriculum-toolbar">
+                <div class="semester-tabs segmented">
+                    @for($pao = 1; $pao <= 9; $pao++)
+                        <button class="{{ $pao === 5 ? 'is-active' : '' }}" type="button" data-semester="{{ $pao }}">{{ $pao }}.º</button>
+                    @endfor
+                </div>
+                <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar materia..." data-table-search></label>
+            </div>
+
+            <div class="subject-grid">
+                @foreach($curriculum as $subject)
+                    <article data-search-row>
+                        <span>{{ $subject['code'] }}</span>
+                        <h3>{{ $subject['name'] }}</h3>
+                        <p>{{ $subject['credits'] }} créditos · {{ $subject['hours'] }} horas</p>
+                        <div class="row-actions">
+                            <button class="row-action" type="button" title="Editar" data-modal-open="subject-modal"><i data-lucide="pencil"></i></button>
+                            <button class="row-action danger" type="button" title="Eliminar" data-toast="{{ $subject['name'] }} eliminada en la demostración"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <p class="empty-state hidden" data-curriculum-empty>
+                <i data-lucide="book-dashed"></i> Esta carrera todavía no tiene materias registradas en su malla.
+            </p>
+
+            <div class="panel-footer">
+                <span><i data-lucide="info"></i> <span data-curriculum-summary>{{ count($curriculum) }} materias en el 5.º PAO · {{ $totalCredits }} créditos.</span></span>
+                <button class="secondary-button" type="button" data-toast="Malla exportada en la demostración"><i data-lucide="download"></i> Exportar malla</button>
+            </div>
+        </section>
     </section>
 </div>
 
 <div class="modal" id="faculty-modal" aria-hidden="true">
-    <form class="modal-card demo-form" data-demo-form>
-        <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
-        <small>ESTRUCTURA ACADÉMICA</small>
-        <h2>Nueva facultad</h2>
-        <label>Nombre<input required placeholder="Facultad de..."></label>
-        <div class="form-grid">
-            <label>Siglas<input placeholder="Ej: FIE"></label>
-            <label>Estado<select><option>Activa</option><option>Inactiva</option></select></label>
+    <form class="modal-card demo-form identity-modal" data-demo-form>
+        <div class="identity-modal-head">
+            <span class="identity-icon"><i data-lucide="building-2"></i></span>
+            <div><h2>Nueva facultad</h2><p>Completa los datos y personaliza el diseño</p></div>
+            <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
         </div>
-        <label>Decano/a actual<input placeholder="Nombre del Decano"></label>
-        <label class="file-drop">
-            <i data-lucide="image-plus"></i>
-            <span><b>Ícono o logotipo</b><small>SVG o PNG · fondo transparente</small></span>
-            <input type="file" accept="image/svg+xml,image/png">
-        </label>
+
+        <div class="form-grid">
+            <label class="export-field">Siglas <em>*</em><input required placeholder="Ej: FIE"></label>
+            <label class="export-field">Estado<select><option>Activa</option><option>Inactiva</option></select></label>
+        </div>
+
+        <label class="export-field">Nombre completo <em>*</em><input required placeholder="Facultad de..."></label>
+        <label class="export-field">Decano/a actual<input placeholder="Nombre del Decano"></label>
+
+        <div class="identity-section">
+            <span class="section-label">Diseño corporativo</span>
+
+            <label class="export-field">Color hexadecimal
+                <span class="color-field">
+                    <input type="color" value="{{ $academic['palette'][1] }}" data-color-input>
+                    <input type="text" value="{{ $academic['palette'][1] }}" data-color-text>
+                </span>
+            </label>
+
+            <div class="color-swatches" data-color-swatches>
+                @foreach($academic['palette'] as $color)
+                    <button type="button" style="background: {{ $color }}" data-color="{{ $color }}" title="{{ $color }}"></button>
+                @endforeach
+            </div>
+
+            <span class="field-label">Ícono o logotipo SVG</span>
+            <div class="icon-picker icon-grid" data-icon-picker>
+                @foreach($academic['icons'] as $index => $icon)
+                    <button class="{{ $index === count($academic['icons']) - 1 ? 'is-active' : '' }}" type="button" data-icon="{{ $icon }}"><i data-lucide="{{ $icon }}"></i></button>
+                @endforeach
+            </div>
+
+            <label class="upload-button">
+                <i data-lucide="upload"></i> Subir SVG personalizado
+                <input type="file" accept="image/svg+xml">
+            </label>
+        </div>
+
         <div class="modal-actions">
             <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-            <button class="primary-button" type="submit">Guardar facultad</button>
+            <button class="primary-button dark" type="submit">Crear facultad</button>
         </div>
     </form>
 </div>
 
 <div class="modal" id="career-modal" aria-hidden="true">
-    <form class="modal-card demo-form" data-demo-form>
-        <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
-        <small>CARRERAS</small>
-        <h2>Nueva carrera</h2>
-        <label>Nombre<input required placeholder="Ej: Ingeniería de Software"></label>
-        <div class="form-grid">
-            <label>Facultad<select><option>FIE · Informática y Electrónica</option></select></label>
-            <label>N° PAO<input type="number" min="1" max="12" value="9"></label>
+    <form class="modal-card demo-form identity-modal" data-demo-form>
+        <div class="identity-modal-head">
+            <span class="identity-icon"><i data-lucide="book-open"></i></span>
+            <div><h2>Nueva carrera</h2><p>Asignación e identidad visual</p></div>
+            <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
         </div>
-        <div class="form-grid">
-            <label>Director/a de carrera<input placeholder="Ing. Nombre Apellido"></label>
-            <label>Estado<select><option>Activa</option><option>Inactiva</option></select></label>
-        </div>
-        <div class="form-grid">
-            <label>Color hexadecimal<input type="color" value="#2563eb"></label>
-            <label>Ícono representativo<select><option>Electricidad</option><option>Electrónica</option><option>Telecomunicaciones</option><option>Software</option></select></label>
-        </div>
-        <label class="file-drop">
-            <i data-lucide="image-plus"></i>
-            <span><b>Ícono o logotipo</b><small>SVG o PNG · se usa en la grilla de horarios</small></span>
-            <input type="file" accept="image/svg+xml,image/png">
+
+        <label class="export-field">Facultad a la que pertenece <em>*</em>
+            <select><option>{{ $faculty['name'] }}</option></select>
         </label>
+
+        <label class="export-field">Nombre de la carrera <em>*</em><input required placeholder="Ej: Ingeniería de Software"></label>
+
+        <div class="form-grid">
+            <label class="export-field">N° PAO<input type="number" min="1" max="12" value="9"></label>
+            <label class="export-field">Estado<select><option>Activa</option><option>Inactiva</option></select></label>
+        </div>
+
+        <label class="export-field">Director/a de carrera<input placeholder="Ing. Nombre Apellido"></label>
+
+        <div class="identity-section">
+            <span class="section-label">Diseño corporativo de la carrera</span>
+            <p class="section-note">Nota: el color hexadecimal debe ser único dentro de la misma facultad.</p>
+
+            <label class="export-field">Color hexadecimal
+                <span class="color-field">
+                    <input type="color" value="{{ $academic['palette'][1] }}" data-color-input>
+                    <input type="text" value="{{ $academic['palette'][1] }}" data-color-text>
+                </span>
+            </label>
+
+            <div class="color-swatches" data-color-swatches>
+                @foreach($academic['palette'] as $color)
+                    <button type="button" style="background: {{ $color }}" data-color="{{ $color }}" title="{{ $color }}"></button>
+                @endforeach
+            </div>
+
+            <span class="field-label">Ícono o logotipo (SVG, PNG)</span>
+            <div class="icon-picker icon-grid" data-icon-picker>
+                @foreach($academic['icons'] as $icon)
+                    <button class="{{ $icon === 'book-open' ? 'is-active' : '' }}" type="button" data-icon="{{ $icon }}"><i data-lucide="{{ $icon }}"></i></button>
+                @endforeach
+            </div>
+
+            <label class="upload-button">
+                <i data-lucide="upload"></i> Subir imagen
+                <input type="file" accept="image/svg+xml,image/png">
+            </label>
+        </div>
+
         <div class="modal-actions">
             <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-            <button class="primary-button" type="submit">Guardar carrera</button>
+            <button class="primary-button dark" type="submit">Crear carrera</button>
         </div>
     </form>
 </div>
