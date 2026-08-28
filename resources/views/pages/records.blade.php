@@ -377,14 +377,7 @@
             <p class="empty-state hidden" data-users-empty><i data-lucide="search-x"></i> Ningún registro coincide con los filtros.</p>
         </div>
 
-        <div class="users-footer">
-            <span class="range-chip"><i class="dot"></i> <span data-users-range>1-{{ count($visibleUsers) }} de {{ count($visibleUsers) }}</span></span>
-            <div class="rows-per-page"><label>Filas:<select><option>10</option><option>25</option><option>50</option></select></label></div>
-            <div class="users-pagination">
-                <button class="icon-button" type="button" disabled aria-label="Anterior"><i data-lucide="chevron-left"></i></button>
-                <button class="page-number is-active" type="button">1</button>
-                <button class="icon-button" type="button" disabled aria-label="Siguiente"><i data-lucide="chevron-right"></i></button>
-            </div>
+        <x-table-footer :count="count($visibleUsers)" data-users-range />
         </div>
     </section>
 
@@ -415,18 +408,27 @@
 
 
 @else
-    <x-hero icon="bar-chart-3" title="Reportes" subtitle="Indicadores de gestión académica y uso de recursos."
-        :stats="[['Solicitudes', '126', 'periodo'], ['Préstamos', '98', 'entregados'], ['Uso de aulas', '87%', 'promedio'], ['Asistencia', '92%', 'general']]">
-        <button class="hero-button" type="button" data-modal-open="report-modal"><i data-lucide="file-down"></i> Generar reporte</button>
-    </x-hero>
+    <section class="infra-hero">
+        <div class="infra-hero-title">
+            <span><i data-lucide="bar-chart-3"></i></span>
+            <div><h1>Reportes</h1><p>Indicadores de gestión académica y uso de recursos.</p></div>
+        </div>
+
+        <div class="infra-hero-stats">
+            <div><i data-lucide="clipboard-list"></i><span><strong>126</strong><small>Solicitudes</small></span></div>
+            <div><i data-lucide="package-check"></i><span><strong>98</strong><small>Préstamos</small></span></div>
+            <div><i data-lucide="door-open"></i><span><strong>87%</strong><small>Uso de aulas</small></span></div>
+            <div><i data-lucide="user-check"></i><span><strong>92%</strong><small>Asistencia</small></span></div>
+        </div>
+    </section>
 
     <div class="dashboard-grid">
         <section class="panel span-2">
             <div class="panel-header">
                 <div><small>TENDENCIA</small><h2>Uso de recursos por mes</h2></div>
                 <div class="row-actions">
-                    <button class="secondary-button" type="button" data-toast="Reporte PDF generado"><i data-lucide="file-text"></i> PDF</button>
-                    <button class="secondary-button" type="button" data-toast="Reporte Excel generado"><i data-lucide="table"></i> Excel</button>
+                    <button class="pill-button" type="button" data-toast="Reporte PDF generado"><i data-lucide="file-text"></i> PDF</button>
+                    <button class="pill-button" type="button" data-toast="Reporte Excel generado"><i data-lucide="table"></i> Excel</button>
                 </div>
             </div>
             <div class="bar-chart tall">
@@ -446,6 +448,92 @@
         </section>
     </div>
 
+    <section class="panel users-panel" data-users-panel>
+        <span class="panel-accent" aria-hidden="true"></span>
+
+        <div class="toolbar users-toolbar">
+            <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar reporte..." data-users-search></label>
+
+            <div class="chip-filters" data-users-roles>
+                <button class="filter-chip role-chip" type="button" data-user-role="PDF">PDF</button>
+                <button class="filter-chip role-chip" type="button" data-user-role="Excel">Excel</button>
+                <button class="filter-chip role-chip" type="button" data-user-role="CSV">CSV</button>
+            </div>
+
+            <select class="select-control" data-users-status>
+                <option value="">Estado: Todos</option>
+                <option>Generado</option>
+                <option>Archivado</option>
+            </select>
+
+            <button class="text-button" type="button" data-users-clear><i data-lucide="rotate-ccw"></i> Limpiar filtros</button>
+
+            <div class="toolbar-right">
+                <button class="pill-button" type="button" data-toast="Listado exportado en la demostración"><i data-lucide="download"></i> Exportar</button>
+                <button class="pill-button solid" type="button" data-modal-open="report-modal"><i data-lucide="plus"></i> Generar reporte</button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table users-table">
+                <thead>
+                    <tr>
+                        <th class="check-column"><input type="checkbox" aria-label="Seleccionar todo" data-users-select-all></th>
+                        <th><button class="sort-header" type="button" data-sort-users="name">Reporte <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th><button class="sort-header" type="button" data-sort-users="role">Periodo / Formato <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th><button class="sort-header" type="button" data-sort-users="status">Estado <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th><button class="sort-header" type="button" data-sort-users="last">Generado <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th class="actions-col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-users-body>
+                    @foreach($reports as $report)
+                        <tr data-user-row
+                            data-user-search="{{ mb_strtolower($report['name'].' '.$report['code'].' '.$report['author']) }}"
+                            data-user-role="{{ $report['format'] }}"
+                            data-user-status="{{ $report['status'] }}"
+                            data-sort-name="{{ mb_strtolower($report['name']) }}"
+                            data-sort-role="{{ $report['format'] }}"
+                            data-sort-status="{{ $report['status'] }}"
+                            data-sort-last="{{ $report['date'] }}">
+                            <td class="check-column"><input type="checkbox" aria-label="Seleccionar {{ $report['name'] }}"></td>
+                            <td>
+                                <div class="user-cell">
+                                    <span class="file-icon {{ strtolower($report['format']) }}"><i data-lucide="file-text"></i></span>
+                                    <div><b>{{ $report['name'] }}</b><small>{{ $report['code'] }}</small></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="role-cell">
+                                    <span class="role-pill role-{{ strtolower($report['format']) }}"><i data-lucide="file-type-2"></i> {{ $report['format'] }}</span>
+                                    <small>{{ $report['period'] }}</small>
+                                </div>
+                            </td>
+                            <td><x-badge :value="$report['status']" /></td>
+                            <td>
+                                <div class="role-cell">
+                                    <b class="cell-strong">{{ $report['date'] }}</b>
+                                    <small>{{ $report['author'] }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row-actions">
+                                    <button class="row-action" type="button" title="Descargar" data-toast="Descargando {{ $report['code'] }}"><i data-lucide="download"></i></button>
+                                    <button class="row-action edit" type="button" title="Regenerar" data-modal-open="report-modal"><i data-lucide="refresh-cw"></i></button>
+                                    <button class="row-action danger" type="button" title="Eliminar" data-toast="{{ $report['code'] }} eliminado en la demostración"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <p class="empty-state hidden" data-users-empty><i data-lucide="search-x"></i> Ningún reporte coincide con los filtros.</p>
+        </div>
+
+        <x-table-footer :count="count($reports)" data-users-range />
+    </section>
+
     <div class="modal" id="report-modal" aria-hidden="true">
         <form class="modal-card demo-form" data-demo-form>
             <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
@@ -459,7 +547,7 @@
             <label>Formato<select><option>PDF</option><option>Excel</option><option>CSV</option></select></label>
             <div class="modal-actions">
                 <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-                <button class="primary-button" type="submit">Generar</button>
+                <button class="primary-button dark" type="submit">Generar</button>
             </div>
         </form>
     </div>

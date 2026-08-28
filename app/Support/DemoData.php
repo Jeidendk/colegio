@@ -250,6 +250,13 @@ final class DemoData
                 ['order' => 'OM-2026-009', 'asset' => 'Proyector Epson PowerLite', 'issue' => 'Lámpara con bajo brillo', 'priority' => 'Media', 'opened' => '09 ago 2026', 'status' => 'En proceso'],
                 ['order' => 'OM-2026-004', 'asset' => 'Motor Trifásico WEG', 'issue' => 'Mantenimiento preventivo', 'priority' => 'Baja', 'opened' => '28 jul 2026', 'status' => 'Cerrada'],
             ],
+            'reports' => [
+                ['code' => 'REP-2026-018', 'name' => 'Uso de recursos por mes', 'period' => 'Marzo - Agosto 2026', 'format' => 'PDF', 'author' => 'Dra. Andrea López', 'date' => '27 ago 2026', 'status' => 'Generado'],
+                ['code' => 'REP-2026-017', 'name' => 'Solicitudes por estado', 'period' => 'Agosto 2026', 'format' => 'Excel', 'author' => 'Dra. Andrea López', 'date' => '25 ago 2026', 'status' => 'Generado'],
+                ['code' => 'REP-2026-015', 'name' => 'Ocupación de aulas', 'period' => 'Periodo 2026-1', 'format' => 'PDF', 'author' => 'Ing. Roberto Sánchez', 'date' => '18 ago 2026', 'status' => 'Generado'],
+                ['code' => 'REP-2026-012', 'name' => 'Rendimiento académico por curso', 'period' => 'Parcial 1', 'format' => 'Excel', 'author' => 'Ing. Patricia Morales', 'date' => '09 ago 2026', 'status' => 'Generado'],
+                ['code' => 'REP-2026-009', 'name' => 'Inventario de laboratorios', 'period' => 'Agosto 2026', 'format' => 'CSV', 'author' => 'Braulio Balseca', 'date' => '02 ago 2026', 'status' => 'Archivado'],
+            ],
             'resources' => [
                 ['title' => 'Guía de laboratorio: Circuitos RLC', 'subject' => 'Circuitos Eléctricos I', 'type' => 'PDF', 'size' => '2,4 MB'],
                 ['title' => 'Práctica 04: Control de motores', 'subject' => 'Control Automático', 'type' => 'DOCX', 'size' => '1,1 MB'],

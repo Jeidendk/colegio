@@ -523,3 +523,15 @@ html.dark .assets-page{background:#0d1218}html.dark .assets-panel,html.dark .ass
 .users-pagination .icon-button:disabled{opacity:.45}
 .page-number{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800;color:#5b6878}
 .page-number.is-active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* Pildoras por formato de documento y ajustes de las tarjetas de recursos */
+.role-pill.role-pdf{background:#fef2f2;color:#b42318}
+.role-pill.role-docx{background:#eff6ff;color:#1d4ed8}
+.role-pill.role-video{background:#f5f3ff;color:#6d28d9}
+.role-pill.role-excel{background:#ecfdf5;color:#047857}
+.role-pill.role-csv{background:#fffbeb;color:#b45309}
+.cell-strong{font-size:12px;color:#334155}
+.resource-card .row-actions{margin-left:auto}
+.resource-card>div{min-width:0}
+.users-panel .resource-grid{margin-top:4px}
+.users-panel .layout-switch{margin-right:4px}

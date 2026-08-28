@@ -883,7 +883,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sortAscending = column === sortColumn ? !sortAscending : true;
         sortColumn = column;
 
-        const ordered = [...rows].sort((first, second) => {
+        // Solo se reordenan las filas de la tabla: las tarjetas viven fuera del tbody.
+        const sortableRows = body ? [...body.querySelectorAll('[data-user-row]')] : [];
+        const ordered = sortableRows.sort((first, second) => {
             const left = first.dataset['sort' + column.charAt(0).toUpperCase() + column.slice(1)] || '';
             const right = second.dataset['sort' + column.charAt(0).toUpperCase() + column.slice(1)] || '';
             return sortAscending ? left.localeCompare(right, 'es') : right.localeCompare(left, 'es');
