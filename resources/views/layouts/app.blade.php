@@ -9,7 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @if($role === 'admin' && $page === 'horarios')
+        <link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}">
+    @endif
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+    @if($role === 'admin' && $page === 'horarios')
+        <script src="{{ asset('vendor/leaflet/leaflet.js') }}" defer></script>
+    @endif
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body data-role="{{ $role }}" data-page="{{ $page }}">

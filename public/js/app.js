@@ -304,3 +304,237 @@ document.addEventListener('DOMContentLoaded', () => {
         syncSheet();
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const transactions = document.querySelector('[data-transactions]');
+    if (!transactions) return;
+
+    let activePanel = 'requests';
+    const search = transactions.querySelector('[data-transaction-search]');
+    const status = transactions.querySelector('[data-transaction-status]');
+    const type = transactions.querySelector('[data-transaction-type]');
+    const date = transactions.querySelector('[data-transaction-date]');
+    const empty = transactions.querySelector('[data-transactions-empty]');
+    const visibleLabel = transactions.querySelector('[data-transaction-visible]');
+    const totalLabel = transactions.querySelector('[data-transaction-total]');
+
+    const activeBody = () => transactions.querySelector(`[data-transaction-panel="${activePanel}"]`);
+    const applyTransactionFilters = () => {
+        const rows = [...(activeBody()?.querySelectorAll('[data-transaction-row]') || [])];
+        const query = (search?.value || '').trim().toLocaleLowerCase('es');
+        let visible = 0;
+
+        rows.forEach((row) => {
+            const matches = (!query || row.textContent.toLocaleLowerCase('es').includes(query))
+                && (!status?.value || row.dataset.status === status.value)
+                && (!type?.value || row.dataset.type === type.value)
+                && (!date?.value || row.dataset.date.includes(date.value));
+            row.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+
+        empty?.classList.toggle('hidden', visible !== 0);
+        if (visibleLabel) visibleLabel.textContent = visible;
+        if (totalLabel) totalLabel.textContent = rows.length;
+    };
+
+    transactions.querySelectorAll('[data-transaction-tab]').forEach((tab) => tab.addEventListener('click', () => {
+        activePanel = tab.dataset.transactionTab;
+        transactions.querySelectorAll('[data-transaction-tab]').forEach((item) => {
+            const selected = item === tab;
+            item.classList.toggle('is-active', selected);
+            item.setAttribute('aria-selected', String(selected));
+        });
+        transactions.querySelectorAll('[data-transaction-panel]').forEach((panel) => panel.classList.toggle('hidden', panel.dataset.transactionPanel !== activePanel));
+        applyTransactionFilters();
+    }));
+
+    [search, status, type, date].forEach((control) => {
+        control?.addEventListener(control === search ? 'input' : 'change', applyTransactionFilters);
+    });
+
+    transactions.querySelector('[data-transaction-clear]')?.addEventListener('click', () => {
+        if (search) search.value = '';
+        if (status) status.value = '';
+        if (type) type.value = '';
+        if (date) date.value = '';
+        applyTransactionFilters();
+    });
+
+    document.querySelectorAll('[data-transaction-detail]').forEach((button) => button.addEventListener('click', () => {
+        const title = document.querySelector('[data-transaction-detail-title]');
+        if (title) title.textContent = button.dataset.transactionDetail;
+    }));
+
+    applyTransactionFilters();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const scheduleTabs = document.querySelectorAll('[data-schedule-view]');
+    if (!scheduleTabs.length) return;
+
+    const schedulePanel = document.querySelector('[data-schedule-root]');
+    const spacesView = document.querySelector('[data-spaces-view]');
+    const exportView = document.querySelector('[data-export-view]');
+    const spaceSearch = document.querySelector('[data-space-search]');
+    const spaceFilter = document.querySelector('[data-space-filter]');
+    const mapElement = document.querySelector('[data-leaflet-map]');
+    const campusCenter = [-1.65605, -78.67795];
+    let campusMap = null;
+    let activeMapLayer = null;
+    let mapLayers = {};
+    const spaceMarkers = [];
+
+    const initCampusMap = () => {
+        if (campusMap || !mapElement || !window.L) return;
+
+        campusMap = window.L.map(mapElement, {zoomControl: false}).setView(campusCenter, 17);
+        mapLayers = {
+            street: window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 20,
+                attribution: '&copy; OpenStreetMap',
+            }),
+            satellite: window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 20,
+                attribution: 'Tiles &copy; Esri',
+            }),
+        };
+        mapLayers.hybrid = window.L.layerGroup([
+            window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom: 20, attribution: 'Tiles &copy; Esri'}),
+            window.L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {maxZoom: 20}),
+        ]);
+        activeMapLayer = mapLayers.street.addTo(campusMap);
+
+        document.querySelectorAll('[data-space-card]').forEach((card) => {
+            const index = card.dataset.spaceIndex;
+            const latLng = [Number(card.dataset.spaceLat), Number(card.dataset.spaceLng)];
+            const marker = window.L.circleMarker(latLng, {
+                radius: 12,
+                color: '#ffffff',
+                weight: 3,
+                fillColor: index === '0' ? '#2563eb' : '#00a875',
+                fillOpacity: 1,
+            }).addTo(campusMap);
+            const title = card.querySelector('.space-result-copy b')?.textContent || '';
+            const detail = card.querySelector('.space-result-copy small')?.textContent || '';
+            marker.bindPopup(`<b>${title}</b>${detail}`);
+            marker.bindTooltip(title, {direction: 'top', className: 'leaflet-space-tooltip', offset: [0, -9]});
+            marker.on('click', () => selectSpace(index, false));
+            spaceMarkers[index] = marker;
+        });
+    };
+
+    scheduleTabs.forEach((tab) => tab.addEventListener('click', () => {
+        const showSpaces = tab.dataset.scheduleView === 'spaces';
+        scheduleTabs.forEach((item) => {
+            const selected = item === tab;
+            item.classList.toggle('is-active', selected);
+            item.setAttribute('aria-selected', String(selected));
+        });
+        if (schedulePanel) {
+            schedulePanel.hidden = false;
+            schedulePanel.classList.toggle('hidden', showSpaces);
+        }
+        spacesView?.classList.toggle('hidden', !showSpaces);
+        if (exportView) exportView.hidden = true;
+        const workspace = document.querySelector('.workspace');
+        if (workspace) workspace.scrollTop = 0;
+        if (showSpaces) {
+            initCampusMap();
+            window.setTimeout(() => campusMap?.invalidateSize(), 50);
+        }
+    }));
+
+    const filterSpaces = () => {
+        const query = (spaceSearch?.value || '').trim().toLocaleLowerCase('es');
+        const wantedType = spaceFilter?.value || '';
+        document.querySelectorAll('[data-space-card]').forEach((card) => {
+            const matches = (!query || card.dataset.spaceName.includes(query))
+                && (!wantedType || card.dataset.spaceType === wantedType);
+            card.classList.toggle('hidden', !matches);
+        });
+    };
+    spaceSearch?.addEventListener('input', filterSpaces);
+    spaceFilter?.addEventListener('change', filterSpaces);
+
+    const selectSpace = (index, moveMap = true) => {
+        const selectedCard = document.querySelector(`[data-space-card][data-space-index="${index}"]`);
+        document.querySelectorAll('[data-space-card]').forEach((card) => card.classList.toggle('is-active', card === selectedCard));
+        const title = document.querySelector('[data-space-detail-title]');
+        const copy = document.querySelector('[data-space-detail-copy]');
+        if (title) title.textContent = selectedCard?.querySelector('.space-result-copy b')?.textContent || '';
+        if (copy) copy.textContent = selectedCard?.querySelector('.space-result-copy small')?.textContent || '';
+        spaceMarkers.forEach((marker, markerIndex) => marker?.setStyle({fillColor: String(markerIndex) === String(index) ? '#2563eb' : '#00a875'}));
+        const selectedMarker = spaceMarkers[index];
+        if (moveMap && selectedMarker && campusMap) campusMap.panTo(selectedMarker.getLatLng(), {animate: true});
+        selectedMarker?.openPopup();
+    };
+    document.querySelectorAll('[data-space-card]').forEach((card) => card.addEventListener('click', () => selectSpace(card.dataset.spaceIndex)));
+    document.querySelectorAll('.map-style-switch button').forEach((button) => button.addEventListener('click', () => {
+        document.querySelectorAll('.map-style-switch button').forEach((item) => item.classList.toggle('is-active', item === button));
+        if (!campusMap) return;
+        if (activeMapLayer) campusMap.removeLayer(activeMapLayer);
+        activeMapLayer = mapLayers[button.dataset.mapStyle] || mapLayers.street;
+        activeMapLayer.addTo(campusMap);
+    }));
+    document.querySelector('[data-map-zoom-in]')?.addEventListener('click', () => campusMap?.zoomIn());
+    document.querySelector('[data-map-zoom-out]')?.addEventListener('click', () => campusMap?.zoomOut());
+    document.querySelector('[data-map-center]')?.addEventListener('click', () => campusMap?.setView(campusCenter, 17));
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const assets = document.querySelector('[data-assets]');
+    if (!assets) return;
+
+    let activeAssetsPanel = 'inventory';
+    const search = assets.querySelector('[data-assets-search]');
+    const category = assets.querySelector('[data-assets-category]');
+    const status = assets.querySelector('[data-assets-status]');
+    const building = assets.querySelector('[data-assets-building]');
+    const empty = assets.querySelector('[data-assets-empty]');
+    const visibleLabel = assets.querySelector('[data-assets-visible]');
+    const totalLabel = assets.querySelector('[data-assets-total]');
+    const activeBody = () => assets.querySelector(`[data-assets-panel="${activeAssetsPanel}"]`);
+
+    const filterAssets = () => {
+        const rows = [...(activeBody()?.querySelectorAll('[data-asset-row]') || [])];
+        const query = (search?.value || '').trim().toLocaleLowerCase('es');
+        let visible = 0;
+        rows.forEach((row) => {
+            const matches = (!query || row.textContent.toLocaleLowerCase('es').includes(query))
+                && (!category?.value || row.dataset.category === category.value)
+                && (!status?.value || row.dataset.status === status.value)
+                && (!building?.value || row.dataset.building.includes(building.value));
+            row.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+        empty?.classList.toggle('hidden', visible !== 0);
+        if (visibleLabel) visibleLabel.textContent = visible;
+        if (totalLabel) totalLabel.textContent = rows.length;
+    };
+
+    assets.querySelectorAll('[data-assets-tab]').forEach((tab) => tab.addEventListener('click', () => {
+        activeAssetsPanel = tab.dataset.assetsTab;
+        assets.querySelectorAll('[data-assets-tab]').forEach((item) => {
+            const selected = item === tab;
+            item.classList.toggle('is-active', selected);
+            item.setAttribute('aria-selected', String(selected));
+        });
+        assets.querySelectorAll('[data-assets-panel]').forEach((panel) => panel.classList.toggle('hidden', panel.dataset.assetsPanel !== activeAssetsPanel));
+        assets.querySelectorAll('[data-assets-heading]').forEach((heading) => heading.classList.toggle('hidden', heading.dataset.assetsHeading !== activeAssetsPanel));
+        if (category) category.value = '';
+        if (status) status.value = '';
+        if (building) building.value = '';
+        filterAssets();
+    }));
+
+    [search, category, status, building].forEach((control) => control?.addEventListener(control === search ? 'input' : 'change', filterAssets));
+    assets.querySelector('[data-assets-clear]')?.addEventListener('click', () => {
+        if (search) search.value = '';
+        if (category) category.value = '';
+        if (status) status.value = '';
+        if (building) building.value = '';
+        filterAssets();
+    });
+    filterAssets();
+});

@@ -7,27 +7,52 @@
         ['Telemática', '#c026d3'],
     ];
     $printableHours = ['07H00 - 08H00', '08H00 - 09H00', '09H00 - 10H00', '10H00 - 11H00', '11H00 - 12H00', '12H00 - 13H00', '13H00 - 14H00', '14H00 - 15H00', '15H00 - 16H00', '16H00 - 17H00'];
+    $plannerHours = ['07:00 - 08:00', '08:00 - 09:00', '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00'];
     $classesInRoom = 0;
+    $usedRooms = [];
+    $assignedTeachers = [];
     foreach ($schedule as $row) {
         foreach (array_keys($weekDays) as $dayKey) {
             if ($row[$dayKey]) {
                 $classesInRoom++;
+                $usedRooms[] = $row[$dayKey]['room'];
+                $assignedTeachers[] = $row[$dayKey]['teacher'];
             }
         }
     }
+    $mapSpaces = [
+        ['name' => 'Edificio FIE-A', 'detail' => 'Aulas 101, 102, 105, 201 y 302', 'type' => 'Edificio', 'capacity' => 210, 'lat' => -1.65578, 'lng' => -78.67805, 'image' => 'https://images.unsplash.com/photo-1562774053-701939374585?w=320&h=240&fit=crop'],
+        ['name' => 'Bloque de Laboratorios', 'detail' => 'Control, Potencia, Circuitos y Electrónica', 'type' => 'Laboratorio', 'capacity' => 96, 'lat' => -1.65634, 'lng' => -78.67742, 'image' => 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=320&h=240&fit=crop'],
+        ['name' => 'Edificio de Cómputo', 'detail' => 'Laboratorios de informática 1 y 2', 'type' => 'Edificio', 'capacity' => 80, 'lat' => -1.65522, 'lng' => -78.67874, 'image' => 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=320&h=240&fit=crop'],
+        ['name' => 'Aula Magna', 'detail' => 'Auditorio y eventos académicos', 'type' => 'Auditorio', 'capacity' => 320, 'lat' => -1.65476, 'lng' => -78.67692, 'image' => 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=320&h=240&fit=crop'],
+        ['name' => 'Laboratorio de Potencia', 'detail' => 'Máquinas y sistemas eléctricos', 'type' => 'Laboratorio', 'capacity' => 28, 'lat' => -1.65692, 'lng' => -78.67782, 'image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=320&h=240&fit=crop'],
+        ['name' => 'Biblioteca FIE', 'detail' => 'Consulta y estudio colaborativo', 'type' => 'Servicio', 'capacity' => 72, 'lat' => -1.65505, 'lng' => -78.67948, 'image' => 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=320&h=240&fit=crop'],
+        ['name' => 'Cancha cubierta', 'detail' => 'Espacio de bienestar estudiantil', 'type' => 'Servicio', 'capacity' => 150, 'lat' => -1.65725, 'lng' => -78.67652, 'image' => 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=320&h=240&fit=crop'],
+    ];
 @endphp
 
-<x-hero icon="calendar-days"
-    :title="$role === 'estudiante' || $role === 'representante' ? 'Horario académico' : ($role === 'docente' ? 'Mi horario docente' : 'Horarios')"
-    :subtitle="$role === 'representante' ? 'Consulta la jornada semanal de '.$student['firstName'].'.' : ($isSchedulePlanner ? 'Asigne docentes, aulas y edificios a los bloques horarios.' : 'Periodo académico 2026-1 · Ingeniería en Electricidad')"
-    :stats="[['Clases', $classesInRoom, 'programadas'], ['Aulas', '12', 'en uso'], ['Docentes', '4', 'asignados']]">
-    @if($isSchedulePlanner)
-        <div class="hero-segmented">
-            <button class="is-active" type="button">Horario semestral</button>
-            <button type="button" data-toast="El mapa de espacios llega en la siguiente iteración">Mapa de espacios</button>
+@if($isSchedulePlanner)
+    <section class="schedule-reference-hero">
+        <div class="schedule-reference-title">
+            <span><i data-lucide="clock-3"></i></span>
+            <div><h1>Horarios</h1><p>Asigne docentes, aulas y edificios a los bloques horarios.</p></div>
         </div>
-    @endif
-</x-hero>
+        <div class="schedule-view-tabs" role="tablist" aria-label="Vistas de horarios">
+            <button class="is-active" type="button" role="tab" aria-selected="true" data-schedule-view="planner">Horario semestral</button>
+            <button type="button" role="tab" aria-selected="false" data-schedule-view="spaces">Mapa de espacios</button>
+        </div>
+        <div class="schedule-reference-stats">
+            <div><i data-lucide="calendar-days"></i><span><strong>03</strong><small>Clases</small></span></div>
+            <div><i data-lucide="door-open"></i><span><strong>02</strong><small>Aulas</small></span></div>
+            <div><i data-lucide="user-round"></i><span><strong>02</strong><small>Docentes</small></span></div>
+        </div>
+    </section>
+@else
+    <x-hero icon="calendar-days"
+        :title="$role === 'estudiante' || $role === 'representante' ? 'Horario académico' : 'Mi horario docente'"
+        :subtitle="$role === 'representante' ? 'Consulta la jornada semanal de '.$student['firstName'].'.' : 'Periodo académico 2026-1 · Ingeniería en Electricidad'"
+        :stats="[['Clases', $classesInRoom, 'programadas'], ['Aulas', count(array_unique($usedRooms)), 'en uso'], ['Docentes', count(array_unique($assignedTeachers)), 'asignados']]" />
+@endif
 
 <section class="panel schedule-panel" data-schedule-root>
     <span class="panel-accent" aria-hidden="true"></span>
@@ -43,7 +68,7 @@
             <div class="location-chips">
                 <span class="location-chip"><i data-lucide="building-2"></i><b data-chip-building>Edificio de aulas</b></span>
                 <span class="location-chip"><i data-lucide="layers"></i><b data-chip-floor>Piso 1</b></span>
-                <span class="location-chip"><i data-lucide="door-open"></i><b data-chip-room>Todas las aulas</b></span>
+                <span class="location-chip"><i data-lucide="door-open"></i><b data-chip-room>Aula 102</b></span>
             </div>
         @endif
 
@@ -71,32 +96,43 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($schedule as $row)
-                    <tr>
-                        <th class="hour-col">{{ $row['time'] }}</th>
-                        @foreach($weekDays as $dayKey => $dayLabel)
-                            @php $class = $row[$dayKey]; @endphp
-                            <td>
-                                @if($class)
-                                    <button class="class-block {{ $class['type'] }}" type="button"
-                                        data-class-cell
-                                        data-search-text="{{ mb_strtolower($class['subject'].' '.$class['teacher'].' '.$class['room']) }}"
-                                        data-room="{{ $class['room'] }}"
-                                        @if($isSchedulePlanner) data-modal-open="class-modal" @else data-toast="{{ $class['subject'] }} · {{ $class['room'] }}" @endif>
-                                        <span class="class-title"><i class="dot class-{{ $class['type'] }}"></i>{{ $class['subject'] }}</span>
-                                        <span class="class-career">{{ $class['career'] }}</span>
-                                        <span class="class-meta"><i data-lucide="map-pin"></i>{{ $class['room'] }}</span>
-                                        <span class="class-meta"><i data-lucide="user"></i>{{ $class['teacher'] }}</span>
-                                    </button>
-                                @elseif($isSchedulePlanner)
-                                    <button class="cell-add" type="button" data-modal-open="class-modal" title="Asignar clase el {{ $dayLabel }} a las {{ $row['time'] }}">
+                @if($isSchedulePlanner)
+                    @foreach($plannerHours as $hour)
+                        <tr>
+                            <th class="hour-col">{{ $hour }}</th>
+                            @foreach($weekDays as $dayLabel)
+                                <td>
+                                    <button class="cell-add" type="button" data-modal-open="class-modal" title="Asignar clase el {{ $dayLabel }} a las {{ $hour }}">
                                         <i data-lucide="plus"></i>
                                     </button>
-                                @endif
-                            </td>
-                        @endforeach
-                    </tr>
-                @endforeach
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                @else
+                    @foreach($schedule as $row)
+                        <tr>
+                            <th class="hour-col">{{ $row['time'] }}</th>
+                            @foreach($weekDays as $dayKey => $dayLabel)
+                                @php $class = $row[$dayKey]; @endphp
+                                <td>
+                                    @if($class)
+                                        <button class="class-block {{ $class['type'] }}" type="button"
+                                            data-class-cell
+                                            data-search-text="{{ mb_strtolower($class['subject'].' '.$class['teacher'].' '.$class['room']) }}"
+                                            data-room="{{ $class['room'] }}"
+                                            data-toast="{{ $class['subject'] }} · {{ $class['room'] }}">
+                                            <span class="class-title"><i class="dot class-{{ $class['type'] }}"></i>{{ $class['subject'] }}</span>
+                                            <span class="class-career">{{ $class['career'] }}</span>
+                                            <span class="class-meta"><i data-lucide="map-pin"></i>{{ $class['room'] }}</span>
+                                            <span class="class-meta"><i data-lucide="user"></i>{{ $class['teacher'] }}</span>
+                                        </button>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>
@@ -150,6 +186,33 @@
         <div class="locations-backdrop" data-locations-close></div>
     @endif
 </section>
+
+@if($isSchedulePlanner)
+    <section class="spaces-view hidden" data-spaces-view>
+        <aside class="spaces-explorer">
+            <header><i data-lucide="map-pin"></i><h2>Explorador de espacios</h2></header>
+            <label class="spaces-search"><i data-lucide="search"></i><input type="search" placeholder="Buscar por nombre o detalle..." data-space-search></label>
+            <label class="spaces-filter"><i data-lucide="sliders-horizontal"></i><select data-space-filter aria-label="Filtrar espacios por tipo"><option value="">Todos los tipos</option><option>Edificio</option><option>Laboratorio</option><option>Auditorio</option><option>Servicio</option></select></label>
+            <div class="spaces-list">
+                @foreach($mapSpaces as $index => $space)
+                    <button class="space-result {{ $index === 0 ? 'is-active' : '' }}" type="button" data-space-card data-space-name="{{ mb_strtolower($space['name'].' '.$space['detail']) }}" data-space-type="{{ $space['type'] }}" data-space-index="{{ $index }}" data-space-lat="{{ $space['lat'] }}" data-space-lng="{{ $space['lng'] }}">
+                        <span class="space-thumb"><img src="{{ $space['image'] }}" alt="{{ $space['name'] }}" loading="lazy"><i data-lucide="{{ $space['type'] === 'Laboratorio' ? 'flask-conical' : ($space['type'] === 'Auditorio' ? 'presentation' : 'building-2') }}"></i></span>
+                        <span class="space-result-copy"><b>{{ $space['name'] }}</b><small>{{ $space['detail'] }}</small><em><i data-lucide="users"></i> Cap: {{ $space['capacity'] }} <strong>Operativo</strong></em></span>
+                        <span class="space-kind">{{ $space['type'] }}</span>
+                    </button>
+                @endforeach
+            </div>
+        </aside>
+
+        <div class="campus-spaces-map" data-campus-map>
+            <div class="leaflet-campus-map" id="spaces-leaflet-map" data-leaflet-map aria-label="Mapa interactivo de espacios ESPOCH"></div>
+            <div class="map-style-switch"><button class="is-active" type="button" data-map-style="street">Mapa</button><button type="button" data-map-style="satellite">Satélite</button><button type="button" data-map-style="hybrid">Híbrido</button></div>
+            <div class="map-zoom"><button type="button" data-map-zoom-in aria-label="Acercar">+</button><button type="button" data-map-zoom-out aria-label="Alejar">−</button><button type="button" data-map-center aria-label="Centrar mapa"><i data-lucide="locate-fixed"></i></button></div>
+            <div class="spaces-map-legend"><b><i data-lucide="layers-3"></i> Leyenda</b><span><i class="dot available"></i> Disponible / Operativo</span><span><i class="dot occupied"></i> Ocupado</span></div>
+            <div class="space-map-detail"><small>ESPACIO SELECCIONADO</small><b data-space-detail-title>{{ $mapSpaces[0]['name'] }}</b><span data-space-detail-copy>{{ $mapSpaces[0]['detail'] }}</span></div>
+        </div>
+    </section>
+@endif
 
 {{-- Generar formato: réplica de la pantalla de exportación del sistema original --}}
 <section class="export-view" data-export-view hidden>

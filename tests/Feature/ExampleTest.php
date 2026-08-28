@@ -68,4 +68,43 @@ class ExampleTest extends TestCase
             $this->get($url)->assertOk()->assertSee($text);
         }
     }
+
+    public function test_admin_transactions_screen_uses_the_adapted_workflow(): void
+    {
+        $this->get('/admin/tramites')
+            ->assertOk()
+            ->assertSee('Bandeja de oficios y reportes enviados por los estudiantes.')
+            ->assertSee('Solicitudes')
+            ->assertSee('Préstamos')
+            ->assertSee('SOL-2026-041')
+            ->assertSee('PRE-2026-018')
+            ->assertSee('Importar solicitudes');
+    }
+
+    public function test_admin_schedule_includes_planner_and_spaces_map(): void
+    {
+        $this->get('/admin/horarios')
+            ->assertOk()
+            ->assertSee('Horario semestral')
+            ->assertSee('Mapa de espacios')
+            ->assertSee('Explorador de espacios')
+            ->assertSee('Edificio FIE-A')
+            ->assertSee('Aula 102')
+            ->assertSee('spaces-leaflet-map')
+            ->assertSee('images.unsplash.com')
+            ->assertSee('Nueva clase');
+    }
+
+    public function test_admin_assets_screen_includes_inventory_workflows(): void
+    {
+        $this->get('/admin/activos')
+            ->assertOk()
+            ->assertSee('Equipos, herramientas, mobiliario y tecnología.')
+            ->assertSee('Inventario')
+            ->assertSee('Asignaciones')
+            ->assertSee('Mantenimiento')
+            ->assertSee('Multímetro Digital Fluke')
+            ->assertSee('Registrar ítem')
+            ->assertSee('Subir foto');
+    }
 }

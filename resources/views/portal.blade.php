@@ -9,6 +9,8 @@
         @include('pages.virtual-classroom')
     @elseif($page === 'tramites')
         @include('pages.transactions')
+    @elseif($page === 'activos')
+        @include('pages.assets')
     @elseif($page === 'catalogo')
         @include('pages.catalog')
     @elseif($page === 'mapa')
