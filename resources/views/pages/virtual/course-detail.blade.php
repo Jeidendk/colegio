@@ -25,7 +25,8 @@
 <section data-virtual-panel="course" data-course-topics>
     <div class="course-topic-tabs" role="tablist" aria-label="Unidades del curso">
         <button class="is-active" type="button" data-course-topic="welcome">Bienvenida</button>
-        @foreach($selectedCourse['modules'] as $index => $module)<button type="button" data-course-topic="unit-{{ $index + 1 }}">Unidad {{ $index + 1 }}</button>@endforeach
+        @foreach($selectedCourse['modules'] as $index => $module)<button type="button" data-course-topic="unit-{{ $index + 1 }}">Unidad {{ $index + 1 }}@if($isTeacher)<span class="topic-rename" role="button" tabindex="0" title="Renombrar unidad" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></span>@endif</button>@if($isTeacher)<button class="topic-insert" type="button" title="Insertar unidad aquí" data-modal-open="course-section-modal"><i data-lucide="plus"></i></button>@endif
+        @endforeach
         <button type="button" data-course-topic="closing">Cierre</button>
         @if($isTeacher)<button class="topic-add" type="button" data-modal-open="course-section-modal" title="Agregar unidad"><i data-lucide="plus"></i> Unidad</button>@endif
     </div>
@@ -118,10 +119,10 @@
     </div>
 
     <div class="modal" id="course-activity-modal" aria-hidden="true">
-        <form class="modal-card demo-form wide-modal" data-demo-form>
+        <form class="modal-card demo-form settings-modal" data-demo-form>
             <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">&times;</button>
             <small>CONTENIDO DEL AULA</small>
-            <h2>Agregar recurso o actividad</h2>
+            <h2 data-activity-title>Nueva actividad o recurso</h2>
 
             <span class="field-label">Tipo de contenido</span>
             <div class="chooser-tabs segmented compact" data-chooser-tabs>
@@ -132,42 +133,85 @@
             <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar tipo de contenido..." data-chooser-search></label>
 
             <div class="icon-picker activity-picker" data-icon-picker>
-                <button class="is-active" type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="tarea"><i data-lucide="clipboard-pen"></i><small>Tarea</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="foro"><i data-lucide="message-square"></i><small>Foro</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="cuestionario"><i data-lucide="list-checks"></i><small>Cuestionario</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="asistencia"><i data-lucide="calendar-check-2"></i><small>Asistencia</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="glosario"><i data-lucide="book-a"></i><small>Glosario</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="encuesta"><i data-lucide="clipboard-list"></i><small>Encuesta</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="archivo"><i data-lucide="file-text"></i><small>Archivo</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="carpeta"><i data-lucide="folder"></i><small>Carpeta</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="url enlace"><i data-lucide="link"></i><small>URL</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="pagina"><i data-lucide="file-code-2"></i><small>Página</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="etiqueta"><i data-lucide="tag"></i><small>Etiqueta</small></button>
-                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="video"><i data-lucide="circle-play"></i><small>Video</small></button>
+                <button class="is-active" type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="tarea" data-chooser-label="Tarea"><i data-lucide="clipboard-pen"></i><small>Tarea</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="foro" data-chooser-label="Foro"><i data-lucide="message-square"></i><small>Foro</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="cuestionario" data-chooser-label="Cuestionario"><i data-lucide="list-checks"></i><small>Cuestionario</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="asistencia" data-chooser-label="Asistencia"><i data-lucide="calendar-check-2"></i><small>Asistencia</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="glosario" data-chooser-label="Glosario"><i data-lucide="book-a"></i><small>Glosario</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="activity" data-chooser-name="encuesta consulta" data-chooser-label="Encuesta"><i data-lucide="clipboard-list"></i><small>Encuesta</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="archivo" data-chooser-label="Archivo"><i data-lucide="file-text"></i><small>Archivo</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="carpeta" data-chooser-label="Carpeta"><i data-lucide="folder"></i><small>Carpeta</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="url enlace" data-chooser-label="URL"><i data-lucide="link"></i><small>URL</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="pagina" data-chooser-label="Página"><i data-lucide="file-code-2"></i><small>Página</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="etiqueta area de texto" data-chooser-label="Etiqueta"><i data-lucide="tag"></i><small>Etiqueta</small></button>
+                <button type="button" data-chooser-item data-chooser-kind="resource" data-chooser-name="video" data-chooser-label="Video"><i data-lucide="circle-play"></i><small>Video</small></button>
             </div>
             <p class="empty-state hidden" data-chooser-empty><i data-lucide="search-x"></i> Ningún tipo coincide con la búsqueda.</p>
 
-            <label class="export-field">Título<input required placeholder="Ej. Guía de laboratorio 05"></label>
-            <label class="export-field">Unidad<select><option>Bienvenida</option><option>Unidad 1</option><option>Unidad 2</option><option>Unidad 3</option><option>Unidad 4</option><option>Cierre</option></select></label>
-            <label class="export-field">Descripción o instrucciones<textarea placeholder="Qué debe hacer el estudiante..."></textarea></label>
+            <details class="settings-group" open>
+                <summary><i data-lucide="chevron-down"></i> General</summary>
 
-            <div class="form-grid">
-                <label class="export-field">Fecha de entrega<input type="date" value="2026-09-12"></label>
-                <label class="export-field">Puntaje<input type="number" min="0" max="10" value="10"></label>
-            </div>
+                <label class="export-field">Nombre <em>*</em><input required placeholder="Ej. Cuestionario de la unidad 1"></label>
 
-            <label class="file-drop">
-                <i data-lucide="file-up"></i>
-                <span><b>Adjuntar archivo</b><small>PDF, DOCX, imagen o video &middot; opcional</small></span>
-                <input type="file">
-            </label>
+                <span class="field-label">Descripción</span>
+                <div class="editor-box">
+                    <div class="editor-toolbar" role="toolbar" aria-label="Formato del texto">
+                        <button type="button" title="Deshacer" data-toast="Deshacer"><i data-lucide="undo-2"></i></button>
+                        <button type="button" title="Rehacer" data-toast="Rehacer"><i data-lucide="redo-2"></i></button>
+                        <span class="editor-divider"></span>
+                        <button type="button" title="Negrita" data-toast="Negrita"><b>B</b></button>
+                        <button type="button" title="Cursiva" data-toast="Cursiva"><i>I</i></button>
+                        <button type="button" title="Lista" data-toast="Lista"><i data-lucide="list"></i></button>
+                        <span class="editor-divider"></span>
+                        <button type="button" title="Imagen" data-toast="Insertar imagen"><i data-lucide="image"></i></button>
+                        <button type="button" title="Video" data-toast="Insertar video"><i data-lucide="video"></i></button>
+                        <button type="button" title="Audio" data-toast="Grabar audio"><i data-lucide="mic"></i></button>
+                        <button type="button" title="Enlace" data-toast="Insertar enlace"><i data-lucide="link"></i></button>
+                        <span class="editor-divider"></span>
+                        <button type="button" title="Tabla" data-toast="Insertar tabla"><i data-lucide="table"></i></button>
+                        <button type="button" title="Pantalla completa" data-toast="Pantalla completa"><i data-lucide="maximize-2"></i></button>
+                    </div>
+                    <textarea placeholder="Describe la actividad, las instrucciones y los criterios de evaluación..."></textarea>
+                </div>
 
-            <label class="check-inline"><input type="checkbox" checked> Visible para los estudiantes</label>
-            <label class="check-inline"><input type="checkbox"> Notificar a la clase al publicar</label>
+                <label class="check-inline"><input type="checkbox"> Mostrar la descripción en la página del curso</label>
+            </details>
 
-            <div class="modal-actions">
+            <details class="settings-group">
+                <summary><i data-lucide="chevron-down"></i> Disponibilidad</summary>
+                <div class="form-grid">
+                    <label class="export-field">Unidad<select><option>Bienvenida</option><option>Unidad 1</option><option>Unidad 2</option><option>Unidad 3</option><option>Unidad 4</option><option>Cierre</option></select></label>
+                    <label class="export-field">Visibilidad<select><option>Mostrar en la página del curso</option><option>Ocultar a los estudiantes</option></select></label>
+                </div>
+                <div class="form-grid">
+                    <label class="export-field">Disponible desde<input type="date" value="2026-09-02"></label>
+                    <label class="export-field">Fecha de entrega<input type="date" value="2026-09-12"></label>
+                </div>
+            </details>
+
+            <details class="settings-group">
+                <summary><i data-lucide="chevron-down"></i> Calificación</summary>
+                <div class="form-grid">
+                    <label class="export-field">Puntaje máximo<input type="number" min="0" max="10" value="10"></label>
+                    <label class="export-field">Intentos permitidos<select><option>1</option><option>2</option><option>Ilimitados</option></select></label>
+                </div>
+                <label class="export-field">Categoría de calificación<select><option>Sin categorizar</option><option>Parcial 1</option><option>Parcial 2</option><option>Examen final</option></select></label>
+            </details>
+
+            <details class="settings-group">
+                <summary><i data-lucide="chevron-down"></i> Archivos adjuntos</summary>
+                <label class="file-drop">
+                    <i data-lucide="file-up"></i>
+                    <span><b>Arrastra o selecciona un archivo</b><small>PDF, DOCX, imagen o video &middot; máx. 50 MB</small></span>
+                    <input type="file">
+                </label>
+                <label class="check-inline"><input type="checkbox" checked> Notificar a la clase al publicar</label>
+            </details>
+
+            <div class="modal-actions settings-actions">
                 <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-                <button class="primary-button dark" type="submit">Agregar al aula</button>
+                <button class="pill-button" type="submit">Guardar y volver al curso</button>
+                <button class="primary-button dark" type="submit">Guardar y mostrar</button>
             </div>
         </form>
     </div>

@@ -719,3 +719,32 @@ a.user-cell:hover b{color:var(--red)}
 .activity-add.subsection-add{margin-top:8px;border-style:solid;border-color:var(--line)}
 .chooser-tabs{width:100%;margin-bottom:4px}
 .chooser-tabs button{flex:1}
+
+/* Formulario de ajustes de actividad y edición de unidades */
+.settings-modal{max-width:640px}
+.settings-group{border:1px solid var(--line);border-radius:12px;padding:0 14px;background:#fbfcfe}
+.settings-group+.settings-group{margin-top:10px}
+.settings-group>summary{display:flex;align-items:center;gap:8px;padding:13px 0;font-size:13px;font-weight:800;color:#334155;cursor:pointer;list-style:none}
+.settings-group>summary::-webkit-details-marker{display:none}
+.settings-group>summary svg{width:15px;height:15px;color:#9aa3b1;transition:transform .2s}
+.settings-group[open]>summary svg{transform:rotate(0)}
+.settings-group:not([open])>summary svg{transform:rotate(-90deg)}
+.settings-group[open]{padding-bottom:14px;background:#fff}
+.settings-group>*:not(summary){margin-top:10px}
+.editor-box{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.editor-toolbar{display:flex;align-items:center;gap:3px;flex-wrap:wrap;padding:7px 9px;border-bottom:1px solid var(--line);background:#f8fafc}
+.editor-toolbar button{width:29px;height:29px;border:0;background:transparent;border-radius:7px;color:#5b6878;display:grid;place-items:center;font-size:13px;font-weight:800}
+.editor-toolbar button:hover{background:#e9edf3;color:#1e293b}
+.editor-toolbar svg{width:15px;height:15px}
+.editor-divider{width:1px;height:18px;background:var(--line);margin:0 4px}
+.editor-box textarea{width:100%;border:0;padding:12px;min-height:120px;font-size:13px;color:#334155;resize:vertical}
+.editor-box textarea:focus{outline:none}
+.settings-actions{flex-wrap:wrap}
+.topic-rename{display:none;margin-left:7px;color:#9aa3b1}
+.course-detail-room.is-editing .topic-rename{display:inline-flex}
+.topic-rename svg{width:12px;height:12px}
+.topic-rename:hover{color:var(--room-accent)}
+.topic-insert{display:none;align-items:center;justify-content:center;width:26px;height:26px;align-self:center;margin:0 2px;border:1px dashed #cbd5e1;background:#fff;border-radius:50%;color:#8a94a3}
+.course-detail-room.is-editing .topic-insert{display:inline-flex}
+.topic-insert:hover{border-color:var(--room-accent);color:var(--room-accent)}
+.topic-insert svg{width:13px;height:13px}

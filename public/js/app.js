@@ -1137,7 +1137,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
 
     search?.addEventListener('input', filterItems);
+    const title = chooser.querySelector('[data-activity-title]');
     items.forEach((item) => item.addEventListener('click', () => {
         items.forEach((other) => other.classList.toggle('is-active', other === item));
+        if (title) title.textContent = 'Nuevo: ' + item.dataset.chooserLabel;
     }));
 });
