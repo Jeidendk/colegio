@@ -814,3 +814,83 @@ document.addEventListener('DOMContentLoaded', () => {
         careersPanel.classList.remove('hidden');
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const panel = document.querySelector('[data-users-panel]');
+    if (!panel) return;
+
+    const body = panel.querySelector('[data-users-body]');
+    const search = panel.querySelector('[data-users-search]');
+    const statusSelect = panel.querySelector('[data-users-status]');
+    const emptyMessage = panel.querySelector('[data-users-empty]');
+    const rangeLabel = panel.querySelector('[data-users-range]');
+    const selectAll = panel.querySelector('[data-users-select-all]');
+    const roleChips = [...panel.querySelectorAll('[data-user-role]')];
+    const rows = [...panel.querySelectorAll('[data-user-row]')];
+    let activeRole = '';
+
+    const applyFilters = () => {
+        const query = (search?.value || '').trim().toLocaleLowerCase('es');
+        const wantedStatus = statusSelect?.value || '';
+        let visible = 0;
+
+        rows.forEach((row) => {
+            const matches = (!query || row.dataset.userSearch.includes(query))
+                && (!activeRole || row.dataset.userRole === activeRole)
+                && (!wantedStatus || row.dataset.userStatus === wantedStatus);
+            row.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+
+        emptyMessage?.classList.toggle('hidden', visible > 0);
+        if (rangeLabel) {
+            rangeLabel.textContent = visible > 0 ? '1-' + visible + ' de ' + rows.length : '0 de ' + rows.length;
+        }
+    };
+
+    search?.addEventListener('input', applyFilters);
+    statusSelect?.addEventListener('change', applyFilters);
+
+    roleChips.forEach((chip) => chip.addEventListener('click', () => {
+        // El mismo chip vuelve a mostrar todos los roles.
+        activeRole = activeRole === chip.dataset.userRole ? '' : chip.dataset.userRole;
+        roleChips.forEach((item) => item.classList.toggle('is-active', item.dataset.userRole === activeRole));
+        applyFilters();
+    }));
+
+    panel.querySelector('[data-users-clear]')?.addEventListener('click', () => {
+        activeRole = '';
+        roleChips.forEach((chip) => chip.classList.remove('is-active'));
+        if (search) search.value = '';
+        if (statusSelect) statusSelect.value = '';
+        applyFilters();
+    });
+
+    selectAll?.addEventListener('change', () => {
+        rows.filter((row) => !row.classList.contains('hidden'))
+            .forEach((row) => {
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox) checkbox.checked = selectAll.checked;
+            });
+    });
+
+    // Orden por columna: alterna ascendente y descendente sobre las filas ya renderizadas.
+    let sortColumn = '';
+    let sortAscending = true;
+
+    panel.querySelectorAll('[data-sort-users]').forEach((header) => header.addEventListener('click', () => {
+        const column = header.dataset.sortUsers;
+        sortAscending = column === sortColumn ? !sortAscending : true;
+        sortColumn = column;
+
+        const ordered = [...rows].sort((first, second) => {
+            const left = first.dataset['sort' + column.charAt(0).toUpperCase() + column.slice(1)] || '';
+            const right = second.dataset['sort' + column.charAt(0).toUpperCase() + column.slice(1)] || '';
+            return sortAscending ? left.localeCompare(right, 'es') : right.localeCompare(left, 'es');
+        });
+
+        ordered.forEach((row) => body?.appendChild(row));
+    }));
+
+    applyFilters();
+});

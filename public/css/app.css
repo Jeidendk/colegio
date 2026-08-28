@@ -196,18 +196,6 @@ media (max-width:900px){.locations-body{grid-template-columns:1fr}.locations-lis
 /* Estructura académica: ficha de facultad, banner de carrera y toolbar de malla */
 .tree-children button span{display:flex;flex-direction:column;flex:1;min-width:0;text-align:left}
 .tree-children button small{font-size:10px;font-weight:600;color:#9aa3b1}
-.faculty-card{margin-top:16px;border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfcfe;display:flex;flex-direction:column;gap:9px}
-.faculty-card small{font-size:10px;font-weight:800;letter-spacing:.9px;color:#9aa3b1}
-.faculty-card>div{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#6b7280}
-.faculty-card svg{width:14px;height:14px;color:#9aa3b1}
-.faculty-card b{margin-left:auto;color:#334155}
-.career-banner{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:14px;padding:13px 15px;background:#fbfcfe;margin-bottom:14px}
-.career-mark{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:0 0 42px}
-.career-mark svg{width:20px;height:20px}
-.career-banner div{display:flex;flex-direction:column;gap:2px;min-width:0}
-.career-banner b{font-size:14px;color:#334155}
-.career-banner small{font-size:11px;color:#78828f;font-weight:600}
-.career-credits{margin-left:auto;background:#eef2ff;color:#4338ca;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700;white-space:nowrap}
 .curriculum-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .curriculum-toolbar .search-field{max-width:250px}
 .subject-grid article .row-actions{margin-top:6px}
@@ -493,3 +481,45 @@ html.dark .assets-page{background:#0d1218}html.dark .assets-panel,html.dark .ass
 .tree-summary div{display:flex;flex-direction:column;min-width:0}
 .tree-summary b{font-size:12px;color:#334155}
 .tree-summary small{font-size:10px;font-weight:600;color:#9aa3b1}
+
+/* ===== USUARIOS: toolbar de filtros, tabla con avatar y pie con paginacion ===== */
+.users-panel{position:relative;overflow:hidden}
+.users-toolbar{flex-wrap:wrap;gap:10px;align-items:center}
+.users-toolbar .search-field{max-width:250px}
+.users-toolbar .toolbar-right{margin-left:auto;display:flex;gap:9px}
+.users-toolbar .text-button{display:inline-flex;align-items:center;gap:6px;color:#8a94a3}
+.users-toolbar .text-button svg{width:13px;height:13px}
+.role-chip{border-radius:999px;padding:9px 18px;font-size:12px}
+.role-chip.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.users-table th{padding:12px 10px;font-size:10px;letter-spacing:.9px}
+.users-table td{padding:14px 10px;vertical-align:middle}
+.check-column{width:38px}
+.check-column input{width:15px;height:15px;accent-color:var(--red)}
+.sort-header{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:#8a94a3;font:inherit;font-size:10px;font-weight:800;letter-spacing:.9px;text-transform:uppercase}
+.sort-header:hover{color:#475569}
+.sort-header svg{width:12px;height:12px}
+.user-cell{display:flex;align-items:center;gap:11px}
+.user-cell div{display:flex;flex-direction:column;min-width:0}
+.user-cell b{font-size:12px;color:#334155}
+.user-cell small{font-size:11px;color:#9aa3b1;font-weight:500}
+.role-cell{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.role-cell small{font-size:11px;color:#9aa3b1;font-weight:500}
+.role-pill{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;background:#eef2ff;color:#4338ca}
+.role-pill svg{width:13px;height:13px}
+.role-pill.role-docente{background:#ecfdf5;color:#047857}
+.role-pill.role-estudiante{background:#eff6ff;color:#1d4ed8}
+.role-pill.role-representante{background:#fdf4ff;color:#a21caf}
+.muted-cell{color:#a3adba}
+.row-action.edit{color:#2563eb;border-color:#dbeafe;background:#eff6ff}
+.row-action.edit:hover{background:#dbeafe}
+.users-table .row-action.danger{border-color:#fee2e2;background:#fef2f2}
+
+.users-footer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.range-chip{display:inline-flex;align-items:center;gap:7px;background:#f4f6f9;border-radius:999px;padding:6px 13px;font-size:11px;font-weight:700;color:#5b6878}
+.range-chip .dot{width:7px;height:7px;border-radius:50%;background:#9aa3b1}
+.users-pagination{margin-left:auto;display:inline-flex;align-items:center;gap:7px}
+.users-pagination .icon-button{width:30px;height:30px;border:1px solid var(--line);background:#fff;color:#8a94a3}
+.users-pagination .icon-button:disabled{opacity:.45}
+.page-number{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:800;color:#5b6878}
+.page-number.is-active{background:var(--red);border-color:var(--red);color:#fff}

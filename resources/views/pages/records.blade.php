@@ -274,70 +274,116 @@
 @elseif(in_array($page, ['usuarios','estudiantes'], true))
     @php
         $isUsersPage = $page === 'usuarios';
-        $roleFilters = ['' => 'Todos', 'Estudiante' => 'Estudiantes', 'Docente' => 'Docentes', 'Representante' => 'Representantes'];
         $roleCounts = array_count_values(array_column($users, 'role'));
+        $visibleUsers = $isUsersPage ? $users : array_values(array_filter($users, fn ($user) => $user['role'] === 'Estudiante'));
+        $activeUsers = count(array_filter($visibleUsers, fn ($user) => $user['status'] === 'Activo'));
+        $roleFilters = ['Administrador', 'Docente', 'Estudiante', 'Representante'];
+        $initials = fn (string $name): string => mb_substr($name, 0, 1).mb_substr(strrchr($name, ' ') ?: '', 1, 1);
     @endphp
 
-    <x-hero icon="users"
-        :title="$isUsersPage ? 'Usuarios' : 'Estudiantes'"
-        :subtitle="$isUsersPage ? 'Gestión demostrativa de estudiantes, docentes y representantes.' : 'Seguimiento de los estudiantes asignados a tus cursos.'"
-        :stats="[
-            ['Total', $isUsersPage ? '412' : '83', 'registros'],
-            ['Activos', $isUsersPage ? '396' : '81', 'vigentes'],
-            ['Docentes', '38', 'registrados'],
-            ['Representantes', '126', 'vinculados'],
-        ]">
-        <button class="hero-button" type="button" data-modal-open="user-modal"><i data-lucide="user-plus"></i> Nuevo {{ $isUsersPage ? 'usuario' : 'registro' }}</button>
-    </x-hero>
+    <section class="infra-hero users-hero">
+        <div class="infra-hero-title">
+            <span><i data-lucide="users"></i></span>
+            <div>
+                <h1>{{ $isUsersPage ? 'Gestión de usuarios y docentes' : 'Estudiantes' }}</h1>
+                <p>{{ $isUsersPage ? 'Administración de cuentas y del catálogo docente.' : 'Seguimiento de los estudiantes asignados a tus cursos.' }}</p>
+            </div>
+        </div>
 
-    <section class="panel">
-        <div class="toolbar">
+        <div class="infra-hero-stats">
+            <div><i data-lucide="users"></i><span><strong>{{ count($visibleUsers) }}</strong><small>Registros</small></span></div>
+            <div><i data-lucide="user-check"></i><span><strong>{{ $activeUsers }}</strong><small>Activos</small></span></div>
+            <div><i data-lucide="graduation-cap"></i><span><strong>{{ $roleCounts['Estudiante'] ?? 0 }}</strong><small>Estudiantes</small></span></div>
+            <div><i data-lucide="book-open"></i><span><strong>{{ $roleCounts['Docente'] ?? 0 }}</strong><small>Docentes</small></span></div>
+        </div>
+    </section>
+
+    <section class="panel users-panel" data-users-panel>
+        <span class="panel-accent" aria-hidden="true"></span>
+
+        <div class="toolbar users-toolbar">
+            <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar usuario o docente..." data-users-search></label>
+
             @if($isUsersPage)
-                <div class="chip-filters" data-filter-chips>
-                    @foreach($roleFilters as $value => $label)
-                        <button type="button" class="filter-chip {{ $value === '' ? 'is-active' : '' }}" data-filter-chip="{{ $value }}">
-                            {{ $label }}<b>{{ $value === '' ? count($users) : ($roleCounts[$value] ?? 0) }}</b>
-                        </button>
+                <div class="chip-filters" data-users-roles>
+                    @foreach($roleFilters as $role)
+                        <button class="filter-chip role-chip" type="button" data-user-role="{{ $role }}">{{ $role }}</button>
                     @endforeach
                 </div>
             @endif
-            <label class="search-field grow"><i data-lucide="search"></i><input type="search" placeholder="Buscar por nombre o correo..." data-table-search></label>
-            <button class="secondary-button" type="button" data-toast="Listado exportado"><i data-lucide="download"></i> Exportar</button>
+
+            <select class="select-control" data-users-status>
+                <option value="">Estado: Todos</option>
+                <option>Activo</option>
+                <option>Inactivo</option>
+            </select>
+
+            <button class="text-button" type="button" data-users-clear><i data-lucide="rotate-ccw"></i> Limpiar filtros</button>
+
+            <div class="toolbar-right">
+                <button class="pill-button" type="button" data-toast="Listado exportado en la demostración"><i data-lucide="download"></i> Exportar</button>
+                <button class="pill-button solid" type="button" data-modal-open="user-modal"><i data-lucide="plus"></i> Nuevo registro</button>
+            </div>
         </div>
 
         <div class="table-wrap">
-            <table class="data-table">
-                <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Detalle</th><th>Estado</th><th class="actions-col">Acciones</th></tr></thead>
-                <tbody>
-                    @foreach($users as $user)
-                        <tr data-search-row data-filter-value="{{ $user['role'] }}">
+            <table class="data-table users-table">
+                <thead>
+                    <tr>
+                        <th class="check-column"><input type="checkbox" aria-label="Seleccionar todo" data-users-select-all></th>
+                        <th><button class="sort-header" type="button" data-sort-users="name">Usuario / Docente <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th><button class="sort-header" type="button" data-sort-users="role">Rol / Departamento <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th><button class="sort-header" type="button" data-sort-users="status">Estado <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th><button class="sort-header" type="button" data-sort-users="last">Última conexión <i data-lucide="chevrons-up-down"></i></button></th>
+                        <th class="actions-col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-users-body>
+                    @foreach($visibleUsers as $user)
+                        <tr data-user-row
+                            data-user-search="{{ mb_strtolower($user['name'].' '.$user['email'].' '.$user['department']) }}"
+                            data-user-role="{{ $user['role'] }}"
+                            data-user-status="{{ $user['status'] }}"
+                            data-sort-name="{{ mb_strtolower($user['name']) }}"
+                            data-sort-role="{{ $user['role'] }}"
+                            data-sort-status="{{ $user['status'] }}"
+                            data-sort-last="{{ $user['last_seen'] === 'Sin registro' ? '' : $user['last_seen'] }}">
+                            <td class="check-column"><input type="checkbox" aria-label="Seleccionar {{ $user['name'] }}"></td>
                             <td>
-                                <div class="person-cell">
-                                    <span class="avatar small">{{ substr($user['name'], 0, 1) }}{{ substr(strrchr($user['name'], ' ') ?: '', 1, 1) }}</span>
-                                    <b>{{ $user['name'] }}</b>
+                                <div class="user-cell">
+                                    <span class="avatar small">{{ $initials($user['name']) }}</span>
+                                    <div><b>{{ $user['name'] }}</b><small>{{ $user['email'] }}</small></div>
                                 </div>
                             </td>
-                            <td>{{ $user['email'] }}</td>
-                            <td>{{ $isUsersPage ? $user['role'] : 'Estudiante' }}</td>
-                            <td>{{ $user['detail'] }}</td>
+                            <td>
+                                <div class="role-cell">
+                                    <span class="role-pill role-{{ Str::slug($user['role']) }}"><i data-lucide="shield-check"></i> {{ $user['role'] }}</span>
+                                    <small>{{ $user['department'] }}</small>
+                                </div>
+                            </td>
                             <td><x-badge :value="$user['status']" /></td>
+                            <td class="{{ $user['last_seen'] === 'Sin registro' ? 'muted-cell' : '' }}">{{ $user['last_seen'] }}</td>
                             <td>
                                 <div class="row-actions">
-                                    <button class="row-action" type="button" title="Ver perfil" data-toast="Perfil de {{ $user['name'] }}"><i data-lucide="eye"></i></button>
-                                    <button class="row-action" type="button" title="Editar" data-modal-open="user-modal"><i data-lucide="pencil"></i></button>
-                                    <button class="row-action danger" type="button" title="Desactivar" data-toast="{{ $user['name'] }} desactivado en la demostración"><i data-lucide="user-round-x"></i></button>
+                                    <button class="row-action edit" type="button" title="Editar" data-modal-open="user-modal"><i data-lucide="pencil"></i></button>
+                                    <button class="row-action danger" type="button" title="Eliminar" data-toast="{{ $user['name'] }} eliminado en la demostración"><i data-lucide="trash-2"></i></button>
                                 </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <p class="empty-state hidden" data-users-empty><i data-lucide="search-x"></i> Ningún registro coincide con los filtros.</p>
         </div>
 
-        <div class="panel-footer">
-            <span><i data-lucide="info"></i> Mostrando {{ count($users) }} registros.</span>
-            <div class="rows-per-page">
-                <label>Filas:<select><option>10</option><option>25</option><option>50</option></select></label>
+        <div class="users-footer">
+            <span class="range-chip"><i class="dot"></i> <span data-users-range>1-{{ count($visibleUsers) }} de {{ count($visibleUsers) }}</span></span>
+            <div class="rows-per-page"><label>Filas:<select><option>10</option><option>25</option><option>50</option></select></label></div>
+            <div class="users-pagination">
+                <button class="icon-button" type="button" disabled aria-label="Anterior"><i data-lucide="chevron-left"></i></button>
+                <button class="page-number is-active" type="button">1</button>
+                <button class="icon-button" type="button" disabled aria-label="Siguiente"><i data-lucide="chevron-right"></i></button>
             </div>
         </div>
     </section>
@@ -346,26 +392,27 @@
         <form class="modal-card demo-form" data-demo-form>
             <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
             <small>USUARIOS</small>
-            <h2>Nuevo usuario</h2>
+            <h2>Nuevo registro</h2>
             <label>Nombre completo<input required placeholder="Nombre y apellido"></label>
             <div class="form-grid">
                 <label>Correo institucional<input type="email" required placeholder="correo@espoch.edu.ec"></label>
                 <label>Cédula<input placeholder="0603XXXXXX"></label>
             </div>
             <div class="form-grid">
-                <label>Rol<select><option>Estudiante</option><option>Docente</option><option>Representante</option><option>Administrador</option></select></label>
+                <label>Rol<select>@foreach($roleFilters as $role)<option>{{ $role }}</option>@endforeach</select></label>
                 <label>Estado<select><option>Activo</option><option>Inactivo</option></select></label>
             </div>
             <div class="form-grid">
-                <label>Carrera<select><option>Ingeniería en Electricidad</option><option>Electrónica y Automatización</option><option>Telecomunicaciones</option></select></label>
-                <label>PAO<select>@for($pao = 1; $pao <= 9; $pao++)<option>{{ $pao }}.º</option>@endfor</select></label>
+                <label>Departamento o carrera<select><option>Ingeniería en Electricidad</option><option>Electrónica y Automatización</option><option>Telecomunicaciones</option><option>Dirección de Carrera</option></select></label>
+                <label>PAO<select><option>No aplica</option>@for($pao = 1; $pao <= 9; $pao++)<option>{{ $pao }}.º</option>@endfor</select></label>
             </div>
             <div class="modal-actions">
                 <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-                <button class="primary-button" type="submit">Guardar usuario</button>
+                <button class="primary-button dark" type="submit">Guardar registro</button>
             </div>
         </form>
     </div>
+
 
 @else
     <x-hero icon="bar-chart-3" title="Reportes" subtitle="Indicadores de gestión académica y uso de recursos."
