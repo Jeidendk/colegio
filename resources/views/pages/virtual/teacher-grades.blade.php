@@ -77,5 +77,5 @@
         </table>
     </div>
 
-    <x-table-footer :count="count($gradeRows)" label="22 entregas por calificar en el periodo." />
+    <x-table-footer :count="count($gradeRows)" />
 </section>

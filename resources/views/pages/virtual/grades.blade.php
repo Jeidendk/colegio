@@ -32,7 +32,7 @@
                     <tr data-search-row>
                         <td>
                             <a class="user-cell" href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'curso' => $course['slug']]) }}">
-                                <span class="course-mark tone-{{ $course['tone'] }}"><i data-lucide="book-open"></i></span>
+                                <span class="course-mark tone-{{ $course['tone'] }}"><i data-lucide="{{ $course['icon'] }}"></i></span>
                                 <div><b>{{ $course['name'] }}</b><small>{{ $course['code'] }}</small></div>
                             </a>
                         </td>
@@ -51,5 +51,5 @@
         </table>
     </div>
 
-    <x-table-footer :count="count($virtualCourses)" :label="'Promedio general '.$student['average'].' sobre 10.'" />
+    <x-table-footer :count="count($virtualCourses)" />
 </section>

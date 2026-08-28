@@ -587,3 +587,30 @@ a.user-cell:hover b{color:var(--red)}
 .cart-form .export-field textarea{border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:13px;font-weight:500;color:#334155;min-height:70px;resize:vertical;text-transform:none;letter-spacing:0}
 .cart-form .primary-button{width:100%;justify-content:center;gap:8px}
 .cart-form .primary-button svg{width:15px;height:15px}
+
+/* Los paneles con tabla ocupan el alto disponible: el pie queda abajo, no a media pagina */
+.users-panel{display:flex;flex-direction:column;min-height:calc(100vh - 300px)}
+.users-panel .table-wrap{flex:1}
+.users-panel .users-footer{margin-top:auto}
+.request-mark{width:34px;height:34px;border-radius:10px;flex:0 0 34px;display:grid;place-items:center;background:#fef2f2;color:#b42318}
+.request-mark svg{width:16px;height:16px}
+
+/* Paleta por asignatura: el aula virtual ya no depende solo de rojo y azul marino */
+.tone-indigo{background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff}
+.tone-violet{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
+.tone-green{background:linear-gradient(135deg,#059669,#34d399);color:#fff}
+.tone-amber{background:linear-gradient(135deg,#d97706,#fbbf24);color:#fff}
+.tone-rose{background:linear-gradient(135deg,#e11d48,#fb7185);color:#fff}
+.tone-cyan{background:linear-gradient(135deg,#0891b2,#22d3ee);color:#fff}
+.tone-pink{background:linear-gradient(135deg,#db2777,#f472b6);color:#fff}
+.tone-teal{background:linear-gradient(135deg,#0d9488,#2dd4bf);color:#fff}
+
+/* En celdas de tabla el chip va en version suave, no en degradado */
+.course-mark.tone-indigo{background:#eef2ff;color:#4338ca}
+.course-mark.tone-violet{background:#f5f3ff;color:#6d28d9}
+.course-mark.tone-green{background:#ecfdf5;color:#047857}
+.course-mark.tone-amber{background:#fffbeb;color:#b45309}
+.course-mark.tone-rose{background:#fff1f2;color:#be123c}
+.course-mark.tone-cyan{background:#ecfeff;color:#0e7490}
+.course-mark.tone-pink{background:#fdf2f8;color:#be185d}
+.course-mark.tone-teal{background:#f0fdfa;color:#0f766e}

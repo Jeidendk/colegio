@@ -178,7 +178,7 @@ final class DemoData
             'virtualCourses' => [
                 [
                     'slug' => 'matematica-octavo', 'code' => 'MAT-8A', 'name' => 'Matemática · 8.º EGB',
-                    'teacher' => 'Lcdo. Roberto Sánchez', 'initials' => 'RS', 'progress' => 78, 'tone' => 'navy',
+                    'teacher' => 'Lcdo. Roberto Sánchez', 'initials' => 'RS', 'progress' => 78, 'tone' => 'indigo', 'icon' => 'calculator', 'icon' => 'book-open', 'icon' => 'calculator',
                     'parallel' => 'A', 'students' => 28, 'pending' => 7, 'sections' => 6, 'activities' => 12,
                     'room' => 'Aula 8A', 'updated' => 'Hoy, 08:45', 'visible' => true,
                     'readiness' => 92, 'image' => 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&h=520&fit=crop',
@@ -193,7 +193,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'lengua-literatura-octavo', 'code' => 'LYL-8A', 'name' => 'Lengua y Literatura · 8.º EGB',
-                    'teacher' => 'Lcda. Patricia Morales', 'initials' => 'PM', 'progress' => 62, 'tone' => 'red',
+                    'teacher' => 'Lcda. Patricia Morales', 'initials' => 'PM', 'progress' => 62, 'tone' => 'violet', 'icon' => 'book-open',
                     'parallel' => 'A', 'students' => 28, 'pending' => 11, 'sections' => 5, 'activities' => 9,
                     'room' => 'Aula 8A', 'updated' => 'Ayer, 16:20', 'visible' => true,
                     'readiness' => 84, 'image' => 'https://images.unsplash.com/photo-1455885666463-5e7c6f3b71b9?w=900&h=520&fit=crop',
@@ -208,7 +208,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'ciencias-naturales-octavo', 'code' => 'CCNN-8A', 'name' => 'Ciencias Naturales · 8.º EGB',
-                    'teacher' => 'Lcda. Ana Gómez', 'initials' => 'AG', 'progress' => 86, 'tone' => 'amber',
+                    'teacher' => 'Lcda. Ana Gómez', 'initials' => 'AG', 'progress' => 86, 'tone' => 'green', 'icon' => 'flask-conical',
                     'parallel' => 'A', 'students' => 28, 'pending' => 4, 'sections' => 7, 'activities' => 14,
                     'room' => 'Lab. Ciencias', 'updated' => '25 ago, 11:10', 'visible' => true,
                     'readiness' => 76, 'image' => 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=900&h=520&fit=crop',
@@ -223,7 +223,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'estudios-sociales-octavo', 'code' => 'EESS-8A', 'name' => 'Estudios Sociales · 8.º EGB',
-                    'teacher' => 'Lcdo. Fernando Ruiz', 'initials' => 'FR', 'progress' => 71, 'tone' => 'navy',
+                    'teacher' => 'Lcdo. Fernando Ruiz', 'initials' => 'FR', 'progress' => 71, 'tone' => 'amber', 'icon' => 'globe',
                     'parallel' => 'A', 'students' => 28, 'pending' => 6, 'sections' => 6, 'activities' => 10,
                     'room' => 'Aula 8A', 'updated' => 'Hoy, 07:40', 'visible' => true,
                     'readiness' => 88, 'image' => 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=900&h=520&fit=crop',
@@ -238,7 +238,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'english-octavo', 'code' => 'ENG-8A', 'name' => 'English · 8.º EGB',
-                    'teacher' => 'Miss Carolina Mendoza', 'initials' => 'CM', 'progress' => 69, 'tone' => 'red',
+                    'teacher' => 'Miss Carolina Mendoza', 'initials' => 'CM', 'progress' => 69, 'tone' => 'rose', 'icon' => 'languages',
                     'parallel' => 'A', 'students' => 28, 'pending' => 8, 'sections' => 5, 'activities' => 11,
                     'room' => 'Aula de Idiomas', 'updated' => 'Ayer, 14:15', 'visible' => true,
                     'readiness' => 90, 'image' => 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=900&h=520&fit=crop',
@@ -253,7 +253,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'computacion-robotica-octavo', 'code' => 'COMP-8A', 'name' => 'Computación y Robótica · 8.º EGB',
-                    'teacher' => 'Lcdo. Carlos Mendoza', 'initials' => 'CM', 'progress' => 83, 'tone' => 'amber',
+                    'teacher' => 'Lcdo. Carlos Mendoza', 'initials' => 'CM', 'progress' => 83, 'tone' => 'cyan', 'icon' => 'monitor',
                     'parallel' => 'A', 'students' => 28, 'pending' => 5, 'sections' => 7, 'activities' => 13,
                     'room' => 'Sala de Computación', 'updated' => 'Hoy, 09:20', 'visible' => true,
                     'readiness' => 95, 'image' => 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&h=520&fit=crop',
@@ -268,7 +268,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'educacion-cultural-artistica-octavo', 'code' => 'ECA-8A', 'name' => 'Educación Cultural y Artística · 8.º EGB',
-                    'teacher' => 'Lcda. Sofía Naranjo', 'initials' => 'SN', 'progress' => 58, 'tone' => 'navy',
+                    'teacher' => 'Lcda. Sofía Naranjo', 'initials' => 'SN', 'progress' => 58, 'tone' => 'pink', 'icon' => 'palette',
                     'parallel' => 'A', 'students' => 28, 'pending' => 9, 'sections' => 5, 'activities' => 8,
                     'room' => 'Taller de Arte', 'updated' => '26 ago, 12:10', 'visible' => true,
                     'readiness' => 81, 'image' => 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=900&h=520&fit=crop',
@@ -283,7 +283,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'educacion-fisica-octavo', 'code' => 'EF-8A', 'name' => 'Educación Física · 8.º EGB',
-                    'teacher' => 'Lcdo. Diego Vera', 'initials' => 'DV', 'progress' => 77, 'tone' => 'red',
+                    'teacher' => 'Lcdo. Diego Vera', 'initials' => 'DV', 'progress' => 77, 'tone' => 'teal', 'icon' => 'volleyball',
                     'parallel' => 'A', 'students' => 28, 'pending' => 3, 'sections' => 6, 'activities' => 9,
                     'room' => 'Cancha cubierta', 'updated' => '25 ago, 10:30', 'visible' => true,
                     'readiness' => 87, 'image' => 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=900&h=520&fit=crop',

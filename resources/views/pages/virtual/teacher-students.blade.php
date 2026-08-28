@@ -80,5 +80,5 @@
         </table>
     </div>
 
-    <x-table-footer :count="count($participants)" label="83 estudiantes matriculados en el periodo." />
+    <x-table-footer :count="count($participants)" />
 </section>

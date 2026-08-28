@@ -88,7 +88,7 @@
                 <p class="empty-state hidden" data-users-empty><i data-lucide="search-x"></i> Ningún estudiante coincide con los filtros.</p>
             </div>
 
-            <x-table-footer :count="count($roster)" label="Las ediciones son visuales y no se guardan." data-users-range />
+            <x-table-footer :count="count($roster)" data-users-range />
         @else
             <div class="panel-header">
                 <div><small>CALIFICACIONES</small><h2>Detalle por asignatura</h2></div>
@@ -125,7 +125,7 @@
                 </table>
             </div>
 
-            <x-table-footer :count="count($grades)" :label="'Promedio general '.$student['average'].' sobre 10.'" />
+            <x-table-footer :count="count($grades)" />
         @endif
     </section>
 

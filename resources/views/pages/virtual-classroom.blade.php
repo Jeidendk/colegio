@@ -51,7 +51,7 @@
             <article class="virtual-course-card" data-search-row>
                 <div class="virtual-cover tone-{{ $course['tone'] }}">
                     <img src="{{ $course['image'] }}" alt="Imagen temática de {{ $course['name'] }}" loading="lazy">
-                    <span>{{ $course['code'] }}</span><i data-lucide="zap"></i>
+                    <span>{{ $course['code'] }}</span><i data-lucide="{{ $course['icon'] }}"></i>
                     <div class="cover-progress"><i style="width: {{ $course['progress'] }}%"></i></div>
                 </div>
                 <div class="virtual-course-body">

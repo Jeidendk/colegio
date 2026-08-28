@@ -39,18 +39,35 @@
         </div>
 
         <div class="table-wrap">
-            <table class="data-table">
+            <table class="data-table users-table">
                 <thead>
-                    <tr><th>Código</th><th>Asignatura</th><th>Equipos</th><th>Fecha</th><th>Estado</th><th class="actions-col">Acciones</th></tr>
+                    <tr>
+                        <th class="check-column"><input type="checkbox" aria-label="Seleccionar todo" data-users-select-all></th>
+                        <th>Solicitud</th>
+                        <th>Asignatura / Equipos</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th class="actions-col">Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach($requests as $request)
                         <tr data-search-row data-filter-value="{{ $request['status'] }}">
-                            <td><b>{{ $request['id'] }}</b></td>
-                            <td>{{ $request['subject'] }}</td>
-                            <td>{{ $request['items'] }}</td>
-                            <td>{{ $request['date'] }}</td>
+                            <td class="check-column"><input type="checkbox" aria-label="Seleccionar {{ $request['id'] }}"></td>
+                            <td>
+                                <div class="user-cell">
+                                    <span class="request-mark"><i data-lucide="clipboard-list"></i></span>
+                                    <div><b>{{ $request['id'] }}</b><small>Solicitud de préstamo</small></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="role-cell">
+                                    <span class="role-pill role-estudiante"><i data-lucide="book-open"></i> {{ $request['subject'] }}</span>
+                                    <small>{{ $request['items'] }}</small>
+                                </div>
+                            </td>
                             <td><x-badge :value="$request['status']" /></td>
+                            <td class="muted-cell">{{ $request['date'] }}</td>
                             <td>
                                 <div class="row-actions">
                                     <button class="row-action" type="button" title="Ver detalle" data-toast="Detalle de {{ $request['id'] }}"><i data-lucide="eye"></i></button>
@@ -66,7 +83,7 @@
             </table>
         </div>
 
-        <x-table-footer :count="count($requests)" label="Bandeja de solicitudes y préstamos del periodo." />
+        <x-table-footer :count="count($requests)" />
     </section>
 
     @if($canManageRequests)
