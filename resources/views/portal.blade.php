@@ -5,6 +5,8 @@
         @include('pages.dashboard')
     @elseif(in_array($page, ['horarios', 'horario'], true))
         @include('pages.schedule')
+    @elseif($page === 'aulas')
+        @include('pages.virtual-rooms')
     @elseif($page === 'aula-virtual')
         @include('pages.virtual-classroom')
     @elseif($page === 'tramites')

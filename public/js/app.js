@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2600);
     };
+    // Otros bloques de esta hoja (cargados después) muestran avisos con el mismo toast.
+    window.showToast = showToast;
 
     document.querySelectorAll('[data-toast]').forEach((element) => {
         element.addEventListener('click', () => showToast(element.dataset.toast));
@@ -1043,4 +1045,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         topicRoot.querySelectorAll('[data-course-topic]').forEach((button) => button.addEventListener('click', () => activateTopic(button.dataset.courseTopic)));
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Modo edición del aula: muestra las acciones de sección y de contenido, como en Moodle.
+    const toggle = document.querySelector('[data-course-edit-toggle]');
+    const room = document.querySelector('.course-detail-room');
+    if (!toggle || !room) return;
+
+    const label = toggle.querySelector('[data-course-edit-label]');
+    toggle.addEventListener('click', () => {
+        const editing = room.classList.toggle('is-editing');
+        toggle.classList.toggle('is-active', editing);
+        if (label) label.textContent = editing ? 'Desactivar edición' : 'Activar edición';
+        window.showToast?.(editing ? 'Edición activada: ya puedes agregar unidades y recursos' : 'Edición desactivada');
+    });
 });

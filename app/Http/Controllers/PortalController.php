@@ -11,7 +11,7 @@ final class PortalController extends Controller
     private const DEFAULT_PAGES = ['admin' => 'dashboard', 'docente' => 'dashboard', 'estudiante' => 'aula-virtual', 'representante' => 'resumen'];
 
     private const PAGES = [
-        'admin' => ['dashboard', 'tramites', 'horarios', 'activos', 'infraestructura', 'estructura-academica', 'recursos', 'formatos', 'usuarios', 'reportes'],
+        'admin' => ['dashboard', 'tramites', 'horarios', 'aulas', 'activos', 'infraestructura', 'estructura-academica', 'recursos', 'formatos', 'usuarios', 'reportes'],
         'docente' => ['dashboard', 'aula-virtual', 'horario', 'recursos', 'comunicaciones'],
         'estudiante' => ['aula-virtual', 'catalogo', 'solicitudes', 'horarios', 'mapa', 'recursos'],
         'representante' => ['resumen', 'rendimiento', 'horario', 'solicitudes', 'comunicaciones'],
@@ -32,7 +32,7 @@ final class PortalController extends Controller
     {
         return match ($role) {
             'admin' => [
-                ['dashboard', 'layout-dashboard', 'Dashboard'], ['tramites', 'inbox', 'Trámites'], ['horarios', 'calendar-days', 'Horarios'],
+                ['dashboard', 'layout-dashboard', 'Dashboard'], ['tramites', 'inbox', 'Trámites'], ['horarios', 'calendar-days', 'Horarios'], ['aulas', 'monitor-play', 'Aulas virtuales'],
                 ['activos', 'package', 'Activos'], ['infraestructura', 'building-2', 'Infraestructura'], ['estructura-academica', 'landmark', 'Estructura acad.'],
                 ['recursos', 'library', 'Recursos'], ['formatos', 'file-text', 'Formatos'], ['usuarios', 'users', 'Usuarios'], ['reportes', 'bar-chart-3', 'Reportes'],
             ],
@@ -56,6 +56,7 @@ final class PortalController extends Controller
         $meta = [
             'dashboard' => ['Inicio', 'Panel de control', 'Vista general de la comunidad educativa Montessori.'],
             'tramites' => ['Gestión', 'Trámites', 'Solicitudes y préstamos en una sola bandeja.'],
+            'aulas' => ['Académico', 'Aulas virtuales', 'Creación de aulas y asignación de docentes.'],
             'horarios' => ['Académico', 'Horarios', 'Planificación de clases y uso de espacios.'], 'horario' => ['Académico', 'Mi horario', 'Agenda semanal de clases y actividades.'],
             'activos' => ['Recursos', 'Activos', 'Inventario, asignaciones y mantenimiento.'], 'infraestructura' => ['Campus', 'Infraestructura', 'Edificios, aulas y laboratorios.'],
             'estructura-academica' => ['Institución', 'Estructura académica', 'Niveles, grados y asignaturas de la institución.'],

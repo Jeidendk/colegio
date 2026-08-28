@@ -167,8 +167,18 @@ final class DemoData
                 ['code' => 'LYL-8A', 'name' => 'Lengua y Literatura', 'parallel' => 'A', 'students' => 28, 'average' => '8,4', 'room' => 'Aula 8A'],
                 ['code' => 'CCNN-8A', 'name' => 'Ciencias Naturales', 'parallel' => 'A', 'students' => 28, 'average' => '8,2', 'room' => 'Lab. Ciencias'],
             ],
+            'virtualRooms' => [
+                ['code' => 'MAT-8A', 'subject' => 'Matemática', 'grade' => '8.º EGB', 'parallel' => 'A', 'teacher' => 'Lcdo. Roberto Sánchez', 'students' => 32, 'status' => 'Publicada', 'tone' => 'indigo', 'period' => '2026-2027'],
+                ['code' => 'LYL-8A', 'subject' => 'Lengua y Literatura', 'grade' => '8.º EGB', 'parallel' => 'A', 'teacher' => 'Lcda. Patricia Morales', 'students' => 32, 'status' => 'Publicada', 'tone' => 'orange', 'period' => '2026-2027'],
+                ['code' => 'CCNN-8A', 'subject' => 'Ciencias Naturales', 'grade' => '8.º EGB', 'parallel' => 'A', 'teacher' => 'Lcda. Ana Gómez', 'students' => 32, 'status' => 'Publicada', 'tone' => 'green', 'period' => '2026-2027'],
+                ['code' => 'EESS-8A', 'subject' => 'Estudios Sociales', 'grade' => '8.º EGB', 'parallel' => 'A', 'teacher' => 'Lcdo. Fernando Ruiz', 'students' => 32, 'status' => 'Publicada', 'tone' => 'amber', 'period' => '2026-2027'],
+                ['code' => 'ENG-8A', 'subject' => 'English', 'grade' => '8.º EGB', 'parallel' => 'A', 'teacher' => 'Miss Carolina Mendoza', 'students' => 32, 'status' => 'Publicada', 'tone' => 'rose', 'period' => '2026-2027'],
+                ['code' => 'COMP-8A', 'subject' => 'Computación y Robótica', 'grade' => '8.º EGB', 'parallel' => 'A', 'teacher' => 'Lcdo. Diego Cabrera', 'students' => 28, 'status' => 'Publicada', 'tone' => 'cyan', 'period' => '2026-2027'],
+                ['code' => 'MAT-8B', 'subject' => 'Matemática', 'grade' => '8.º EGB', 'parallel' => 'B', 'teacher' => '', 'students' => 30, 'status' => 'Borrador', 'tone' => 'indigo', 'period' => '2026-2027'],
+                ['code' => 'CCNN-9A', 'subject' => 'Ciencias Naturales', 'grade' => '9.º EGB', 'parallel' => 'A', 'teacher' => '', 'students' => 31, 'status' => 'Borrador', 'tone' => 'green', 'period' => '2026-2027'],
+            ],
             'toneColors' => [
-                'indigo' => '#4f46e5', 'violet' => '#7c3aed', 'green' => '#059669', 'amber' => '#d97706',
+                'indigo' => '#4f46e5', 'orange' => '#f97316', 'green' => '#059669', 'amber' => '#d97706',
                 'rose' => '#e11d48', 'cyan' => '#0891b2', 'pink' => '#db2777', 'teal' => '#0d9488',
                 'navy' => '#1e293b', 'red' => '#b00000', 'blue' => '#2563eb',
             ],
@@ -190,7 +200,7 @@ final class DemoData
                 ],
                 [
                     'slug' => 'lengua-literatura-octavo', 'code' => 'LYL-8A', 'name' => 'Lengua y Literatura · 8.º EGB',
-                    'teacher' => 'Lcda. Patricia Morales', 'initials' => 'PM', 'progress' => 62, 'tone' => 'violet', 'icon' => 'book-open',
+                    'teacher' => 'Lcda. Patricia Morales', 'initials' => 'PM', 'progress' => 62, 'tone' => 'orange', 'icon' => 'book-open',
                     'parallel' => 'A', 'students' => 28, 'pending' => 11, 'sections' => 5, 'activities' => 9,
                     'room' => 'Aula 8A', 'updated' => 'Ayer, 16:20', 'visible' => true,
                     'readiness' => 84, 'image' => 'https://images.unsplash.com/photo-1455885666463-5e7c6f3b71b9?w=900&h=520&fit=crop',

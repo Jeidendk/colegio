@@ -1,5 +1,4 @@
-@php $courseAccent = $toneColors[$selectedCourse['tone']] ?? $toneColors['red']; @endphp
-<div class="course-detail-room" style="--course-accent: {{ $courseAccent }}">
+<div class="course-detail-room">
 <div class="course-detail-breadcrumb"><a href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Área personal</a><i data-lucide="chevron-right"></i><a href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Mis cursos</a><i data-lucide="chevron-right"></i><span>{{ $selectedCourse['code'] }}</span></div>
 
 <header class="course-detail-header">
@@ -10,6 +9,7 @@
 @if($isTeacher)
     <div class="teacher-course-adminbar panel">
         <div><span><i data-lucide="settings-2"></i></span><div><small>MODO DOCENTE</small><b>Gestión del aula</b></div></div>
+        <button class="edit-toggle" type="button" data-course-edit-toggle><i data-lucide="pencil-ruler"></i> <span data-course-edit-label>Activar edición</span></button>
         <nav><button data-virtual-tab-target="people"><i data-lucide="users"></i> Participantes</button><button data-virtual-tab-target="grades"><i data-lucide="notebook-tabs"></i> Calificaciones</button><button data-toast="Informe del curso preparado"><i data-lucide="chart-no-axes-column-increasing"></i> Informes</button><button data-modal-open="virtual-resource-modal"><i data-lucide="plus"></i> Añadir contenido</button></nav>
     </div>
 @endif
@@ -26,6 +26,7 @@
         <button class="is-active" type="button" data-course-topic="welcome">Bienvenida</button>
         @foreach($selectedCourse['modules'] as $index => $module)<button type="button" data-course-topic="unit-{{ $index + 1 }}">Unidad {{ $index + 1 }}</button>@endforeach
         <button type="button" data-course-topic="closing">Cierre</button>
+        @if($isTeacher)<button class="topic-add" type="button" data-modal-open="course-section-modal" title="Agregar unidad"><i data-lucide="plus"></i> Unidad</button>@endif
     </div>
 
     <div class="course-detail-layout">
@@ -33,7 +34,7 @@
             <section data-course-topic-panel="welcome">
                 <div class="course-detail-cover"><img src="{{ $selectedCourse['image'] }}" alt="Imagen de {{ $selectedCourse['name'] }}"><div><span>MONTESSORI · AULA VIRTUAL</span><h2>{{ $selectedCourse['name'] }}</h2><p>Aprende, explora y comparte tus descubrimientos.</p></div></div>
 
-                <div class="course-section-heading"><i data-lucide="info"></i><span>Sección de información</span></div>
+                <div class="course-section-heading"><i data-lucide="info"></i><span>Sección de información</span><span class="section-edit-actions"><button class="row-action" type="button" title="Editar sección" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></button><button class="row-action" type="button" title="Agregar recurso" data-modal-open="course-activity-modal"><i data-lucide="plus"></i></button><button class="row-action danger" type="button" title="Eliminar sección" data-toast="La sección se eliminaría en la demostración"><i data-lucide="trash-2"></i></button></span></div>
                 <div class="course-learning-results"><b>Resultados de aprendizaje</b><ul><li>Comprende los conceptos esenciales de la asignatura y los relaciona con situaciones de su entorno.</li><li>Desarrolla autonomía para investigar, organizar información y comunicar sus ideas.</li><li>Participa con respeto y responsabilidad en experiencias colaborativas.</li></ul></div>
                 <button class="course-activity-row" type="button" data-toast="Perfil del docente abierto"><span class="type-file"><i data-lucide="contact"></i></span><div><b>Conoce a tu docente</b><small>{{ $selectedCourse['teacher'] }} · Docente responsable</small></div><i data-lucide="chevron-right"></i></button>
                 <button class="course-activity-row" type="button" data-toast="Plan de aprendizaje abierto"><span class="type-file"><i data-lucide="file-text"></i></span><div><b>Plan de aprendizaje de la asignatura</b><small>Objetivos, unidades, metodología y evaluación · PDF</small></div><i data-lucide="chevron-right"></i></button>
@@ -41,11 +42,11 @@
                 <div class="course-schedule-strip"><div><i data-lucide="calendar-days"></i><span><b>Encuentros de clase</b><small>Lunes y miércoles · 07:00 a 09:00</small></span></div><div><i data-lucide="messages-square"></i><span><b>Acompañamiento</b><small>Viernes · 12:00 a 13:00</small></span></div></div>
                 <button class="course-activity-row" type="button" data-toast="Evaluación diagnóstica abierta"><span class="type-quiz"><i data-lucide="list-checks"></i></span><div><b>Evaluación diagnóstica</b><small>Disponible hasta el 31 de agosto · 10 puntos</small></div><x-badge value="Pendiente" /></button>
 
-                <div class="course-section-heading"><i data-lucide="megaphone"></i><span>Sección de comunicación</span></div>
+                <div class="course-section-heading"><i data-lucide="megaphone"></i><span>Sección de comunicación</span><span class="section-edit-actions"><button class="row-action" type="button" title="Editar sección" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></button><button class="row-action" type="button" title="Agregar recurso" data-modal-open="course-activity-modal"><i data-lucide="plus"></i></button><button class="row-action danger" type="button" title="Eliminar sección" data-toast="La sección se eliminaría en la demostración"><i data-lucide="trash-2"></i></button></span></div>
                 <button class="course-activity-row" type="button" data-toast="Foro de avisos abierto"><span class="type-forum"><i data-lucide="messages-square"></i></span><div><b>Avisos y novedades</b><small>Información importante publicada por el docente</small></div><em>3 nuevos</em></button>
                 <button class="course-activity-row" type="button" data-toast="Guía de convivencia abierta"><span class="type-file"><i data-lucide="file-heart"></i></span><div><b>Acuerdos de convivencia y participación</b><small>Orientaciones para nuestra comunidad de aprendizaje</small></div><i data-lucide="chevron-right"></i></button>
 
-                <div class="course-section-heading"><i data-lucide="users"></i><span>Sección de interacción</span></div>
+                <div class="course-section-heading"><i data-lucide="users"></i><span>Sección de interacción</span><span class="section-edit-actions"><button class="row-action" type="button" title="Editar sección" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></button><button class="row-action" type="button" title="Agregar recurso" data-modal-open="course-activity-modal"><i data-lucide="plus"></i></button><button class="row-action danger" type="button" title="Eliminar sección" data-toast="La sección se eliminaría en la demostración"><i data-lucide="trash-2"></i></button></span></div>
                 <button class="course-activity-row" type="button" data-toast="Foro de preguntas abierto"><span class="type-forum"><i data-lucide="message-circle-question"></i></span><div><b>Preguntas, ideas y descubrimientos</b><small>Espacio para conversar y construir respuestas juntos</small></div><i data-lucide="chevron-right"></i></button>
                 <button class="course-activity-row" type="button" data-toast="Registro de asistencia consultado"><span class="type-attendance"><i data-lucide="user-check"></i></span><div><b>Registro de asistencia</b><small>Consulta tu participación en las clases programadas</small></div><x-badge value="Al día" /></button>
             </section>
@@ -53,10 +54,10 @@
             @foreach($selectedCourse['modules'] as $index => $module)
                 <section class="hidden" data-course-topic-panel="unit-{{ $index + 1 }}">
                     <div class="course-unit-heading"><span>UNIDAD {{ $index + 1 }}</span><h2>{{ $module['title'] }}</h2><p>{{ $module['meta'] }}</p></div>
-                    <div class="course-section-heading"><i data-lucide="book-open-check"></i><span>Explorar y comprender</span></div>
+                    <div class="course-section-heading"><i data-lucide="book-open-check"></i><span>Explorar y comprender</span><span class="section-edit-actions"><button class="row-action" type="button" title="Editar sección" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></button><button class="row-action" type="button" title="Agregar recurso" data-modal-open="course-activity-modal"><i data-lucide="plus"></i></button><button class="row-action danger" type="button" title="Eliminar sección" data-toast="La sección se eliminaría en la demostración"><i data-lucide="trash-2"></i></button></span></div>
                     <button class="course-activity-row" type="button" data-toast="Guía de aprendizaje abierta"><span class="type-file"><i data-lucide="file-text"></i></span><div><b>Guía de aprendizaje de la unidad</b><small>Conceptos, ejemplos y preguntas para explorar</small></div><x-badge :value="$module['done'] ? 'Completado' : 'Pendiente'" /></button>
                     <button class="course-activity-row" type="button" data-toast="Recurso multimedia abierto"><span class="type-url"><i data-lucide="circle-play"></i></span><div><b>Recurso multimedia interactivo</b><small>Video y material visual · 18 minutos</small></div><i data-lucide="external-link"></i></button>
-                    <div class="course-section-heading"><i data-lucide="pencil-ruler"></i><span>Aplicar y crear</span></div>
+                    <div class="course-section-heading"><i data-lucide="pencil-ruler"></i><span>Aplicar y crear</span><span class="section-edit-actions"><button class="row-action" type="button" title="Editar sección" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></button><button class="row-action" type="button" title="Agregar recurso" data-modal-open="course-activity-modal"><i data-lucide="plus"></i></button><button class="row-action danger" type="button" title="Eliminar sección" data-toast="La sección se eliminaría en la demostración"><i data-lucide="trash-2"></i></button></span></div>
                     <button class="course-activity-row" type="button" data-toast="Actividad práctica abierta"><span class="type-quiz"><i data-lucide="clipboard-check"></i></span><div><b>{{ $module['type'] === 'task' ? $module['title'] : 'Actividad práctica de la unidad' }}</b><small>Entrega guiada con retroalimentación del docente</small></div><x-badge value="Pendiente" /></button>
                     <button class="course-activity-row" type="button" data-toast="Foro colaborativo abierto"><span class="type-forum"><i data-lucide="users-round"></i></span><div><b>Construimos juntos</b><small>Comparte tu proceso, comenta y aprende de tus compañeros</small></div><i data-lucide="chevron-right"></i></button>
                 </section>
@@ -64,7 +65,7 @@
 
             <section class="hidden" data-course-topic-panel="closing">
                 <div class="course-unit-heading"><span>CIERRE DEL CURSO</span><h2>Reflexiona sobre lo aprendido</h2><p>Organiza tus evidencias y reconoce tus avances.</p></div>
-                <div class="course-section-heading"><i data-lucide="sparkles"></i><span>Portafolio y despedida</span></div>
+                <div class="course-section-heading"><i data-lucide="sparkles"></i><span>Portafolio y despedida</span><span class="section-edit-actions"><button class="row-action" type="button" title="Editar sección" data-modal-open="course-section-modal"><i data-lucide="pencil"></i></button><button class="row-action" type="button" title="Agregar recurso" data-modal-open="course-activity-modal"><i data-lucide="plus"></i></button><button class="row-action danger" type="button" title="Eliminar sección" data-toast="La sección se eliminaría en la demostración"><i data-lucide="trash-2"></i></button></span></div>
                 <button class="course-activity-row" type="button" data-toast="Portafolio abierto"><span class="type-file"><i data-lucide="folder-check"></i></span><div><b>Mi portafolio de aprendizaje</b><small>Selección de trabajos, reflexiones y logros</small></div><i data-lucide="chevron-right"></i></button>
                 <button class="course-activity-row" type="button" data-toast="Autoevaluación abierta"><span class="type-quiz"><i data-lucide="badge-check"></i></span><div><b>Autoevaluación final</b><small>Reconoce tus fortalezas y próximos retos</small></div><x-badge value="Pendiente" /></button>
             </section>
@@ -87,4 +88,70 @@
 <section class="hidden" data-virtual-panel="skills"><div class="virtual-section-title"><div><small>APRENDIZAJES</small><h2>Competencias del curso</h2></div></div><div class="competency-grid">@foreach([['Pensamiento crítico','Analiza información y comunica conclusiones.',88],['Autonomía','Organiza su proceso y toma decisiones responsables.',82],['Trabajo colaborativo','Participa con respeto y aporta al grupo.',92]] as $skill)<article class="panel"><span><i data-lucide="badge-check"></i></span><h3>{{ $skill[0] }}</h3><p>{{ $skill[1] }}</p><div><i style="width:{{ $skill[2] }}%"></i></div><b>{{ $skill[2] }}% alcanzado</b></article>@endforeach</div></section>
 
 <section class="hidden" data-virtual-panel="people"><div class="virtual-section-title"><div><small>COMUNIDAD DEL CURSO</small><h2>{{ $isTeacher ? 'Participantes matriculados' : 'Docente y compañeros' }}</h2></div></div><div class="people-grid"><article class="panel virtual-person"><span>{{ $selectedCourse['initials'] }}</span><div><small>DOCENTE PRINCIPAL</small><h3>{{ $selectedCourse['teacher'] }}</h3><p>docente@montessori-riobamba.edu.ec</p></div><button data-toast="Mensaje preparado"><i data-lucide="mail"></i></button></article>@foreach([['JP','Juan Carlos Pérez','M-08021'],['MR','María Fernanda Ruiz','M-08034'],['JS','Jorge Silva Andrade','M-08047']] as $person)<article class="panel virtual-person"><span>{{ $person[0] }}</span><div><small>ESTUDIANTE</small><h3>{{ $person[1] }}</h3><p>{{ $person[2] }} · 8.º EGB A</p></div><button data-toast="Perfil académico abierto"><i data-lucide="eye"></i></button></article>@endforeach</div></section>
+
+@if($isTeacher)
+    <div class="modal" id="course-section-modal" aria-hidden="true">
+        <form class="modal-card demo-form" data-demo-form>
+            <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">&times;</button>
+            <small>ESTRUCTURA DEL AULA</small>
+            <h2>Nueva unidad o sección</h2>
+            <label class="export-field">Nombre<input required placeholder="Ej. Unidad 5 · Energía y movimiento"></label>
+            <div class="form-grid">
+                <label class="export-field">Tipo<select><option>Unidad</option><option>Sección de información</option><option>Sección de comunicación</option><option>Cierre</option></select></label>
+                <label class="export-field">Posición<select><option>Al final</option><option>Después de Bienvenida</option><option>Después de la Unidad 1</option></select></label>
+            </div>
+            <div class="form-grid">
+                <label class="export-field">Disponible desde<input type="date" value="2026-09-01"></label>
+                <label class="export-field">Disponible hasta<input type="date" value="2026-12-19"></label>
+            </div>
+            <label class="export-field">Descripción<textarea placeholder="Qué encontrará el estudiante en esta unidad..."></textarea></label>
+            <label class="check-inline"><input type="checkbox" checked> Visible para los estudiantes</label>
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
+                <button class="primary-button dark" type="submit">Guardar unidad</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="course-activity-modal" aria-hidden="true">
+        <form class="modal-card demo-form wide-modal" data-demo-form>
+            <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">&times;</button>
+            <small>CONTENIDO DEL AULA</small>
+            <h2>Agregar recurso o actividad</h2>
+
+            <span class="field-label">Tipo de contenido</span>
+            <div class="icon-picker activity-picker" data-icon-picker>
+                <button class="is-active" type="button" data-icon="file-text"><i data-lucide="file-text"></i><small>Archivo</small></button>
+                <button type="button" data-icon="link"><i data-lucide="link"></i><small>Enlace</small></button>
+                <button type="button" data-icon="message-square"><i data-lucide="message-square"></i><small>Foro</small></button>
+                <button type="button" data-icon="clipboard-pen"><i data-lucide="clipboard-pen"></i><small>Tarea</small></button>
+                <button type="button" data-icon="list-checks"><i data-lucide="list-checks"></i><small>Cuestionario</small></button>
+                <button type="button" data-icon="circle-play"><i data-lucide="circle-play"></i><small>Video</small></button>
+            </div>
+
+            <label class="export-field">Título<input required placeholder="Ej. Guía de laboratorio 05"></label>
+            <label class="export-field">Unidad<select><option>Bienvenida</option><option>Unidad 1</option><option>Unidad 2</option><option>Unidad 3</option><option>Unidad 4</option><option>Cierre</option></select></label>
+            <label class="export-field">Descripción o instrucciones<textarea placeholder="Qué debe hacer el estudiante..."></textarea></label>
+
+            <div class="form-grid">
+                <label class="export-field">Fecha de entrega<input type="date" value="2026-09-12"></label>
+                <label class="export-field">Puntaje<input type="number" min="0" max="10" value="10"></label>
+            </div>
+
+            <label class="file-drop">
+                <i data-lucide="file-up"></i>
+                <span><b>Adjuntar archivo</b><small>PDF, DOCX, imagen o video &middot; opcional</small></span>
+                <input type="file">
+            </label>
+
+            <label class="check-inline"><input type="checkbox" checked> Visible para los estudiantes</label>
+            <label class="check-inline"><input type="checkbox"> Notificar a la clase al publicar</label>
+
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
+                <button class="primary-button dark" type="submit">Agregar al aula</button>
+            </div>
+        </form>
+    </div>
+@endif
 </div>
