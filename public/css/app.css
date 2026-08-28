@@ -704,3 +704,18 @@ a.user-cell:hover b{color:var(--red)}
 .attendance-options button[data-attendance-state="Ausente"].is-active{color:#b42318}
 .attendance-options button[data-attendance-state="Justificado"].is-active{color:#1d4ed8}
 .attendance-note{max-width:230px;font-size:12px;padding:9px 11px}
+
+/* Edición del aula: acciones por actividad, altas al final de cada unidad y selector de contenido */
+.activity-line{display:flex;align-items:center;gap:8px}
+.activity-line .course-activity-row{flex:1;min-width:0}
+.activity-edit-actions{display:none;gap:5px;flex:0 0 auto}
+.course-detail-room.is-editing .activity-edit-actions{display:inline-flex}
+.activity-edit-actions .row-action{width:27px;height:27px}
+.activity-edit-actions .row-action svg{width:13px;height:13px}
+.activity-add{display:none;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;border:1.5px dashed #cbd5e1;background:#fbfcfe;color:#5b6878;border-radius:12px;padding:12px;font-size:12px;font-weight:700}
+.course-detail-room.is-editing .activity-add{display:inline-flex}
+.activity-add:hover{border-color:var(--room-accent);color:var(--room-accent);background:#fff}
+.activity-add svg{width:15px;height:15px}
+.activity-add.subsection-add{margin-top:8px;border-style:solid;border-color:var(--line)}
+.chooser-tabs{width:100%;margin-bottom:4px}
+.chooser-tabs button{flex:1}

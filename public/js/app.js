@@ -1104,3 +1104,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     refreshCounters();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Selector de contenido del aula: pestañas y buscador sobre los tipos disponibles.
+    const chooser = document.querySelector('[data-chooser-tabs]')?.closest('form');
+    if (!chooser) return;
+
+    const items = [...chooser.querySelectorAll('[data-chooser-item]')];
+    const search = chooser.querySelector('[data-chooser-search]');
+    const empty = chooser.querySelector('[data-chooser-empty]');
+    const tabs = [...chooser.querySelectorAll('[data-chooser-tab]')];
+    let activeKind = 'all';
+
+    const filterItems = () => {
+        const query = (search?.value || '').trim().toLocaleLowerCase('es');
+        let visible = 0;
+
+        items.forEach((item) => {
+            const matches = (activeKind === 'all' || item.dataset.chooserKind === activeKind)
+                && (!query || item.dataset.chooserName.includes(query));
+            item.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+
+        empty?.classList.toggle('hidden', visible > 0);
+    };
+
+    tabs.forEach((tab) => tab.addEventListener('click', () => {
+        tabs.forEach((item) => item.classList.toggle('is-active', item === tab));
+        activeKind = tab.dataset.chooserTab;
+        filterItems();
+    }));
+
+    search?.addEventListener('input', filterItems);
+    items.forEach((item) => item.addEventListener('click', () => {
+        items.forEach((other) => other.classList.toggle('is-active', other === item));
+    }));
+});
