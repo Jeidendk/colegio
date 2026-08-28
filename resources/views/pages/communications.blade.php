@@ -1,5 +1,14 @@
 @php
     $canBroadcast = in_array($role, ['admin', 'docente'], true);
+    // Color e ícono por tipo de mensaje: la bandeja ya no es una lista de avatares grises.
+    $messageStyles = [
+        'Académico' => ['indigo', 'calendar-check'],
+        'Docente' => ['green', 'book-open'],
+        'Sistema' => ['cyan', 'circle-check-big'],
+        'Curso' => ['orange', 'users'],
+        'Representantes' => ['amber', 'heart-handshake'],
+    ];
+    $styleFor = fn (string $type): array => $messageStyles[$type] ?? ['indigo', 'mail'];
     $sentMessages = [
         ['type' => 'Curso', 'title' => 'Recordatorio: entrega de la actividad 05', 'text' => 'Enviado a Matemática · 8.º EGB · Paralelo A.', 'date' => 'Hoy'],
         ['type' => 'Representantes', 'title' => 'Convocatoria a reunión de padres', 'text' => 'Enviado a 28 representantes del paralelo A.', 'date' => 'Ayer'],
@@ -31,7 +40,8 @@
             @foreach($notices as $index => $notice)
                 <button class="message-row {{ $index === 0 ? 'is-active' : '' }}" type="button" data-search-row
                     data-message-title="{{ $notice['title'] }}" data-message-text="{{ $notice['text'] }}" data-message-type="{{ $notice['type'] }}">
-                    <span class="avatar small">{{ substr($notice['type'], 0, 2) }}</span>
+                    @php [$tone, $icon] = $styleFor($notice['type']); @endphp
+                    <span class="course-mark tone-{{ $tone }}"><i data-lucide="{{ $icon }}"></i></span>
                     <div>
                         <span><b>{{ $notice['title'] }}</b><small>{{ $notice['date'] }}</small></span>
                         <p>{{ $notice['text'] }}</p>
@@ -44,7 +54,8 @@
             @foreach($sentMessages as $message)
                 <button class="message-row" type="button" data-search-row
                     data-message-title="{{ $message['title'] }}" data-message-text="{{ $message['text'] }}" data-message-type="{{ $message['type'] }}">
-                    <span class="avatar small">{{ substr($message['type'], 0, 2) }}</span>
+                    @php [$tone, $icon] = $styleFor($message['type']); @endphp
+                    <span class="course-mark tone-{{ $tone }}"><i data-lucide="{{ $icon }}"></i></span>
                     <div>
                         <span><b>{{ $message['title'] }}</b><small>{{ $message['date'] }}</small></span>
                         <p>{{ $message['text'] }}</p>
@@ -63,7 +74,7 @@
             </div>
         </div>
 
-        <small data-message-type>ACADÉMICO</small>
+        <small class="message-type-chip" data-message-type>ACADÉMICO</small>
         <h2 data-message-title>Reunión de seguimiento del periodo</h2>
         <p data-message-text>Miércoles 2 de septiembre, 16:00 · Sala de reuniones Montessori.</p>
 

@@ -68,6 +68,27 @@
     </section>
 </div>
 @else
+@php
+    // Cada materia y cada tipo de aviso llevan su color e ícono, en vez de repetir el rojo.
+    $subjectStyles = [
+        'Matemática' => ['indigo', 'calculator'],
+        'Lengua y Literatura' => ['orange', 'book-open'],
+        'Ciencias Naturales' => ['green', 'flask-conical'],
+        'Estudios Sociales' => ['amber', 'globe'],
+        'English' => ['rose', 'languages'],
+    ];
+    $noticeStyles = [
+        'Académico' => ['indigo', 'calendar-check'],
+        'Docente' => ['green', 'book-open'],
+        'Sistema' => ['cyan', 'circle-check-big'],
+    ];
+    $upcoming = [
+        ['28', 'AGO', 'Entrega informe de laboratorio', 'green', 'flask-conical'],
+        ['02', 'SEP', 'Evaluación de Matemática', 'indigo', 'calculator'],
+        ['05', 'SEP', 'Reunión de representantes', 'amber', 'users'],
+    ];
+@endphp
+
 <div class="representative-layout">
     <section class="student-card panel">
         <div class="student-avatar">JP</div><div><small>ESTUDIANTE VINCULADO</small><h2>{{ $student['name'] }}</h2><p>{{ $student['code'] }} · {{ $student['career'] }}</p></div><x-badge value="Matrícula activa" />
@@ -77,21 +98,40 @@
             <div class="panel-header"><div><small>RENDIMIENTO</small><h2>Progreso por materia</h2></div><a href="{{ route('portal', ['role' => 'representante', 'page' => 'rendimiento']) }}">Ver detalle</a></div>
             <div class="progress-list">
                 @foreach(array_slice($grades, 0, 4) as $grade)
-                    <div><span><b>{{ $grade['subject'] }}</b><strong>{{ $grade['final'] }}</strong></span><div><i style="width: {{ ((float) str_replace(',', '.', $grade['final'])) * 10 }}%"></i></div></div>
+                    @php [$tone, $icon] = $subjectStyles[$grade['subject']] ?? ['indigo', 'book-open']; @endphp
+                    <div class="progress-row tone-line-{{ $tone }}">
+                        <span>
+                            <span class="course-mark tone-{{ $tone }}"><i data-lucide="{{ $icon }}"></i></span>
+                            <b>{{ $grade['subject'] }}</b>
+                            <strong>{{ $grade['final'] }}</strong>
+                        </span>
+                        <div><i style="width: {{ ((float) str_replace(',', '.', $grade['final'])) * 10 }}%"></i></div>
+                    </div>
                 @endforeach
             </div>
         </section>
         <section class="panel">
             <div class="panel-header"><div><small>PRÓXIMAS</small><h2>Actividades</h2></div></div>
-            <div class="mini-calendar"><b>28</b><span>AGO<small>Entrega informe de laboratorio</small></span></div>
-            <div class="mini-calendar"><b>02</b><span>SEP<small>Evaluación de Matemática</small></span></div>
-            <div class="mini-calendar"><b>05</b><span>SEP<small>Reunión de representantes</small></span></div>
+            @foreach($upcoming as [$day, $month, $title, $tone, $icon])
+                <div class="mini-calendar">
+                    <b class="date-chip tone-{{ $tone }}">{{ $day }}<em>{{ $month }}</em></b>
+                    <span><small class="agenda-title">{{ $title }}</small><small class="agenda-meta"><i data-lucide="{{ $icon }}"></i> Actividad del periodo</small></span>
+                </div>
+            @endforeach
         </section>
         <section class="panel span-3">
             <div class="panel-header"><div><small>ACTUALIZACIONES</small><h2>Novedades recientes</h2></div></div>
             <div class="notice-list">
                 @foreach($notices as $notice)
-                    <article><span class="notice-icon"><i data-lucide="bell-ring"></i></span><div><small>{{ $notice['type'] }} · {{ $notice['date'] }}</small><h3>{{ $notice['title'] }}</h3><p>{{ $notice['text'] }}</p></div></article>
+                    @php [$tone, $icon] = $noticeStyles[$notice['type']] ?? ['indigo', 'bell-ring']; @endphp
+                    <article>
+                        <span class="notice-icon course-mark tone-{{ $tone }}"><i data-lucide="{{ $icon }}"></i></span>
+                        <div>
+                            <small><span class="notice-type tone-text-{{ $tone }}">{{ $notice['type'] }}</span> · {{ $notice['date'] }}</small>
+                            <h3>{{ $notice['title'] }}</h3>
+                            <p>{{ $notice['text'] }}</p>
+                        </div>
+                    </article>
                 @endforeach
             </div>
         </section>
