@@ -538,3 +538,158 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     filterAssets();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const managementPanel = document.querySelector('[data-infra-panel="management"]');
+    const mapPanel = document.querySelector('[data-infra-panel="map"]');
+    if (!managementPanel || !mapPanel) return;
+
+    const campusCenter = [-1.65605, -78.67795];
+    const buildTileLayers = () => ({
+        street: window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 20, attribution: '&copy; OpenStreetMap'}),
+        satellite: window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom: 20, attribution: 'Tiles &copy; Esri'}),
+        hybrid: window.L.layerGroup([
+            window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom: 20, attribution: 'Tiles &copy; Esri'}),
+            window.L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {maxZoom: 20}),
+        ]),
+    });
+
+    // --- Vista: Gestión / Mapa campus ---
+    let campusMap = null;
+    let campusLayers = {};
+    let activeCampusLayer = null;
+
+    const initCampusMap = () => {
+        const element = document.querySelector('[data-infra-map]');
+        if (campusMap || !element || !window.L) return;
+
+        campusMap = window.L.map(element, {zoomControl: false}).setView(campusCenter, 17);
+        campusLayers = buildTileLayers();
+        activeCampusLayer = campusLayers.street.addTo(campusMap);
+
+        document.querySelectorAll('[data-infra-marker]').forEach((marker) => {
+            const point = window.L.circleMarker([Number(marker.dataset.markerLat), Number(marker.dataset.markerLng)], {
+                radius: 12,
+                color: '#ffffff',
+                weight: 3,
+                fillColor: marker.dataset.markerIndex === '0' ? '#2563eb' : '#00a875',
+                fillOpacity: 1,
+            }).addTo(campusMap);
+            point.bindPopup('<b>' + marker.dataset.markerTitle + '</b><br>' + marker.dataset.markerDetail);
+            point.bindTooltip(marker.dataset.markerTitle, {direction: 'top', offset: [0, -9]});
+        });
+    };
+
+    document.querySelectorAll('[data-infra-view]').forEach((tab) => tab.addEventListener('click', () => {
+        const showMap = tab.dataset.infraView === 'map';
+        document.querySelectorAll('[data-infra-view]').forEach((item) => {
+            const selected = item === tab;
+            item.classList.toggle('is-active', selected);
+            item.setAttribute('aria-selected', String(selected));
+        });
+        managementPanel.classList.toggle('hidden', showMap);
+        mapPanel.classList.toggle('hidden', !showMap);
+        if (!showMap) return;
+        initCampusMap();
+        window.setTimeout(() => campusMap?.invalidateSize(), 60);
+    }));
+
+    document.querySelectorAll('[data-infra-map-style]').forEach((button) => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-infra-map-style]').forEach((item) => item.classList.toggle('is-active', item === button));
+        if (!campusMap) return;
+        if (activeCampusLayer) campusMap.removeLayer(activeCampusLayer);
+        activeCampusLayer = campusLayers[button.dataset.infraMapStyle] || campusLayers.street;
+        activeCampusLayer.addTo(campusMap);
+    }));
+
+    document.querySelector('[data-infra-map-zoom-in]')?.addEventListener('click', () => campusMap?.zoomIn());
+    document.querySelector('[data-infra-map-zoom-out]')?.addEventListener('click', () => campusMap?.zoomOut());
+    document.querySelector('[data-infra-map-center]')?.addEventListener('click', () => campusMap?.setView(campusCenter, 17));
+
+    // --- Árbol de edificios ---
+    document.querySelectorAll('[data-tree-toggle]').forEach((head) => head.addEventListener('click', (event) => {
+        if (event.target.closest('[data-modal-open]')) return;
+        const building = head.closest('[data-tree-building]');
+        building?.classList.toggle('is-open');
+        document.querySelectorAll('[data-tree-toggle]').forEach((item) => item.classList.toggle('is-active', item === head));
+    }));
+
+    const treeSearch = document.querySelector('[data-tree-search]');
+    treeSearch?.addEventListener('input', () => {
+        const query = treeSearch.value.trim().toLocaleLowerCase('es');
+        document.querySelectorAll('[data-tree-building]').forEach((building) => {
+            const spaces = [...building.querySelectorAll('[data-tree-space]')];
+            let visibleSpaces = 0;
+            spaces.forEach((space) => {
+                const matches = !query || space.dataset.spaceName.includes(query);
+                space.classList.toggle('hidden', !matches);
+                if (matches) visibleSpaces += 1;
+            });
+            const matchesBuilding = !query || building.dataset.buildingName.includes(query);
+            building.classList.toggle('hidden', !matchesBuilding && visibleSpaces === 0);
+            if (query && visibleSpaces > 0) building.classList.add('is-open');
+        });
+    });
+
+    // --- Filtros de espacios ---
+    const spaceSearch = document.querySelector('[data-space-filter-search]');
+    const statusSelect = document.querySelector('[data-space-status]');
+    const emptyMessage = document.querySelector('[data-spaces-empty]');
+    let activeKind = '';
+
+    const filterSpaces = () => {
+        const query = (spaceSearch?.value || '').trim().toLocaleLowerCase('es');
+        const wantedStatus = statusSelect?.value || '';
+        let visible = 0;
+
+        document.querySelectorAll('[data-space-item]').forEach((card) => {
+            const matches = (!query || card.dataset.spaceName.includes(query))
+                && (!activeKind || card.dataset.spaceKind === activeKind)
+                && (!wantedStatus || card.dataset.spaceStatus === wantedStatus);
+            card.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+
+        emptyMessage?.classList.toggle('hidden', visible > 0);
+    };
+
+    spaceSearch?.addEventListener('input', filterSpaces);
+    statusSelect?.addEventListener('change', filterSpaces);
+    document.querySelectorAll('[data-space-kind]').forEach((chip) => chip.addEventListener('click', () => {
+        document.querySelectorAll('[data-space-kind]').forEach((item) => item.classList.toggle('is-active', item === chip));
+        activeKind = chip.dataset.spaceKind;
+        filterSpaces();
+    }));
+
+    document.querySelectorAll('[data-space-layout]').forEach((button) => button.addEventListener('click', () => {
+        document.querySelectorAll('[data-space-layout]').forEach((item) => item.classList.toggle('is-active', item === button));
+        document.querySelector('[data-space-cards]')?.classList.toggle('is-list', button.dataset.spaceLayout === 'list');
+    }));
+
+    // --- Mini mapas de los modales: se crean al abrirlos porque Leaflet necesita el alto real ---
+    const modalMaps = new WeakMap();
+    document.querySelectorAll('[data-modal-open]').forEach((trigger) => trigger.addEventListener('click', () => {
+        const modal = document.getElementById(trigger.dataset.modalOpen);
+        const element = modal?.querySelector('[data-modal-map]');
+        if (!element || !window.L) return;
+
+        window.setTimeout(() => {
+            let map = modalMaps.get(element);
+            if (!map) {
+                map = window.L.map(element, {zoomControl: false, attributionControl: false}).setView(campusCenter, 17);
+                buildTileLayers().street.addTo(map);
+                let pin = null;
+                map.on('click', (event) => {
+                    if (pin) map.removeLayer(pin);
+                    pin = window.L.marker(event.latlng).addTo(map);
+                });
+                modalMaps.set(element, map);
+            }
+            map.invalidateSize();
+        }, 80);
+    }));
+
+    document.querySelectorAll('[data-icon-picker] button').forEach((button) => button.addEventListener('click', () => {
+        button.closest('[data-icon-picker]').querySelectorAll('button').forEach((item) => item.classList.toggle('is-active', item === button));
+    }));
+});
