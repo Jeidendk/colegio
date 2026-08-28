@@ -207,6 +207,70 @@ document.addEventListener('DOMContentLoaded', () => {
         button.closest('.module-item')?.classList.toggle('is-open');
     }));
 
+    const teacherCourseLibrary = document.querySelector('[data-teacher-course-library]');
+    if (teacherCourseLibrary) {
+        const courseSearch = teacherCourseLibrary.querySelector('[data-teacher-course-search]');
+        const courseFilter = teacherCourseLibrary.querySelector('[data-teacher-course-filter]');
+        const courseSort = teacherCourseLibrary.querySelector('[data-teacher-course-sort]');
+        const courseGrid = teacherCourseLibrary.querySelector('[data-teacher-course-grid]');
+        const courseCards = [...teacherCourseLibrary.querySelectorAll('[data-teacher-course]')];
+        const courseEmpty = teacherCourseLibrary.querySelector('[data-teacher-course-empty]');
+        const filterTeacherCourses = () => {
+            const query = (courseSearch?.value || '').trim().toLocaleLowerCase('es');
+            const filter = courseFilter?.value || '';
+            let visible = 0;
+            courseCards.forEach((card) => {
+                const matchesQuery = !query || card.dataset.courseSearch.includes(query);
+                const matchesFilter = !filter || (filter === 'visible' && card.dataset.courseVisible === 'true') || (filter === 'pending' && card.dataset.coursePending === 'true');
+                card.classList.toggle('hidden', !matchesQuery || !matchesFilter);
+                if (matchesQuery && matchesFilter) visible += 1;
+            });
+            courseEmpty?.classList.toggle('hidden', visible !== 0);
+        };
+        courseSearch?.addEventListener('input', filterTeacherCourses);
+        courseFilter?.addEventListener('change', filterTeacherCourses);
+        const sortTeacherCourses = () => {
+            if (!courseGrid) return;
+            const order = courseSort?.value || 'name';
+            const sorted = [...courseCards].sort((first, second) => {
+                if (order === 'pending') return Number(second.dataset.coursePendingCount) - Number(first.dataset.coursePendingCount);
+                if (order === 'updated') return courseCards.indexOf(first) - courseCards.indexOf(second);
+                return first.dataset.courseName.localeCompare(second.dataset.courseName, 'es');
+            });
+            sorted.forEach((card) => courseGrid.appendChild(card));
+        };
+        courseSort?.addEventListener('change', sortTeacherCourses);
+        sortTeacherCourses();
+        teacherCourseLibrary.querySelectorAll('[data-teacher-course-view]').forEach((button) => button.addEventListener('click', () => {
+            teacherCourseLibrary.querySelectorAll('[data-teacher-course-view]').forEach((item) => item.classList.toggle('is-active', item === button));
+            courseGrid?.classList.toggle('is-list', button.dataset.teacherCourseView === 'list');
+        }));
+    }
+
+    const bindTeacherTableFilter = (panelSelector, searchSelector, statusSelector, rowSelector, statusKey) => {
+        const panel = document.querySelector(panelSelector);
+        if (!panel) return;
+        const search = panel.querySelector(searchSelector);
+        const status = panel.querySelector(statusSelector);
+        const rows = [...panel.querySelectorAll(rowSelector)];
+        const apply = () => {
+            const query = (search?.value || '').trim().toLocaleLowerCase('es');
+            const wantedStatus = status?.value || '';
+            rows.forEach((row) => row.classList.toggle('hidden', !row.textContent.toLocaleLowerCase('es').includes(query) || (wantedStatus && row.dataset[statusKey] !== wantedStatus)));
+        };
+        search?.addEventListener('input', apply);
+        status?.addEventListener('change', apply);
+    };
+    bindTeacherTableFilter('[data-teacher-gradebook]', '[data-teacher-grade-search]', '[data-teacher-grade-status]', '[data-teacher-grade-row]', 'gradeStatus');
+    bindTeacherTableFilter('[data-teacher-students]', '[data-teacher-student-search]', '[data-teacher-student-status]', '[data-teacher-student-row]', 'studentStatus');
+
+    document.querySelector('[data-teacher-edit-toggle]')?.addEventListener('click', (event) => {
+        const editing = document.querySelector('.course-room-hero')?.classList.toggle('is-editing');
+        event.currentTarget.innerHTML = editing ? '<i data-lucide="circle-check"></i> Edición activada' : '<i data-lucide="pencil"></i> Activar edición';
+        if (window.lucide) window.lucide.createIcons();
+        showToast(editing ? 'Edición del curso activada' : 'Edición del curso desactivada');
+    });
+
     const calendarTitle = document.querySelector('[data-calendar-title]');
     const calendarMonths = ['Julio 2026', 'Agosto 2026', 'Septiembre 2026'];
     let calendarMonth = 1;

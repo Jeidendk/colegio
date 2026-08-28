@@ -53,13 +53,13 @@
     <section class="panel">
         <div class="panel-header"><div><small>PENDIENTES</small><h2>Acciones rápidas</h2></div></div>
         <div class="quick-actions">
-            <a href="{{ route('portal', ['role' => 'docente', 'page' => 'calificaciones']) }}"><i data-lucide="clipboard-pen"></i><span><b>Registrar notas</b><small>6 actividades pendientes</small></span></a>
+            <a href="{{ route('portal', ['role' => 'docente', 'page' => 'aula-virtual', 'vista' => 'calificaciones']) }}"><i data-lucide="clipboard-pen"></i><span><b>Registrar notas</b><small>22 entregas por revisar</small></span></a>
             <button data-modal-open="new-resource-modal"><i data-lucide="upload"></i><span><b>Publicar recurso</b><small>Para tus cursos</small></span></button>
             <a href="{{ route('portal', ['role' => 'docente', 'page' => 'comunicaciones']) }}"><i data-lucide="send"></i><span><b>Enviar aviso</b><small>A un curso o paralelo</small></span></a>
         </div>
     </section>
     <section class="panel span-3">
-        <div class="panel-header"><div><small>PERIODO 2026-1</small><h2>Mis cursos</h2></div><a href="{{ route('portal', ['role' => 'docente', 'page' => 'cursos']) }}">Ver detalle</a></div>
+        <div class="panel-header"><div><small>PERIODO 2026-1</small><h2>Mis cursos</h2></div><a href="{{ route('portal', ['role' => 'docente', 'page' => 'aula-virtual', 'vista' => 'cursos']) }}">Abrir aula virtual</a></div>
         <div class="course-grid compact">
             @foreach($courses as $course)
                 <article class="course-card"><span class="course-code">{{ $course['code'] }}</span><h3>{{ $course['name'] }}</h3><p>Paralelo {{ $course['parallel'] }} · {{ $course['room'] }}</p><div><span><i data-lucide="users"></i>{{ $course['students'] }} estudiantes</span><b>{{ $course['average'] }} prom.</b></div></article>

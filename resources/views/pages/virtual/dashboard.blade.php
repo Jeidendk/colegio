@@ -12,9 +12,9 @@
 
 <div class="virtual-home-grid">
     <section class="panel span-2">
-        <div class="panel-header"><div><small>ACCESO RÁPIDO</small><h2>Continúa aprendiendo</h2></div><a href="{{ route('portal', ['role'=>$role,'page'=>'aula-virtual','vista'=>'cursos']) }}">Ver todos</a></div>
+        <div class="panel-header"><div><small>ACCESO RÁPIDO</small><h2>{{ $isTeacher ? 'Aulas a tu cargo' : 'Continúa aprendiendo' }}</h2></div><a href="{{ route('portal', ['role'=>$role,'page'=>'aula-virtual','vista'=>'cursos']) }}">Ver todos</a></div>
         <div class="recent-course-list">
-            @foreach($virtualCourses as $course)<a href="{{ route('portal', ['role'=>$role,'page'=>'aula-virtual','curso'=>$course['slug']]) }}"><span class="tone-{{ $course['tone'] }}"><i data-lucide="zap"></i></span><div><small>{{ $course['code'] }}</small><b>{{ $course['name'] }}</b><p>{{ $course['teacher'] }}</p></div><em>{{ $course['progress'] }}%</em><i data-lucide="chevron-right"></i></a>@endforeach
+            @foreach($virtualCourses as $course)<a href="{{ route('portal', ['role'=>$role,'page'=>'aula-virtual','curso'=>$course['slug']]) }}"><span class="tone-{{ $course['tone'] }}"><i data-lucide="zap"></i></span><div><small>{{ $course['code'] }}</small><b>{{ $course['name'] }}</b><p>{{ $isTeacher ? $course['students'].' estudiantes · '.$course['pending'].' por revisar' : $course['teacher'] }}</p></div><em>{{ $isTeacher ? 'Gestionar' : $course['progress'].'%' }}</em><i data-lucide="chevron-right"></i></a>@endforeach
         </div>
     </section>
     <aside class="panel">

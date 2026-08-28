@@ -7,9 +7,9 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    public function test_home_redirects_to_the_admin_dashboard(): void
+    public function test_home_redirects_to_the_login_screen(): void
     {
-        $this->get('/')->assertRedirect('/admin/dashboard');
+        $this->get('/')->assertRedirect('/login');
     }
 
     public function test_every_role_has_a_public_hardcoded_home(): void
@@ -40,7 +40,7 @@ class ExampleTest extends TestCase
     {
         $pages = [
             'admin' => ['dashboard', 'tramites', 'horarios', 'activos', 'infraestructura', 'estructura-academica', 'recursos', 'formatos', 'usuarios', 'reportes'],
-            'docente' => ['dashboard', 'aula-virtual', 'horario', 'cursos', 'calificaciones', 'recursos', 'estudiantes', 'comunicaciones'],
+            'docente' => ['dashboard', 'aula-virtual', 'horario', 'recursos', 'comunicaciones'],
             'estudiante' => ['aula-virtual', 'catalogo', 'solicitudes', 'horarios', 'mapa', 'recursos'],
             'representante' => ['resumen', 'rendimiento', 'horario', 'solicitudes', 'comunicaciones'],
         ];
@@ -62,10 +62,32 @@ class ExampleTest extends TestCase
             '/estudiante/aula-virtual?vista=calificaciones' => 'Resumen de resultados por curso',
             '/estudiante/aula-virtual?curso=sistemas-potencia' => 'Módulos de aprendizaje',
             '/docente/aula-virtual' => 'Administra tus cursos',
+            '/docente/aula-virtual?vista=cursos' => 'Cursos que imparto',
+            '/docente/aula-virtual?vista=calificaciones' => 'Libro de calificaciones',
+            '/docente/aula-virtual?vista=estudiantes' => 'Participantes de mis cursos',
         ];
 
         foreach ($screens as $url => $text) {
             $this->get($url)->assertOk()->assertSee($text);
+        }
+    }
+
+    public function test_teacher_course_management_is_consolidated_in_virtual_classroom(): void
+    {
+        $this->get('/docente/aula-virtual?vista=cursos')
+            ->assertOk()
+            ->assertSee('Cursos que imparto')
+            ->assertSee('Entregas por revisar')
+            ->assertSee('Administrar curso')
+            ->assertSee('Solicitar nueva aula')
+            ->assertSee('Buscar cursos...')
+            ->assertSee('Ordenar por nombre del curso')
+            ->assertSee('images.unsplash.com')
+            ->assertSee('del aula preparada')
+            ->assertDontSee('href="http://localhost/docente/cursos"', false);
+
+        foreach (['cursos', 'calificaciones', 'estudiantes'] as $removedPage) {
+            $this->get("/docente/{$removedPage}")->assertNotFound();
         }
     }
 

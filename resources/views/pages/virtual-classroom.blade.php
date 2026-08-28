@@ -3,10 +3,20 @@
     $selectedCourse = collect($virtualCourses)->firstWhere('slug', $selectedSlug);
     $isTeacher = $role === 'docente';
     $virtualView = request()->query('vista', 'inicio');
+    $virtualNavigation = [
+        ['inicio','house','Inicio'],
+        ['area','circle-user-round','Área personal'],
+        ['cursos','book-open','Mis cursos'],
+        ['calendario','calendar-days','Calendario'],
+        ['calificaciones','chart-no-axes-column-increasing','Calificaciones'],
+    ];
+    if ($isTeacher) {
+        $virtualNavigation[] = ['estudiantes','users','Estudiantes'];
+    }
 @endphp
 
 <nav class="virtual-subnav" aria-label="Navegación del aula virtual">
-    @foreach([['inicio','house','Inicio'],['area','circle-user-round','Área personal'],['cursos','book-open','Mis cursos'],['calendario','calendar-days','Calendario'],['calificaciones','chart-no-axes-column-increasing','Calificaciones']] as $virtualNav)
+    @foreach($virtualNavigation as $virtualNav)
         <a class="{{ !$selectedCourse && $virtualView === $virtualNav[0] ? 'is-active' : '' }}" href="{{ route('portal', ['role' => $role, 'page' => 'aula-virtual', 'vista' => $virtualNav[0]]) }}"><i data-lucide="{{ $virtualNav[1] }}"></i>{{ $virtualNav[2] }}</a>
     @endforeach
 </nav>
@@ -18,7 +28,11 @@
 @elseif(!$selectedCourse && $virtualView === 'calendario')
     @include('pages.virtual.calendar')
 @elseif(!$selectedCourse && $virtualView === 'calificaciones')
-    @include('pages.virtual.grades')
+    @include($isTeacher ? 'pages.virtual.teacher-grades' : 'pages.virtual.grades')
+@elseif(!$selectedCourse && $virtualView === 'estudiantes' && $isTeacher)
+    @include('pages.virtual.teacher-students')
+@elseif(!$selectedCourse && $virtualView === 'cursos' && $isTeacher)
+    @include('pages.virtual.teacher-courses')
 @else
 @if(!$selectedCourse)
     <x-hero icon="monitor-play" :title="$isTeacher ? 'Aulas virtuales' : 'Mi aula virtual'" :subtitle="$isTeacher ? 'Publica contenidos y acompaña el avance de tus estudiantes.' : 'Continúa tus cursos, revisa actividades y consulta tus calificaciones.'" :stats="[['Cursos', count($virtualCourses), 'activos'], ['Progreso', '75%', 'promedio'], ['Pendientes', '3', 'actividades'], ['Avisos', '4', 'nuevos']]">
@@ -34,6 +48,7 @@
         @foreach($virtualCourses as $course)
             <article class="virtual-course-card" data-search-row>
                 <div class="virtual-cover tone-{{ $course['tone'] }}">
+                    <img src="{{ $course['image'] }}" alt="Imagen temática de {{ $course['name'] }}" loading="lazy">
                     <span>{{ $course['code'] }}</span><i data-lucide="zap"></i>
                     <div class="cover-progress"><i style="width: {{ $course['progress'] }}%"></i></div>
                 </div>
@@ -55,8 +70,27 @@
 
     <section class="course-room-hero tone-{{ $selectedCourse['tone'] }}">
         <div class="course-room-copy"><span>ESPOCH · AULA VIRTUAL</span><h1>{{ $selectedCourse['name'] }}</h1><div><i>{{ $selectedCourse['initials'] }}</i><b>{{ $selectedCourse['teacher'] }}</b></div></div>
-        <div class="course-room-status"><div><span><i style="width: {{ $selectedCourse['progress'] }}%"></i></span><b>{{ $selectedCourse['progress'] }}% completo</b></div><button data-virtual-tab-target="course">{{ $isTeacher ? 'Administrar curso' : 'Continuar' }}</button></div>
+        <div class="course-room-status">
+            @if($isTeacher)
+                <div class="teacher-room-summary"><b>{{ $selectedCourse['students'] }} estudiantes</b><span>·</span><b>{{ $selectedCourse['pending'] }} entregas pendientes</b></div>
+                <button data-teacher-edit-toggle><i data-lucide="pencil"></i> Activar edición</button>
+            @else
+                <div><span><i style="width: {{ $selectedCourse['progress'] }}%"></i></span><b>{{ $selectedCourse['progress'] }}% completo</b></div><button data-virtual-tab-target="course">Continuar</button>
+            @endif
+        </div>
     </section>
+
+    @if($isTeacher)
+        <div class="teacher-course-adminbar panel">
+            <div><span><i data-lucide="settings-2"></i></span><div><small>MODO DOCENTE</small><b>Gestión del aula</b></div></div>
+            <nav>
+                <button data-virtual-tab-target="people"><i data-lucide="users"></i> Participantes</button>
+                <button data-virtual-tab-target="grades"><i data-lucide="notebook-tabs"></i> Libro de calificaciones</button>
+                <button data-toast="Informe del curso preparado"><i data-lucide="chart-no-axes-column-increasing"></i> Informes</button>
+                <button data-modal-open="virtual-resource-modal"><i data-lucide="plus"></i> Añadir contenido</button>
+            </nav>
+        </div>
+    @endif
 
     <div class="virtual-tabs" role="tablist">
         <button class="is-active" role="tab" data-virtual-tab="course">Curso</button>
@@ -66,7 +100,7 @@
     </div>
 
     <section data-virtual-panel="course">
-        <div class="virtual-section-title"><div><small>CONTENIDO DEL CURSO</small><h2>Módulos de aprendizaje</h2></div>@if($isTeacher)<button class="secondary-button" data-modal-open="virtual-resource-modal"><i data-lucide="plus"></i> Agregar actividad</button>@endif</div>
+        <div class="virtual-section-title"><div><small>CONTENIDO DEL CURSO</small><h2>Módulos de aprendizaje</h2></div>@if($isTeacher)<button class="pill-button" type="button" data-modal-open="virtual-resource-modal"><i data-lucide="plus"></i> Agregar actividad</button>@endif</div>
         <button class="virtual-announcement" data-toast="Foro abierto en modo demostración"><span><i data-lucide="messages-square"></i></span><div><small>COMUNICACIÓN</small><b>Foro de novedades y avisos</b></div><em>3 nuevos</em><i data-lucide="chevron-right"></i></button>
         <article class="course-welcome panel"><span><i data-lucide="sparkles"></i></span><div><h3>Bienvenido a {{ $selectedCourse['name'] }}</h3><p>En este espacio encontrarás los contenidos, recursos y actividades del periodo académico. Revisa regularmente los anuncios y completa cada módulo dentro de las fechas establecidas.</p><b>Facultad de Informática y Electrónica · Escuela de Electricidad</b></div></article>
         <div class="module-list">
@@ -75,7 +109,7 @@
                     <button class="module-main" type="button" data-module-toggle>
                         <span class="module-icon type-{{ $module['type'] }}"><i data-lucide="{{ ['forum'=>'messages-square','file'=>'file-text','video'=>'circle-play','task'=>'clipboard-check'][$module['type']] }}"></i></span>
                         <div><small>MÓDULO {{ $index + 1 }}</small><h3>{{ $module['title'] }}</h3><p>{{ $module['meta'] }}</p></div>
-                        <x-badge :value="$module['done'] ? 'Completado' : 'Pendiente'" /><i data-lucide="chevron-down"></i>
+                        <x-badge :value="$isTeacher ? 'Visible' : ($module['done'] ? 'Completado' : 'Pendiente')" />@if($isTeacher)<span class="teacher-module-edit" data-toast="Opciones de edición abiertas"><i data-lucide="ellipsis-vertical"></i></span>@endif<i data-lucide="chevron-down"></i>
                     </button>
                     <div class="module-details"><p>{{ $module['done'] ? 'Contenido revisado. Puedes abrirlo nuevamente cuando necesites repasar.' : 'Esta actividad está disponible y requiere tu atención antes de la fecha indicada.' }}</p><button data-toast="Contenido abierto en modo demostración">{{ $module['type'] === 'task' ? 'Ver actividad' : 'Abrir recurso' }}</button></div>
                 </article>
@@ -95,7 +129,7 @@
 
     <section class="hidden" data-virtual-panel="people">
         <div class="virtual-section-title"><div><small>COMUNIDAD DEL CURSO</small><h2>{{ $isTeacher ? 'Participantes matriculados' : 'Equipo docente' }}</h2></div></div>
-        <div class="people-grid"><article class="panel virtual-person"><span>{{ $selectedCourse['initials'] }}</span><div><small>DOCENTE PRINCIPAL</small><h3>{{ $selectedCourse['teacher'] }}</h3><p>{{ strtolower(str_replace(['Ing. ', ' '], ['', '.'], $selectedCourse['teacher'])) }}@espoch.edu.ec</p></div><button data-toast="Mensaje preparado"><i data-lucide="mail"></i></button></article>@if($isTeacher)<article class="panel virtual-person"><span>JP</span><div><small>ESTUDIANTE</small><h3>{{ $student['name'] }}</h3><p>{{ $student['code'] }} · {{ $student['semester'] }}</p></div><button data-toast="Perfil académico abierto"><i data-lucide="eye"></i></button></article>@endif</div>
+        <div class="people-grid"><article class="panel virtual-person"><span>{{ $selectedCourse['initials'] }}</span><div><small>DOCENTE PRINCIPAL</small><h3>{{ $selectedCourse['teacher'] }}</h3><p>{{ strtolower(str_replace(['Ing. ', ' '], ['', '.'], $selectedCourse['teacher'])) }}@espoch.edu.ec</p></div><button data-toast="Mensaje preparado"><i data-lucide="mail"></i></button></article>@if($isTeacher)@foreach([['JP','Juan Carlos Pérez','202145678'],['MR','María Fernanda Ruiz','202145691'],['JS','Jorge Silva Andrade','202145704']] as $person)<article class="panel virtual-person"><span>{{ $person[0] }}</span><div><small>ESTUDIANTE</small><h3>{{ $person[1] }}</h3><p>{{ $person[2] }} · Electricidad</p></div><button data-toast="Perfil académico abierto"><i data-lucide="eye"></i></button></article>@endforeach @endif</div>
     </section>
 @endif
 @endif
@@ -130,8 +164,8 @@
         </label>
         <label class="check-inline"><input type="checkbox" checked> Notificar a los estudiantes del curso</label>
         <div class="modal-actions">
-            <button class="secondary-button" type="button" data-modal-close>Cancelar</button>
-            <button class="primary-button" type="submit">Publicar contenido</button>
+            <button class="pill-button" type="button" data-modal-close>Cancelar</button>
+            <button class="primary-button dark" type="submit">Publicar contenido</button>
         </div>
     </form>
 </div>

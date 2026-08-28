@@ -192,6 +192,9 @@ final class DemoData
                 [
                     'slug' => 'sistemas-potencia', 'code' => 'ELEC-501', 'name' => 'Sistemas Eléctricos de Potencia',
                     'teacher' => 'Ing. Roberto Sánchez', 'initials' => 'RS', 'progress' => 78, 'tone' => 'navy',
+                    'parallel' => 'A', 'students' => 28, 'pending' => 7, 'sections' => 6, 'activities' => 12,
+                    'room' => 'FIE-201', 'updated' => 'Hoy, 08:45', 'visible' => true,
+                    'readiness' => 92, 'image' => 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=900&h=520&fit=crop',
                     'next' => 'Cuestionario: Flujo de potencia', 'date' => '31 AGO',
                     'modules' => [
                         ['type' => 'forum', 'title' => 'Foro de novedades y avisos', 'meta' => '3 publicaciones nuevas', 'done' => true],
@@ -199,11 +202,14 @@ final class DemoData
                         ['type' => 'video', 'title' => 'Unidad 2 · Flujo de carga y diagramas unifilares', 'meta' => 'Video · 32 min', 'done' => true],
                         ['type' => 'task', 'title' => 'Actividad 2 · Simulación de flujo de potencia', 'meta' => 'Entrega: 31 de agosto · 23:59', 'done' => false],
                     ],
-                    'grades' => [['Actividad diagnóstica', '9,0'], ['Informe de laboratorio 1', '8,8'], ['Cuestionario unidad 1', '8,9']],
+            'grades' => [['Actividad diagnóstica', '9,0'], ['Informe de laboratorio 1', '8,8'], ['Cuestionario unidad 1', '8,9']],
                 ],
                 [
                     'slug' => 'maquinas-electricas', 'code' => 'ELEC-502', 'name' => 'Máquinas Eléctricas II',
                     'teacher' => 'Ing. Patricia Morales', 'initials' => 'PM', 'progress' => 62, 'tone' => 'red',
+                    'parallel' => 'A', 'students' => 31, 'pending' => 11, 'sections' => 5, 'activities' => 9,
+                    'room' => 'FIE-302', 'updated' => 'Ayer, 16:20', 'visible' => true,
+                    'readiness' => 84, 'image' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&h=520&fit=crop',
                     'next' => 'Informe: Motor trifásico', 'date' => '02 SEP',
                     'modules' => [
                         ['type' => 'forum', 'title' => 'Avisos generales del curso', 'meta' => '1 publicación nueva', 'done' => true],
@@ -216,6 +222,9 @@ final class DemoData
                 [
                     'slug' => 'control-automatico', 'code' => 'ELEC-505', 'name' => 'Control Automático',
                     'teacher' => 'Ing. Fernando Ruiz', 'initials' => 'FR', 'progress' => 86, 'tone' => 'amber',
+                    'parallel' => 'B', 'students' => 24, 'pending' => 4, 'sections' => 7, 'activities' => 14,
+                    'room' => 'Lab. Control', 'updated' => '25 ago, 11:10', 'visible' => true,
+                    'readiness' => 76, 'image' => 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&h=520&fit=crop',
                     'next' => 'Práctica: Control PID', 'date' => '04 SEP',
                     'modules' => [
                         ['type' => 'forum', 'title' => 'Foro de dudas y anuncios', 'meta' => 'Sin publicaciones nuevas', 'done' => true],
@@ -225,6 +234,13 @@ final class DemoData
                     ],
                     'grades' => [['Modelado de sistemas', '8,7'], ['Cuestionario 1', '9,1'], ['Laboratorio PLC', '8,6']],
                 ],
+            ],
+            'roster' => [
+                ['name' => 'María Fernanda Ruiz', 'code' => '202145678', 'p1' => '8,7', 'p2' => '9,1', 'final' => '8,9', 'status' => 'Aprobado'],
+                ['name' => 'Jorge Silva Andrade', 'code' => '202145702', 'p1' => '7,2', 'p2' => '6,8', 'final' => '7,0', 'status' => 'Aprobado'],
+                ['name' => 'Juan Carlos Pérez', 'code' => '202145711', 'p1' => '8,2', 'p2' => '8,6', 'final' => '8,4', 'status' => 'Aprobado'],
+                ['name' => 'Diana Carolina Vaca', 'code' => '202145733', 'p1' => '5,4', 'p2' => '6,1', 'final' => '5,8', 'status' => 'En riesgo'],
+                ['name' => 'Luis Alberto Naranjo', 'code' => '202145750', 'p1' => '9,0', 'p2' => '9,4', 'final' => '9,2', 'status' => 'Aprobado'],
             ],
             'grades' => [
                 ['subject' => 'Sistemas Eléctricos de Potencia', 'p1' => '8,7', 'p2' => '9,1', 'final' => '8,9', 'status' => 'Aprobado'],

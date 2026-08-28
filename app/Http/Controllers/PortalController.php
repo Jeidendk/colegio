@@ -12,7 +12,7 @@ final class PortalController extends Controller
 
     private const PAGES = [
         'admin' => ['dashboard', 'tramites', 'horarios', 'activos', 'infraestructura', 'estructura-academica', 'recursos', 'formatos', 'usuarios', 'reportes'],
-        'docente' => ['dashboard', 'aula-virtual', 'horario', 'cursos', 'calificaciones', 'recursos', 'estudiantes', 'comunicaciones'],
+        'docente' => ['dashboard', 'aula-virtual', 'horario', 'recursos', 'comunicaciones'],
         'estudiante' => ['aula-virtual', 'catalogo', 'solicitudes', 'horarios', 'mapa', 'recursos'],
         'representante' => ['resumen', 'rendimiento', 'horario', 'solicitudes', 'comunicaciones'],
     ];
@@ -37,8 +37,7 @@ final class PortalController extends Controller
                 ['recursos', 'library', 'Recursos'], ['formatos', 'file-text', 'Formatos'], ['usuarios', 'users', 'Usuarios'], ['reportes', 'bar-chart-3', 'Reportes'],
             ],
             'docente' => [
-                ['dashboard', 'layout-dashboard', 'Dashboard'], ['aula-virtual', 'monitor-play', 'Aula virtual'], ['horario', 'calendar-days', 'Mi horario'], ['cursos', 'book-open-check', 'Mis cursos'],
-                ['calificaciones', 'clipboard-check', 'Calificaciones'], ['estudiantes', 'users', 'Estudiantes'], ['recursos', 'library', 'Recursos'],
+                ['dashboard', 'layout-dashboard', 'Dashboard'], ['aula-virtual', 'monitor-play', 'Aula virtual'], ['horario', 'calendar-days', 'Mi horario'], ['recursos', 'library', 'Recursos'],
                 ['comunicaciones', 'messages-square', 'Comunicaciones'],
             ],
             'estudiante' => [
@@ -55,11 +54,11 @@ final class PortalController extends Controller
     private static function pageMeta(string $role, string $page): array
     {
         $meta = [
-            'dashboard' => ['Inicio', 'Panel de control', 'Vista general del sistema de gestión académica.'],
+            'dashboard' => ['Inicio', 'Panel de control', 'Vista general de la comunidad educativa Montessori.'],
             'tramites' => ['Gestión', 'Trámites', 'Solicitudes y préstamos en una sola bandeja.'],
             'horarios' => ['Académico', 'Horarios', 'Planificación de clases y uso de espacios.'], 'horario' => ['Académico', 'Mi horario', 'Agenda semanal de clases y actividades.'],
             'activos' => ['Recursos', 'Activos', 'Inventario, asignaciones y mantenimiento.'], 'infraestructura' => ['Campus', 'Infraestructura', 'Edificios, aulas y laboratorios.'],
-            'estructura-academica' => ['Institución', 'Estructura académica', 'Facultades, carreras y malla curricular.'],
+            'estructura-academica' => ['Institución', 'Estructura académica', 'Niveles, grados y asignaturas de la institución.'],
             'recursos' => ['Académico', 'Recursos', 'Material didáctico y formatos disponibles.'], 'formatos' => ['Documentos', 'Formatos', 'Plantillas institucionales descargables.'],
             'usuarios' => ['Administración', 'Usuarios', 'Estudiantes, docentes y representantes.'], 'reportes' => ['Analítica', 'Reportes', 'Indicadores y métricas del sistema.'],
             'catalogo' => ['Préstamos', 'Catálogo de equipos', 'Explora los recursos disponibles para tus prácticas.'], 'solicitudes' => ['Préstamos', 'Mis solicitudes', 'Seguimiento de solicitudes y entregas.'],

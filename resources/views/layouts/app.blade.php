@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Sistema académico ESPOCH Electricidad, demostración Laravel sin base de datos ni autenticación.">
-    <title>{{ $pageMeta[1] }} · ESPOCH Electricidad</title>
+    <meta name="description" content="Plataforma académica de la Unidad Educativa Particular Montessori, demostración Laravel sin base de datos ni autenticación.">
+    <title>{{ $pageMeta[1] }} · Unidad Educativa Montessori</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -32,9 +32,8 @@
 <div class="app-shell">
     <div class="mobile-backdrop" data-close-sidebar></div>
     <aside class="sidebar" id="sidebar">
-        <a class="brand" href="{{ route('portal', ['role' => $role, 'page' => $homes[$role]]) }}">
-            <span class="brand-mark"><i data-lucide="graduation-cap"></i></span>
-            <span><strong>ESPOCH</strong><small>ELECTRICIDAD</small></span>
+        <a class="brand school-brand" href="{{ route('portal', ['role' => $role, 'page' => $homes[$role]]) }}">
+            <img src="{{ asset('img/montessori-logo.png') }}" alt="Unidad Educativa Montessori">
         </a>
 
         <nav class="side-nav" aria-label="Navegación principal">
@@ -75,7 +74,7 @@
                             </a>
                         @endforeach
                         <button class="dropdown-item" type="button" data-modal-open="profile-modal"><i data-lucide="user-round"></i> Mi perfil</button>
-                        <button class="dropdown-item" type="button" data-toast="Esta réplica no utiliza autenticación"><i data-lucide="log-out"></i> Salir de la demo</button>
+                        <a class="dropdown-item" href="{{ route('login') }}"><i data-lucide="log-out"></i> Cerrar sesión</a>
                     </div>
                 </div>
             </div>
@@ -92,7 +91,7 @@
         <button class="modal-close" type="button" data-modal-close aria-label="Cerrar">×</button>
         <div class="profile-large">{{ $people[$role][2] }}</div>
         <h2>{{ $people[$role][0] }}</h2>
-        <p>{{ $people[$role][1] }} · ESPOCH Electricidad</p>
+        <p>{{ $people[$role][1] }} · Unidad Educativa Montessori</p>
         <div class="info-strip"><i data-lucide="info"></i> Perfil demostrativo sin cuenta ni autenticación.</div>
     </div>
 </div>
