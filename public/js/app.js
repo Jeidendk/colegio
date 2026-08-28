@@ -440,7 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const spaceSearch = document.querySelector('[data-space-search]');
     const spaceFilter = document.querySelector('[data-space-filter]');
     const mapElement = document.querySelector('[data-leaflet-map]');
-    const campusCenter = [-1.65605, -78.67795];
+    const campusCenter = [
+        Number(mapElement.dataset.campusLat || -1.63701),
+        Number(mapElement.dataset.campusLng || -78.67722),
+    ];
     let campusMap = null;
     let activeMapLayer = null;
     let mapLayers = {};
@@ -449,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initCampusMap = () => {
         if (campusMap || !mapElement || !window.L) return;
 
-        campusMap = window.L.map(mapElement, {zoomControl: false}).setView(campusCenter, 17);
+        campusMap = window.L.map(mapElement, {zoomControl: false}).setView(campusCenter, 18);
         mapLayers = {
             street: window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 20,
@@ -688,7 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector('[data-infra-map-zoom-in]')?.addEventListener('click', () => campusMap?.zoomIn());
     document.querySelector('[data-infra-map-zoom-out]')?.addEventListener('click', () => campusMap?.zoomOut());
-    document.querySelector('[data-infra-map-center]')?.addEventListener('click', () => campusMap?.setView(campusCenter, 17));
+    document.querySelector('[data-infra-map-center]')?.addEventListener('click', () => campusMap?.setView(campusCenter, 18));
 
     // --- Árbol de edificios ---
     document.querySelectorAll('[data-tree-toggle]').forEach((head) => head.addEventListener('click', (event) => {

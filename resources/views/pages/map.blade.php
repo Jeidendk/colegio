@@ -1,17 +1,9 @@
 @php
     $places = $campus['buildings'];
-    $totalSpaces = array_sum(array_map(fn ($place) => count($place['spaces']), $places));
-    $totalLabs = array_sum(array_map(
-        fn ($place) => count(array_filter($place['spaces'], fn ($space) => $space['kind'] === 'Laboratorio')),
-        $places
-    ));
-    $placeIcons = ['building-2', 'flask-conical', 'monitor', 'landmark'];
+    $placeIcons = ['school', 'shapes', 'flask-conical', 'landmark'];
 @endphp
 
-<x-hero icon="map-pinned" title="Mapa del campus" subtitle="Localiza aulas, laboratorios y servicios de la institución."
-    :stats="[['Edificios', count($places), 'registrados'], ['Espacios', $totalSpaces, 'disponibles'], ['Laboratorios', $totalLabs, 'equipados']]" />
-
-<div class="map-layout">
+<div class="map-layout student-map-layout">
     <aside class="panel places-panel">
         <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar lugar..." data-place-search></label>
 
@@ -45,8 +37,8 @@
         </div>
     </aside>
 
-    <section class="infra-map-view" aria-label="Mapa del campus">
-        <div class="campus-map" data-infra-map></div>
+    <section class="infra-map-view" aria-label="Mapa de la Unidad Educativa Montessori en Riobamba">
+        <div class="campus-map" data-infra-map data-campus-lat="{{ $campus['center']['lat'] }}" data-campus-lng="{{ $campus['center']['lng'] }}"></div>
 
         <div class="map-style-switch infra-map-styles">
             <button class="is-active" type="button" data-infra-map-style="street">Mapa</button>

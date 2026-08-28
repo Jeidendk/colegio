@@ -570,7 +570,10 @@ html.dark .student-courses-heading h1,html.dark .student-course-body h2,html.dar
 @media(max-width:700px){.student-course-controls,.student-course-controls>div{align-items:stretch;flex-direction:column}.student-course-controls .select-control,.student-course-controls>div .select-control:first-child{width:100%;min-width:0}.student-course-grid{grid-template-columns:1fr}.student-course-grid.is-list .student-course-card{display:flex}.student-course-grid.is-list .student-course-cover{height:138px;min-height:0}.student-course-grid.is-list .student-course-level{align-self:center;transform:translateY(-13px);margin:0}.student-course-grid.is-list .student-course-body>small,.student-course-grid.is-list .student-course-body h2{text-align:center}.student-course-grid.is-list .student-course-progress{border-left:0;border-top:1px solid #e2e8f0}.course-detail-header{align-items:flex-start;flex-direction:column}.course-detail-completion{width:100%}.course-detail-nav{overflow-x:auto}.course-detail-layout{display:block}.course-blocks{grid-template-columns:1fr;margin-top:14px}.course-content-box{padding:14px}.course-detail-cover{height:190px}.course-detail-cover>div{left:19px}.course-detail-cover h2{font-size:20px}.course-schedule-strip{grid-template-columns:1fr}}
 
 /* Mapa del estudiante, celdas de curso y detalle de ubicacion */
-.map-layout .infra-map-view{height:auto;min-height:520px}
+.student-map-layout{height:calc(100dvh - 128px);min-height:520px}
+.student-map-layout .places-panel,.student-map-layout .infra-map-view{height:100%;min-height:0}
+.student-map-layout .place-list{overflow:auto;min-height:0}
+.student-map-layout .place-detail{flex:0 0 auto;background:var(--panel)}
 .place-item[data-infra-marker]{cursor:pointer}
 .place-detail-meta{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 14px;font-size:11px;font-weight:700;color:#5b6878}
 .place-detail-meta span{display:inline-flex;align-items:center;gap:6px}
@@ -583,6 +586,8 @@ a.user-cell:hover b{color:var(--red)}
 .course-mark.tone-red{background:#fef2f2;color:#b42318}
 .course-mark.tone-amber{background:#fffbeb;color:#b45309}
 .course-mark.tone-green{background:#ecfdf5;color:#047857}
+@media(max-width:920px){.student-map-layout{height:auto;min-height:0}.student-map-layout .places-panel{height:auto}.student-map-layout .infra-map-view{height:480px;min-height:480px}}
+@media(max-width:640px){.student-map-layout .infra-map-view{height:390px;min-height:390px}}
 .course-mark.tone-navy{background:#eef2ff;color:#312e81}
 .cart-form .export-field textarea{border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:13px;font-weight:500;color:#334155;min-height:70px;resize:vertical;text-transform:none;letter-spacing:0}
 .cart-form .primary-button{width:100%;justify-content:center;gap:8px}
@@ -614,3 +619,14 @@ a.user-cell:hover b{color:var(--red)}
 .course-mark.tone-cyan{background:#ecfeff;color:#0e7490}
 .course-mark.tone-pink{background:#fdf2f8;color:#be185d}
 .course-mark.tone-teal{background:#f0fdfa;color:#0f766e}
+
+/* El aula del curso usa el color de la asignatura; el rojo queda como respaldo */
+.course-detail-room .course-detail-breadcrumb a{color:var(--course-accent,var(--red))}
+.course-detail-room .course-detail-header>div:first-child small{color:var(--course-accent,var(--red))}
+.course-detail-room .course-detail-nav button.is-active{background:color-mix(in srgb,var(--course-accent,var(--red)) 12%,#fff);color:var(--course-accent,var(--red))}
+.course-detail-room .course-topic-tabs button.is-active{color:var(--course-accent,var(--red))}
+.course-detail-room .course-section-heading{border-top-color:var(--course-accent,var(--red))}
+.course-detail-room .text-button,.course-detail-room a.text-button{color:var(--course-accent,var(--red))}
+.course-detail-room .course-learning-results li::marker{color:var(--course-accent,var(--red))}
+.course-detail-room .course-event-block b{color:var(--course-accent,var(--red))}
+.course-detail-room .virtual-section-title small{color:var(--course-accent,var(--red))}
