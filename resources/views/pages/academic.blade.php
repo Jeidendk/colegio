@@ -3,8 +3,6 @@
     $careers = $academic['careers'];
     $curriculum = $academic['curriculum'];
     $totalSubjects = array_sum(array_column($careers, 'subjects'));
-    $detailCareer = $careers[1];
-    $totalCredits = array_sum(array_column($curriculum, 'credits'));
 @endphp
 
 <section class="infra-hero academic-hero">
@@ -21,7 +19,7 @@
 </section>
 
 <div class="infra-layout">
-    <aside class="panel infra-tree">
+    <aside class="panel infra-tree academic-tree">
         <div class="infra-tree-head">
             <h2>Facultades y carreras</h2>
             <button class="round-button small" type="button" title="Nueva facultad" data-modal-open="faculty-modal"><i data-lucide="plus"></i></button>
@@ -39,12 +37,12 @@
                     <span class="tree-add" role="button" tabindex="0" title="Nueva carrera" data-modal-open="career-modal"><i data-lucide="plus"></i></span>
                 </button>
 
-                <ul class="tree-spaces career-tree">
+                <ul class="career-tree">
                     @foreach($careers as $career)
                         <li data-tree-space data-space-name="{{ mb_strtolower($career['name']) }}">
                             <button type="button" data-career-link="{{ $career['slug'] }}" data-career-title="{{ $career['name'] }}" data-career-subjects="{{ $career['subjects'] }}">
                                 <span class="career-mark-sm" style="background: {{ $career['color'] }}1a; color: {{ $career['color'] }}"><i data-lucide="{{ $career['icon'] }}"></i></span>
-                                <span>{{ $career['name'] }}</span>
+                                <span class="career-tree-name">{{ $career['name'] }}</span>
                             </button>
                         </li>
                     @endforeach
@@ -52,8 +50,10 @@
             </div>
         </div>
 
-        <button class="tree-add-space" type="button" data-modal-open="career-modal"><i data-lucide="plus"></i> Nueva carrera</button>
-        <p class="tree-footer">1 facultad · {{ count($careers) }} carreras</p>
+        <div class="tree-summary">
+            <span><i data-lucide="layers"></i></span>
+            <div><b>1 facultad · {{ count($careers) }} carreras</b><small>Estructura académica</small></div>
+        </div>
     </aside>
 
     <section class="infra-detail">
@@ -107,7 +107,7 @@
             <div class="panel-header">
                 <div>
                     <button class="text-button" type="button" data-curriculum-back><i data-lucide="arrow-left"></i> Volver a carreras</button>
-                    <h2 data-curriculum-title>Malla curricular · {{ $detailCareer['name'] }}</h2>
+                    <h2 data-curriculum-title>Malla curricular</h2>
                 </div>
                 <div class="row-actions">
                     <button class="secondary-button" type="button" data-modal-open="career-modal"><i data-lucide="pencil"></i> Editar carrera</button>
@@ -116,34 +116,34 @@
             </div>
 
             <div class="curriculum-toolbar">
-                <div class="semester-tabs segmented">
+                <div class="semester-tabs segmented" data-pao-tabs>
                     @for($pao = 1; $pao <= 9; $pao++)
-                        <button class="{{ $pao === 5 ? 'is-active' : '' }}" type="button" data-semester="{{ $pao }}">{{ $pao }}.º</button>
+                        <button class="{{ $pao === 1 ? 'is-active' : '' }}" type="button" data-pao="{{ $pao }}">{{ $pao }}.º</button>
                     @endfor
                 </div>
-                <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar materia..." data-table-search></label>
+                <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar materia..." data-subject-search></label>
             </div>
 
-            <div class="subject-grid">
-                @foreach($curriculum as $subject)
-                    <article data-search-row>
-                        <span>{{ $subject['code'] }}</span>
-                        <h3>{{ $subject['name'] }}</h3>
-                        <p>{{ $subject['credits'] }} créditos · {{ $subject['hours'] }} horas</p>
-                        <div class="row-actions">
-                            <button class="row-action" type="button" title="Editar" data-modal-open="subject-modal"><i data-lucide="pencil"></i></button>
-                            <button class="row-action danger" type="button" title="Eliminar" data-toast="{{ $subject['name'] }} eliminada en la demostración"><i data-lucide="trash-2"></i></button>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+            @foreach($careers as $career)
+                <div class="subject-grid hidden" data-curriculum-for="{{ $career['slug'] }}">
+                    @foreach($curriculum[$career['slug']] ?? [] as $subject)
+                        <article data-subject data-pao="{{ $subject['pao'] }}" data-subject-name="{{ mb_strtolower($subject['name'].' '.$subject['code']) }}">
+                            <span>{{ $subject['code'] }}</span>
+                            <h3>{{ $subject['name'] }}</h3>
+                            <p>{{ $subject['credits'] }} créditos · {{ $subject['hours'] }} horas</p>
+                            <div class="row-actions">
+                                <button class="row-action" type="button" title="Editar" data-modal-open="subject-modal"><i data-lucide="pencil"></i></button>
+                                <button class="row-action danger" type="button" title="Eliminar" data-toast="{{ $subject['name'] }} eliminada en la demostración"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @endforeach
 
-            <p class="empty-state hidden" data-curriculum-empty>
-                <i data-lucide="book-dashed"></i> Esta carrera todavía no tiene materias registradas en su malla.
-            </p>
+            <p class="empty-state hidden" data-curriculum-empty><i data-lucide="book-dashed"></i> <span data-curriculum-empty-text>Esta carrera todavía no tiene materias registradas en su malla.</span></p>
 
             <div class="panel-footer">
-                <span><i data-lucide="info"></i> <span data-curriculum-summary>{{ count($curriculum) }} materias en el 5.º PAO · {{ $totalCredits }} créditos.</span></span>
+                <span><i data-lucide="info"></i> <span data-curriculum-summary></span></span>
                 <button class="secondary-button" type="button" data-toast="Malla exportada en la demostración"><i data-lucide="download"></i> Exportar malla</button>
             </div>
         </section>
@@ -268,7 +268,7 @@
         <label>Nombre de la materia<input required placeholder="Ej. Sistemas Distribuidos"></label>
         <div class="form-grid">
             <label>Código<input placeholder="Ej. SW-401"></label>
-            <label>PAO<select>@for($pao = 1; $pao <= 9; $pao++)<option @selected($pao === 5)>{{ $pao }}.º</option>@endfor</select></label>
+            <label>PAO<select>@for($pao = 1; $pao <= 9; $pao++)<option>{{ $pao }}.º</option>@endfor</select></label>
         </div>
         <div class="form-grid">
             <label>Créditos<input type="number" min="1" max="8" value="3"></label>

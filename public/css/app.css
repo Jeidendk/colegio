@@ -477,3 +477,19 @@ html.dark .assets-page{background:#0d1218}html.dark .assets-panel,html.dark .ass
 .upload-button svg{width:15px;height:15px}
 .upload-button input[type=file]{display:none}
 @media (max-width:640px){.icon-grid{grid-template-columns:repeat(5,1fr)}}
+
+/* Estructura academica: carreras del arbol como tarjetas y pie del panel */
+.career-tree{list-style:none;margin:6px 0 0;padding:0 0 0 16px;display:flex;flex-direction:column;gap:8px;position:relative}
+.career-tree:before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.tree-building:not(.is-open) .career-tree{display:none}
+.career-tree>li{list-style:none}
+.career-tree button{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:12px;font-weight:700;color:#334155;text-align:left;transition:.16s}
+.career-tree button:hover{border-color:#cbd5e1;box-shadow:0 6px 14px rgba(15,23,42,.06);transform:translateX(2px)}
+.career-tree-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.academic-tree .tree-building-head.is-active{background:#eef4ff;border-color:#bfd3ff}
+.tree-summary{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:14px;padding:11px 13px;background:#fbfcfe;margin-top:auto}
+.tree-summary>span{width:34px;height:34px;border-radius:11px;background:#eef2ff;color:#4338ca;display:grid;place-items:center;flex:0 0 34px}
+.tree-summary svg{width:16px;height:16px}
+.tree-summary div{display:flex;flex-direction:column;min-width:0}
+.tree-summary b{font-size:12px;color:#334155}
+.tree-summary small{font-size:10px;font-weight:600;color:#9aa3b1}

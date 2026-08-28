@@ -695,9 +695,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const careersPanel = document.querySelector('[data-careers-panel]');
-    const curriculumPanel = document.querySelector('[data-curriculum-panel]');
-
     // --- Selectores de color de los modales de facultad y carrera ---
     document.querySelectorAll('[data-color-swatches]').forEach((group) => {
         const section = group.closest('.identity-section');
@@ -717,11 +714,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const careersPanel = document.querySelector('[data-careers-panel]');
+    const curriculumPanel = document.querySelector('[data-curriculum-panel]');
     if (!careersPanel || !curriculumPanel) return;
 
     // --- Buscador y disposición de las tarjetas de carrera ---
     const careerSearch = document.querySelector('[data-career-search]');
-    const emptyMessage = document.querySelector('[data-careers-empty]');
+    const careersEmpty = document.querySelector('[data-careers-empty]');
 
     careerSearch?.addEventListener('input', () => {
         const query = careerSearch.value.trim().toLocaleLowerCase('es');
@@ -731,7 +730,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.toggle('hidden', !matches);
             if (matches) visible += 1;
         });
-        emptyMessage?.classList.toggle('hidden', visible > 0);
+        careersEmpty?.classList.toggle('hidden', visible > 0);
     });
 
     document.querySelectorAll('[data-career-layout]').forEach((button) => button.addEventListener('click', () => {
@@ -739,30 +738,76 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('[data-career-cards]')?.classList.toggle('is-list', button.dataset.careerLayout === 'list');
     }));
 
-    // --- Detalle: malla curricular de una carrera ---
-    const curriculumTitle = document.querySelector('[data-curriculum-title]');
-
-    const subjectGrid = curriculumPanel.querySelector('.subject-grid');
-    const curriculumEmpty = curriculumPanel.querySelector('[data-curriculum-empty]');
+    // --- Malla curricular de la carrera abierta ---
+    const curriculumTitle = curriculumPanel.querySelector('[data-curriculum-title]');
     const curriculumSummary = curriculumPanel.querySelector('[data-curriculum-summary]');
-    const registeredSummary = curriculumSummary?.textContent || '';
+    const curriculumEmpty = curriculumPanel.querySelector('[data-curriculum-empty]');
+    const curriculumEmptyText = curriculumPanel.querySelector('[data-curriculum-empty-text]');
+    const curriculumToolbar = curriculumPanel.querySelector('.curriculum-toolbar');
+    const paoTabs = [...curriculumPanel.querySelectorAll('[data-pao-tabs] button')];
+    const subjectSearch = curriculumPanel.querySelector('[data-subject-search]');
+    let activeGrid = null;
 
-    document.querySelectorAll('[data-career-link]').forEach((trigger) => trigger.addEventListener('click', () => {
-        // Solo Electricidad tiene malla cargada en la demostración; el resto muestra el estado vacío.
-        const hasSubjects = Number(trigger.dataset.careerSubjects) > 0;
+    const activePao = () => paoTabs.find((tab) => tab.classList.contains('is-active'))?.dataset.pao || '1';
 
-        if (curriculumTitle) curriculumTitle.textContent = 'Malla curricular · ' + trigger.dataset.careerTitle;
-        subjectGrid?.classList.toggle('hidden', !hasSubjects);
-        curriculumPanel.querySelector('.curriculum-toolbar')?.classList.toggle('hidden', !hasSubjects);
-        curriculumEmpty?.classList.toggle('hidden', hasSubjects);
-        if (curriculumSummary) {
-            curriculumSummary.textContent = hasSubjects ? registeredSummary : 'Sin materias registradas todavía.';
+    const renderSubjects = () => {
+        if (!activeGrid) return;
+
+        const pao = activePao();
+        const query = (subjectSearch?.value || '').trim().toLocaleLowerCase('es');
+        let visible = 0;
+
+        activeGrid.querySelectorAll('[data-subject]').forEach((subject) => {
+            const matches = subject.dataset.pao === pao && (!query || subject.dataset.subjectName.includes(query));
+            subject.classList.toggle('hidden', !matches);
+            if (matches) visible += 1;
+        });
+
+        const totalSubjects = activeGrid.querySelectorAll('[data-subject]').length;
+        const credits = [...activeGrid.querySelectorAll('[data-subject]')]
+            .filter((subject) => subject.dataset.pao === pao)
+            .reduce((sum, subject) => sum + Number(subject.querySelector('p').textContent.split(' ')[0]), 0);
+
+        curriculumEmpty?.classList.toggle('hidden', visible > 0);
+        if (curriculumEmptyText && visible === 0) {
+            curriculumEmptyText.textContent = totalSubjects === 0
+                ? 'Esta carrera todavía no tiene materias registradas en su malla.'
+                : 'No hay materias en el ' + pao + '.º PAO con ese criterio.';
         }
+        if (curriculumSummary) {
+            curriculumSummary.textContent = visible > 0
+                ? visible + ' materias en el ' + pao + '.º PAO · ' + credits + ' créditos.'
+                : 'Sin materias que mostrar.';
+        }
+    };
 
+    const openCareer = (trigger) => {
+        const slug = trigger.dataset.careerLink;
+        activeGrid = curriculumPanel.querySelector('[data-curriculum-for="' + slug + '"]');
+
+        curriculumPanel.querySelectorAll('[data-curriculum-for]').forEach((grid) => grid.classList.toggle('hidden', grid !== activeGrid));
+        if (curriculumTitle) curriculumTitle.textContent = 'Malla curricular · ' + trigger.dataset.careerTitle;
+        if (subjectSearch) subjectSearch.value = '';
+
+        // Abre el primer PAO que tenga materias para no aterrizar en una pestaña vacía.
+        const firstPao = activeGrid?.querySelector('[data-subject]')?.dataset.pao || '1';
+        paoTabs.forEach((tab) => tab.classList.toggle('is-active', tab.dataset.pao === firstPao));
+        curriculumToolbar?.classList.toggle('hidden', !activeGrid?.querySelector('[data-subject]'));
+
+        renderSubjects();
         careersPanel.classList.add('hidden');
         curriculumPanel.classList.remove('hidden');
         document.querySelector('.workspace')?.scrollTo({top: 0, behavior: 'smooth'});
+    };
+
+    document.querySelectorAll('[data-career-link]').forEach((trigger) => trigger.addEventListener('click', () => openCareer(trigger)));
+
+    paoTabs.forEach((tab) => tab.addEventListener('click', () => {
+        paoTabs.forEach((item) => item.classList.toggle('is-active', item === tab));
+        renderSubjects();
     }));
+
+    subjectSearch?.addEventListener('input', renderSubjects);
 
     document.querySelector('[data-curriculum-back]')?.addEventListener('click', () => {
         curriculumPanel.classList.add('hidden');
