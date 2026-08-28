@@ -1,0 +1,27 @@
+# Despliegue en Render: servicio web Docker, sin base de datos.
+services:
+  - type: web
+    name: espoch-electricidad-demo
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /admin/dashboard
+    envVars:
+      - key: APP_NAME
+        value: ESPOCH Electricidad
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      # Generar con: php artisan key:generate --show  (y pegarlo en el panel de Render)
+      - key: APP_KEY
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_STORE
+        value: file
+      - key: DB_CONNECTION
+        value: sqlite
