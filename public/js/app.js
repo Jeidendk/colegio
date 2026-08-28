@@ -1061,3 +1061,46 @@ document.addEventListener('DOMContentLoaded', () => {
         window.showToast?.(editing ? 'Edición activada: ya puedes agregar unidades y recursos' : 'Edición desactivada');
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Asistencia del aula: marca el estado de cada estudiante y lleva el conteo.
+    const panel = document.querySelector('[data-attendance]');
+    if (!panel) return;
+
+    const rows = [...panel.querySelectorAll('[data-attendance-row]')];
+
+    const refreshCounters = () => {
+        panel.querySelectorAll('[data-attendance-count]').forEach((counter) => {
+            const state = counter.dataset.attendanceCount;
+            counter.textContent = rows.filter((row) => {
+                const active = row.querySelector('[data-attendance-state].is-active');
+                return active?.dataset.attendanceState === state;
+            }).length;
+        });
+    };
+
+    rows.forEach((row) => {
+        const options = [...row.querySelectorAll('[data-attendance-state]')];
+        options.forEach((option) => option.addEventListener('click', () => {
+            options.forEach((item) => item.classList.toggle('is-active', item === option));
+            refreshCounters();
+        }));
+    });
+
+    panel.querySelector('[data-attendance-search]')?.addEventListener('input', (event) => {
+        const query = event.target.value.trim().toLocaleLowerCase('es');
+        rows.forEach((row) => row.classList.toggle('hidden', Boolean(query) && !row.dataset.attendanceSearch.includes(query)));
+    });
+
+    document.querySelector('[data-attendance-all]')?.addEventListener('click', () => {
+        rows.forEach((row) => {
+            row.querySelectorAll('[data-attendance-state]').forEach((option) => {
+                option.classList.toggle('is-active', option.dataset.attendanceState === 'Presente');
+            });
+        });
+        refreshCounters();
+        window.showToast?.('Todos los estudiantes quedaron como presentes');
+    });
+
+    refreshCounters();
+});

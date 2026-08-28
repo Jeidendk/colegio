@@ -684,3 +684,23 @@ a.user-cell:hover b{color:var(--red)}
 
 .message-row .course-mark{width:34px;height:34px;flex:0 0 34px}
 .message-type-chip{display:inline-flex;align-items:center;gap:6px;background:#eef2ff;color:#4338ca;border-radius:999px;padding:4px 12px;font-size:10px;font-weight:800;letter-spacing:.8px}
+
+/* Asistencia del aula: estados por estudiante y resumen de la clase */
+.inline-field{flex-direction:column;gap:5px;min-width:150px}
+.inline-field input,.inline-field select{padding:9px 11px}
+.attendance-summary{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+.attendance-chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700}
+.attendance-chip b{font-size:12px}
+.attendance-chip.presente{background:#ecfdf5;color:#047857}
+.attendance-chip.atraso{background:#fffbeb;color:#b45309}
+.attendance-chip.ausente{background:#fef2f2;color:#b42318}
+.attendance-chip.justificado{background:#eff6ff;color:#1d4ed8}
+.attendance-options{display:inline-flex;gap:4px;background:#f4f6f9;border-radius:999px;padding:4px}
+.attendance-options button{border:0;background:transparent;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:700;color:#5b6878}
+.attendance-options button:hover{color:#1e293b}
+.attendance-options button.is-active{background:#fff;box-shadow:0 2px 6px rgba(15,23,42,.1);color:#1e293b}
+.attendance-options button[data-attendance-state="Presente"].is-active{color:#047857}
+.attendance-options button[data-attendance-state="Atraso"].is-active{color:#b45309}
+.attendance-options button[data-attendance-state="Ausente"].is-active{color:#b42318}
+.attendance-options button[data-attendance-state="Justificado"].is-active{color:#1d4ed8}
+.attendance-note{max-width:230px;font-size:12px;padding:9px 11px}

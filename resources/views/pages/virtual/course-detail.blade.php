@@ -19,6 +19,7 @@
     <button type="button" data-virtual-tab="people"><i data-lucide="users"></i> Participantes</button>
     <button type="button" data-virtual-tab="grades"><i data-lucide="notebook-tabs"></i> Calificaciones</button>
     <button type="button" data-virtual-tab="skills"><i data-lucide="badge-check"></i> Competencias</button>
+    @if($isTeacher)<button type="button" data-virtual-tab="attendance"><i data-lucide="calendar-check-2"></i> Asistencia</button>@endif
 </div>
 
 <section data-virtual-panel="course" data-course-topics>
@@ -153,5 +154,74 @@
             </div>
         </form>
     </div>
+@endif
+
+@if($isTeacher)
+<section class="hidden" data-virtual-panel="attendance">
+    <div class="virtual-section-title">
+        <div><small>CONTROL DE CLASE</small><h2>Asistencia del curso</h2></div>
+        <div class="row-actions">
+            <button class="pill-button" type="button" data-attendance-all><i data-lucide="check-check"></i> Todos presentes</button>
+            <button class="pill-button" type="button" data-toast="Registro de asistencia exportado"><i data-lucide="download"></i> Exportar</button>
+            <button class="pill-button solid" type="button" data-toast="Asistencia guardada en la demostración"><i data-lucide="save"></i> Guardar asistencia</button>
+        </div>
+    </div>
+
+    <section class="panel users-panel" data-attendance>
+        <span class="panel-accent" aria-hidden="true"></span>
+
+        <div class="toolbar users-toolbar">
+            <label class="export-field inline-field">Fecha de clase<input type="date" value="2026-09-02"></label>
+            <label class="export-field inline-field">Sesión<select><option>Unidad 1 · Sesión 1</option><option>Unidad 1 · Sesión 2</option><option>Unidad 2 · Sesión 1</option></select></label>
+            <label class="search-field"><i data-lucide="search"></i><input type="search" placeholder="Buscar estudiante..." data-attendance-search></label>
+
+            <div class="attendance-summary">
+                <span class="attendance-chip presente"><b data-attendance-count="Presente">0</b> presentes</span>
+                <span class="attendance-chip atraso"><b data-attendance-count="Atraso">0</b> atrasos</span>
+                <span class="attendance-chip ausente"><b data-attendance-count="Ausente">0</b> ausentes</span>
+                <span class="attendance-chip justificado"><b data-attendance-count="Justificado">0</b> justificados</span>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table users-table">
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Estado de la clase</th>
+                        <th>Observación</th>
+                        <th>Asistencia acumulada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($roster as $entry)
+                        <tr data-attendance-row data-attendance-search="{{ mb_strtolower($entry['name'].' '.$entry['code']) }}">
+                            <td>
+                                <div class="user-cell">
+                                    <span class="avatar small">{{ mb_substr($entry['name'], 0, 1) }}{{ mb_substr(strrchr($entry['name'], ' ') ?: '', 1, 1) }}</span>
+                                    <div><b>{{ $entry['name'] }}</b><small>{{ $entry['code'] }}</small></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="attendance-options" role="group" aria-label="Estado de {{ $entry['name'] }}">
+                                    <button class="is-active" type="button" data-attendance-state="Presente">Presente</button>
+                                    <button type="button" data-attendance-state="Atraso">Atraso</button>
+                                    <button type="button" data-attendance-state="Ausente">Ausente</button>
+                                    <button type="button" data-attendance-state="Justificado">Justificado</button>
+                                </div>
+                            </td>
+                            <td><input class="plain-input attendance-note" placeholder="Observación (opcional)"></td>
+                            <td>
+                                <div class="table-progress"><span><i style="width:{{ 88 + $loop->index }}%"></i></span><b>{{ 88 + $loop->index }}%</b></div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <x-table-footer :count="count($roster)" />
+    </section>
+</section>
 @endif
 </div>
