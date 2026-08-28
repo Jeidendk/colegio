@@ -30,5 +30,8 @@ RUN composer dump-autoload --optimize --no-dev --ignore-platform-reqs \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 80
-CMD ["apache2-foreground"]
+ENTRYPOINT ["docker-entrypoint.sh"]
