@@ -535,3 +535,13 @@ html.dark .assets-page{background:#0d1218}html.dark .assets-panel,html.dark .ass
 .resource-card>div{min-width:0}
 .users-panel .resource-grid{margin-top:4px}
 .users-panel .layout-switch{margin-right:4px}
+
+/* Banner unificado: acciones del slot y tercera linea opcional de los indicadores */
+.infra-hero-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;position:relative;z-index:2}
+.infra-hero-stats em{display:block;font-style:normal;font-size:10px;font-weight:600;color:#78828f;margin-top:2px}
+.infra-hero-stats>div{min-width:96px}
+
+/* El subtitulo se limita en ancho para que acciones e indicadores quepan en la misma fila */
+.infra-hero-title{min-width:0}
+.infra-hero-title>div{min-width:0}
+.infra-hero-title p{max-width:340px}
